@@ -41,6 +41,7 @@ public class CouturierServiceApplication {
             Couturier sCouturier =couturierRepository.save(couturier);
 
 
+
             // create reviews add couturier to review
             List<Review> reviews =Arrays.asList(new Review(null,"amal","goood!",sCouturier),
             new Review(null,"sara","awesome!",sCouturier));

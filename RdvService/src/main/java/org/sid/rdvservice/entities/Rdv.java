@@ -24,7 +24,7 @@ public class Rdv {
     private String Heure;
     // customer data
     private Long customerId;
-    @Transient
+    @Transient // dont save in the bd
     private Customer customer;
 
     // couturier data
