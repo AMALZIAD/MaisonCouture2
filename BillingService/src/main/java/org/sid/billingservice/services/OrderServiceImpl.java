@@ -12,6 +12,7 @@ import org.sid.billingservice.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 @Transactional
@@ -84,6 +85,26 @@ public class OrderServiceImpl implements OrderService {
             order.setCouturier(couturier);
         });
         return orders;
+    }
+    @Override
+    public List<Customer> getCustomersByCouturier(Long couturierId) {
+        Couturier couturier=couturierRestClient.couturierById(couturierId);
+        List<Order> orders=orderRepository.findByCouturierId(couturierId);
+        List<Customer> customers = new ArrayList<>();
+        orders.forEach( order -> {
+            customers.add(customerRestClient.customerById(order.getCustomerId()));
+        });
+        return customers;
+    }
+    @Override
+    public List<Couturier> getCouturiesByCustomer(Long customerId) {
+        Customer couturier=customerRestClient.customerById(customerId);
+        List<Order> orders=orderRepository.findByCustomerId(customerId);
+        List<Couturier> couturiers = new ArrayList<>();
+        orders.forEach( order -> {
+            couturiers.add(couturierRestClient.couturierById(order.getCustomerId()));
+        });
+        return couturiers;
     }
 }
 

@@ -2,32 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import {CustomerService} from "../services/customer.service";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {Customer} from "../model/customer.model";
-import {FormBuilder, FormGroup} from "@angular/forms";
 import {Router} from "@angular/router";
 
 
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.css']
+  selector: 'app-customer',
+  templateUrl: './customer.component.html',
+  styleUrls: ['./customer.component.css']
 })
-export class CustomersComponent implements OnInit {
+export class CustomerComponent implements OnInit {
 
   customers!:Observable<Array<Customer>>;
   errorMessage!:string;
-  searchformGroup!:FormGroup;
 
-  constructor(private customerService:CustomerService, private fb:FormBuilder,
+
+  constructor(private customerService:CustomerService,
                 private router : Router) { }
 
   ngOnInit(): void {
-    // search form
-    this.searchformGroup=this.fb.group({
-      keyword:this.fb.control("")
-    });
-    this.handleSearchCustomers();
+    this.customers=this.customerService.getCustomers().pipe(
+      catchError(err =>{
+        this.errorMessage=err.message;
+        return throwError(err);
+      })
+    );
+    console.log(this.customers)
   }
-
 
   handleDeleteCustomer(c: Customer) {
 

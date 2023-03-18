@@ -12,13 +12,13 @@ export class CustomerService {
 
   constructor(private http:HttpClient) { }
 
-  public getCustomers() :Observable<Array<Customer > >{
-    return this.http.get<Array<Customer>>(environment.bankendhost+"/customers")
+  public getCustomers() :Observable<Array<Customer>>{
+    return this.http.get<Array<Customer>>(environment.bankendhost+"/CUSTOMER-SERVICE/customers")
   }
   public saveCustomer(customer: Customer):Observable<Customer>{
-    return this.http.post<Customer>(environment.bankendhost+"/customers",customer);
+    return this.http.post<Customer>(environment.bankendhost+"/CUSTOMER-SERVICE/customers",customer);
   }
   public updateCustomer(customer: Customer){
-    return this.http.put(environment.bankendhost+"/customers/",customer);
+    return this.http.put(environment.bankendhost+"/CUSTOMER-SERVICE/customers/",customer);
   }
 }

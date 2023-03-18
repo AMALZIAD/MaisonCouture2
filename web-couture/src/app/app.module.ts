@@ -4,23 +4,25 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { CustomersComponent } from './customers/customers.component';
-import { CouturiesComponent } from './couturies/couturies.component';
 import { CouturierComponent } from './couturier/couturier.component';
 import { CustomerComponent } from './customer/customer.component';
+import { MesrdvComponent } from './mesrdv/mesrdv.component';
+import {HttpClientModule} from "@angular/common/http";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    CustomersComponent,
-    CouturiesComponent,
     CouturierComponent,
-    CustomerComponent
+    CustomerComponent,
+    MesrdvComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
