@@ -88,7 +88,6 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     public List<Customer> getCustomersByCouturier(Long couturierId) {
-        Couturier couturier=couturierRestClient.couturierById(couturierId);
         List<Order> orders=orderRepository.findByCouturierId(couturierId);
         List<Customer> customers = new ArrayList<>();
         orders.forEach( order -> {
@@ -98,7 +97,6 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     public List<Couturier> getCouturiesByCustomer(Long customerId) {
-        Customer couturier=customerRestClient.customerById(customerId);
         List<Order> orders=orderRepository.findByCustomerId(customerId);
         List<Couturier> couturiers = new ArrayList<>();
         orders.forEach( order -> {

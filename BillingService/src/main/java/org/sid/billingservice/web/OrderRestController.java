@@ -51,7 +51,15 @@ public class OrderRestController {
     public List<Order> getCouturierOrders(@PathVariable Long id){
         return orderService.getCouturierOrders(id);
     }
-
+    //getCustomersByCouturier
+    @GetMapping("/CustomersByCouturier/{id}")
+    public List<Customer> getCustomersByCouturier(@PathVariable Long id){
+        return orderService.getCustomersByCouturier(id);
+    }
+    @GetMapping("/CouturiersByCustomer/{id}")
+    public List<Couturier> getCouturiesByCustomer(@PathVariable Long id){
+        return orderService.getCouturiesByCustomer(id);
+    }
     // save and update
     @PostMapping("/orders")
     public Order saveOrder(@RequestBody Order order){
@@ -67,5 +75,6 @@ public class OrderRestController {
         System.out.println(order.toString());
         return orderService.updateOrder(order);
     }
+
 
 }
