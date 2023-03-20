@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="card-header">Couturiers</div>
+  <div class="card-body">
+    <div class="table" >
+
+      <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>Email</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let c of couturiers |async">
+        <td>{{c.id}}</td>
+        <td>{{c.name}}</td>
+        <td>{{c.email}}</td>
+      </tr>
+      </tbody>
+    </div>
+  </div>
+</div>

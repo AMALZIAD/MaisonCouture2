@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">Update Customer </div>
+    <div class="card-body">
+      <form [formGroup]="newCustomerFormGroup" (ngSubmit)="handleSaveCustomer(1)">
+        <div class="mb-3">
+          <label class="form-label">Name:</label>
+          <input type="text" formControlName="name" class="form-control">
+          <span class="text-danger"
+                *ngIf="newCustomerFormGroup.controls['name'].touched
+                && newCustomerFormGroup.controls['name'].errors
+                && newCustomerFormGroup.controls['name'].errors!['required']">
+            Name is Required
+          </span>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email:</label>
+          <input type="text" formControlName="email" class="form-control">
+          <span class="text-danger"
+                *ngIf="newCustomerFormGroup.controls['email'].touched
+                && newCustomerFormGroup.controls['email'].errors
+                && newCustomerFormGroup.controls['email'].errors!['email']">
+            Email is not valid
+          </span>
+        </div>
+        <button  [disabled]="!newCustomerFormGroup.valid"  class="btn btn-info">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <form [formGroup]="editMesureFormGroup" (ngSubmit)="handleEditMesure()">
+      <div class="mb-3">
+        <label class="form-label">Tour d'Epaule:</label>
+        <input type="text" formControlName="tourEpaule" class="form-control">
+        <span class="text-danger"
+              *ngIf="editMesureFormGroup.controls['tourEpaule'].touched
+                && editMesureFormGroup.controls['tourEpaule'].errors
+                && editMesureFormGroup.controls['tourEpaule'].errors!['number']">
+            Tour d'epaule is not valid
+          </span>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Tour de Taille:</label>
+        <input type="text" formControlName="tourTaille" class="form-control">
+        <span class="text-danger"
+              *ngIf="editMesureFormGroup.controls['tourTaille'].touched
+                && editMesureFormGroup.controls['tourTaille'].errors
+                && editMesureFormGroup.controls['tourTaille'].errors!['number']">
+            Tour Taille is not valid
+          </span>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Hauteur:</label>
+        <input type="text" formControlName="hauteur" class="form-control">
+        <span class="text-danger"
+              *ngIf="editMesureFormGroup.controls['hauteur'].touched
+                && editMesureFormGroup.controls['hauteur'].errors
+                && editMesureFormGroup.controls['hauteur'].errors!['number']">
+            Hauteur is not valid
+          </span>
+      </div>
+      <button  [disabled]="!editMesureFormGroup.valid"  class="btn btn-info">Save</button>
+    </form>
+  </div>
+</div>
+

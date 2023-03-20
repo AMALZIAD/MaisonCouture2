@@ -3,9 +3,6 @@ package org.sid.rdvservice.services;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sid.rdvservice.entities.Rdv;
-import org.sid.rdvservice.exceptions.CouturierNotFoundException;
-import org.sid.rdvservice.exceptions.CustomerNotFoundException;
-import org.sid.rdvservice.exceptions.RdvNotFoundException;
 import org.sid.rdvservice.model.Couturier;
 import org.sid.rdvservice.model.Customer;
 import org.sid.rdvservice.repositories.RdvRepository;
@@ -30,7 +27,7 @@ public class RdvServiceImpl implements RdvService {
     @Override
     public Rdv getRdv(Long id) {
         Rdv rdv=rdvRepository.findById(id).orElse(null);
-        if (rdv==null) throw new RdvNotFoundException("Rdv not Found");
+        //if (rdv==null) throw new RdvNotFoundException("Rdv not Found");
         Customer customer=customerRestClient.customerById(rdv.getCustomerId());
         rdv.setCustomer(customer);
         Couturier couturier=couturierRestClient.couturierById(rdv.getCouturierId());
@@ -64,7 +61,7 @@ public class RdvServiceImpl implements RdvService {
     @Override
     public List<Rdv> getCustomerRdvs(Long customerId) {
         Customer customer=customerRestClient.customerById(customerId);
-        if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
+        //if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
         List<Rdv> rdvs=rdvRepository.findByCustomerId(customerId);
         rdvs.forEach( rdv -> {
             Couturier couturier=couturierRestClient.couturierById(rdv.getCouturierId());
@@ -77,7 +74,7 @@ public class RdvServiceImpl implements RdvService {
     @Override
     public List<Rdv> getCouturierRdvs(Long couturierId) {
         Couturier couturier=couturierRestClient.couturierById(couturierId);
-        if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
+       // if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
         List<Rdv> rdvs=rdvRepository.findByCouturierId(couturierId);
         rdvs.forEach( rdv -> {
             Customer customer=customerRestClient.customerById(rdv.getCustomerId());
