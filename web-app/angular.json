@@ -27,6 +27,7 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [
+              "node_modules/keycloak-js/dist/keycloak.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.js"
             ]
           },

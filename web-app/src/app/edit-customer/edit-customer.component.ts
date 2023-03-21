@@ -15,7 +15,7 @@ export class EditCustomerComponent implements OnInit {
   newCustomerFormGroup !:FormGroup;
   editMesureFormGroup!:FormGroup;
 
-  constructor(private fb:FormBuilder,private customerService:CustomerService,private customer_id:number) {  }
+  constructor(private fb:FormBuilder,private customerService:CustomerService) {  }
 
   ngOnInit(): void {
     //this.customer=this.customerService.getCustomer(this.customer_id);
