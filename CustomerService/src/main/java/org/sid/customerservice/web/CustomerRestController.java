@@ -1,18 +1,15 @@
 package org.sid.customerservice.web;
 
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.representations.idm.RoleRepresentation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.AllArgsConstructor;
+import org.sid.customerservice.entities.Customer;
+import org.sid.customerservice.repositories.CustomerRepository;
+import org.springframework.web.bind.annotation.*;
 
-import static java.util.Arrays.asList;
+import java.util.List;
 
-@RestController
+@RestController@AllArgsConstructor
 public class CustomerRestController {
+    CustomerRepository customerRepository;
 
     @PostMapping("/assignRole/{id}")
     public void saveOrder(@PathVariable String id){
@@ -32,5 +29,9 @@ public class CustomerRestController {
         // asign role
         kc.realm("couture-realm").users().get(id)
                 .roles().realmLevel().add(asList(savedRoleRepresentation));*/
+    }
+    @GetMapping("/customers")
+       public  List<Customer> getCustomer() {
+        return customerRepository.findAll();
     }
 }
