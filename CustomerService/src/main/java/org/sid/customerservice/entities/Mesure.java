@@ -3,13 +3,14 @@ package org.sid.customerservice.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor@ToString
 public class Mesure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

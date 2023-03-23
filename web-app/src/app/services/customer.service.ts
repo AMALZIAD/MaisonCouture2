@@ -25,6 +25,10 @@ export class CustomerService {
   public getCustomer(id: number):Observable<Customer>{
     return this.http.get<Customer>(environment.bankendhost+"/CUSTOMER-SERVICE/customers/"+id);
   }
+  // get customer
+  public getCustomerIdkc(idkc: string):Observable<Customer>{
+    return this.http.get<Customer>(environment.bankendhost+"/CUSTOMER-SERVICE/findByIdkc/"+idkc);
+  }
   // get list of couturiers by id customer IN BILLING SERVICE
   public getCouturiersByCustomer(id: number):Observable<Couturier[]>{
     return this.http.get<Couturier[]>(environment.bankendhost+"/BILLING-SERVICE/CouturiersByCustomer/"+id)

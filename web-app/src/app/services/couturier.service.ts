@@ -19,6 +19,7 @@ export class CouturierService {
         return result._embedded.couturiers; //just return "couturiers"
       }));
   }
+
   // get list of cutomers by id couturier
   public getCustomersByCouturier(id: number):Observable<Customer[]>{
     return this.http.get<Customer[]>(environment.bankendhost+"/BILLING-SERVICE/CustomersByCouturier/"+id)

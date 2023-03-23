@@ -11,7 +11,7 @@ export class NavbarComponent implements OnInit {
   tokenjson !: any;
   constructor(public readonly  sec: KeycloakSecurityService) {
     this.tokenjson=sec.kc.tokenParsed;console.log(sec.kc.authenticated);
-    console.log("id " +sec.kc.token);
+
   }
 
   ngOnInit(): void {
