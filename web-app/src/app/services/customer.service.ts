@@ -13,21 +13,25 @@ export class CustomerService {
 
 
   constructor(private http:HttpClient) { }
+//  -----------------KEY CLOCK-------------------------------------------------------------------
+  // check if cutomer exist in DB
+  public getCustomerIdkc(idkc: string):Observable<boolean>{
+    return this.http.get<boolean>(environment.bankendhost+"/CUSTOMER-SERVICE/findByIdkc/"+idkc);
+  }
 
 // create account in web site
   public saveCustomer(customer: Customer):Observable<Customer>{
     return this.http.post<Customer>(environment.bankendhost+"/CUSTOMER-SERVICE/customers",customer);
   }
+
+  // _______________CUSTOMER SERVICE---------------------------------------------------------------
+  // maj les mesures
   public updateMesure(mesure: Mesure){
     return this.http.put(environment.bankendhost+"/CUSTOMER-SERVICE/mesures",mesure);
   }
-// get customer
+// get customer by id
   public getCustomer(id: number):Observable<Customer>{
     return this.http.get<Customer>(environment.bankendhost+"/CUSTOMER-SERVICE/customers/"+id);
-  }
-  // get customer
-  public getCustomerIdkc(idkc: string):Observable<Customer>{
-    return this.http.get<Customer>(environment.bankendhost+"/CUSTOMER-SERVICE/findByIdkc/"+idkc);
   }
   // get list of couturiers by id customer IN BILLING SERVICE
   public getCouturiersByCustomer(id: number):Observable<Couturier[]>{
@@ -39,7 +43,7 @@ export class CustomerService {
 //
 
 
-  // admin
+  // admin--------------------------------ADMIN-------------------------------------------------
   public getCustomers():Observable<Customer[]>{
     return this.http.get<Customer[]>(environment.bankendhost+"/CUSTOMER-SERVICE/customers")
       .pipe(map((result:any)=>{

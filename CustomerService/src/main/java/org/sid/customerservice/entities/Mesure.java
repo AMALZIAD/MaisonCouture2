@@ -18,6 +18,6 @@ public class Mesure {
     private double tourEpaule;
     private double tourTaille;
     private double hauteur;
-    @OneToOne(mappedBy = "mesure")
+    @OneToOne(mappedBy = "mesure",fetch = FetchType.LAZY)
     private Customer customer;
 }

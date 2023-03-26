@@ -39,7 +39,7 @@ public class CustomerServiceApplication {
             Mesure sMesure= mesureRepository.save(mesure);
             sCustomer.setMesure(sMesure);
                 customerRepository.save(sCustomer);
-                System.out.println(sCustomer.toString());
+                //System.out.println(sCustomer.toString());
 
         };
     }

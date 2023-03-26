@@ -24,38 +24,78 @@ export class KeycloakSecurityService {
         onLoad: "check-sso"
       });
       console.log("Initialise" +this.kc.token)
-      this. customerData();
+      this.customersign();
     }
     catch (e) {
       this.kc.login();
     }
 
   }
-  customerData(){
-    console.log("customer data !????" );
-    // create account in web site
-    if (this.kc.authenticated){
-      let sub = <string>this.kc.tokenParsed?.sub
-
-    /*  let customer: Customer = {
-        id: 0,
-        name: "amal2",
-        email: "amal@live.fr",
-        idck :sub
-      };
-      console.log("customer interface ",customer);*/
-
-      let cust = this.customerService.getCustomerIdkc(sub).forEach((data: Customer) => {
-        console.log(data);
-      });
-      console.log("sub :",JSON.stringify(cust))
-
-      /*console.log("customer saving!!!!!");
-      this.customerService.saveCustomer(customer).subscribe();
-      console.log("customer saved");*/
+  customersign(){
+    console.log("customer data !" );
+    // si user est authetifie
+    if (this.kc.authenticated) {
+      // recupere la zone role
+      let role = this.kc?.tokenParsed?.['kcrole'];
+      console.log("customer kcrole " + role);
+      // si le role est rempli
+      if (role != "") {
+        //  create customer object from token
+        const customer: Customer = {
+          id: 0, idkc: <string>this.kc.tokenParsed?.sub, name: this.kc?.tokenParsed?.['name'],
+          email: this.kc?.tokenParsed?.['email']
+        }
+        console.log(customer);
+        // save new customer to db
+        this.customerService.saveCustomer(customer).subscribe({
+          next: data => {
+            console.log("Customer has been successfully saved!");
+          },
+          error: err => {
+            console.log(err);
+          }
+        });
+      }
+    }
     }
 
+  /*customerData(){
+    console.log("customer data !" );
+   // si user est authetifie
+    if (this.kc.authenticated){
+      // recupere la zone role
+      let  role =this.kc?.tokenParsed?.['kcrole'];
+      console.log("customer kcrole "+role);
+      // si le role est vide alors on fait rien
+      if( role != "" ){
+        // get the id kc from token
+        let sub = <string>this.kc.tokenParsed?.sub
+        console.log(sub);
+       // check if exist and assign role
+        this.customerService.getCustomerIdkc(sub).forEach((data: boolean) => {
+          console.log("boolean : " ,data);
+          if (!data){
+            // if it dosnt exit create customer object from token
+            const customer: Customer = { id: 0, idkc: sub,name:this.kc?.tokenParsed?.['name'],
+              email:this.kc?.tokenParsed?.['email'] };
+            console.log(customer);
+            // save new customer to db
+            this.customerService.saveCustomer(customer).subscribe({
+              next:data=>{
+                console.log("Customer has been successfully saved!");
+              },
+              error: err=>{
+                console.log(err);
+              }
+            });
+          }
+        });
+      }else {
+        console.log(" im empty")
+      }
 
-  }
+    }
+
+  }*/
 
 }
