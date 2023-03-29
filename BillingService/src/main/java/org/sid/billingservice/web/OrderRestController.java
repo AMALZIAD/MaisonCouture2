@@ -44,7 +44,7 @@ public class OrderRestController {
         return orderService.getOrders();
     }
     @GetMapping("/OrderByCustomer/{id}")
-    public List<Order> getCustomerOrders(@PathVariable Long id){
+    public List<Order> getCustomerOrders(@PathVariable String id){
         return orderService.getCustomerOrders(id);
     }
     @GetMapping("/OrderByCouturier/{id}")

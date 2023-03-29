@@ -16,4 +16,7 @@ public interface CustomerRestClient {
     @GetMapping("/customers")
     public PagedModel<Customer> allCustomers();
 
+    @GetMapping("/CustomerByIdkc/{id}")
+    public Customer findCustomerByIdkc(@PathVariable String id);
+
 }

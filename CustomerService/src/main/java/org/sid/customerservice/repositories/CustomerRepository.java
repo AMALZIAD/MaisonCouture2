@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@RepositoryRestResource
 
 public interface CustomerRepository extends JpaRepository  <Customer,Long> {
-    //                   findByIdkc
 
-    Boolean existsByIdkc(String id);
+     public Customer findCustomerByIdkc(String id);
 
 }

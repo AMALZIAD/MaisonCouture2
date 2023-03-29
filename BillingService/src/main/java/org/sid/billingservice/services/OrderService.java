@@ -13,6 +13,9 @@ public interface OrderService {
      void deleteOrder(Long id);
     List<Order> getOrders();
     List<Order> getCustomerOrders(Long customerId);
+
+    List<Order> getCustomerOrders(String idkc);
+
     List<Order> getCouturierOrders(Long couturierId);
     List<Customer> getCustomersByCouturier(Long couturierId);
     List<Couturier> getCouturiesByCustomer(Long customerId);

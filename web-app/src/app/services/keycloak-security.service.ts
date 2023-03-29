@@ -43,7 +43,7 @@ export class KeycloakSecurityService {
         //  create customer object from token
         const customer: Customer = {
           id: 0, idkc: <string>this.kc.tokenParsed?.sub, name: this.kc?.tokenParsed?.['name'],
-          email: this.kc?.tokenParsed?.['email']
+          email: this.kc?.tokenParsed?.['email'],mesure :{hauteur:0, id:0,tourTaille:0,tourEpaule:0}
         }
         console.log(customer);
         // save new customer to db
@@ -57,7 +57,7 @@ export class KeycloakSecurityService {
         });
       }
     }
-    }
+  }
 
   /*customerData(){
     console.log("customer data !" );

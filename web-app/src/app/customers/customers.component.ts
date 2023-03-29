@@ -22,6 +22,9 @@ export class CustomersComponent implements OnInit {
         return throwError(err);
       })
     );
+    this.customers.forEach((data: Customer[]) => {
+      console.log("boolean : ", data);
+    });
   }
 
 }

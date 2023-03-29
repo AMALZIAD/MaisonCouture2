@@ -1,6 +1,7 @@
 package org.sid.customerservice.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,7 @@ public class Customer {
     private String adresse;
     private String photo;
     private String idkc;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mesure_id")
+    @OneToOne
     private Mesure mesure;
     }
 

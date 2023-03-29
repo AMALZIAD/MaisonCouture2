@@ -16,7 +16,7 @@ public class CustomerServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(CustomerServiceApplication.class, args);
     }
-    //@Bean
+    @Bean
     public CommandLineRunner commandLineRunner(CustomerRepository customerRepository,
                                                MesureRepository mesureRepository, RepositoryRestConfiguration restConfiguration){
         return args -> {
@@ -24,22 +24,22 @@ public class CustomerServiceApplication {
             restConfiguration.exposeIdsFor(Customer.class);
             // create customer
             Customer customer=new Customer();
-            customer.setName("asmae");
-            customer.setEmail("sara@gmail.com");
+            customer.setName("lamiss");
+            customer.setEmail("lamiss@gmail.com");
             customer.setPhone("0606060606");
-            customer.setAdresse("123 riad casa");
-            customer.setPhoto("images/nadine.png");
-            Customer sCustomer= customerRepository.save(customer);
+            customer.setAdresse("123 haha rabat");
+            customer.setPhoto("images/lamiss.png");
+
 
             // create Mesure
             Mesure mesure=new Mesure();
-            mesure.setHauteur(10.45);
-            mesure.setTourEpaule(30.02);
-            mesure.setTourTaille(4.00);
-            Mesure sMesure= mesureRepository.save(mesure);
-            sCustomer.setMesure(sMesure);
-                customerRepository.save(sCustomer);
-                //System.out.println(sCustomer.toString());
+            mesure.setHauteur(12.45);
+            mesure.setTourEpaule(80.02);
+            mesure.setTourTaille(11.00);
+            customer.setMesure(mesure);
+            mesureRepository.save(mesure);
+            Customer sCustomer=customerRepository.save(customer);
+                System.out.println(sCustomer.toString());
 
         };
     }

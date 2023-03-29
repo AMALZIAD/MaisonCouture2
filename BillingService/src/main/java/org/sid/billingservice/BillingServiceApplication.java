@@ -29,7 +29,7 @@ public class BillingServiceApplication {
         SpringApplication.run(BillingServiceApplication.class, args);
     }
 
-    @Bean
+    //@Bean
     CommandLineRunner start(OrderRepository orderRepository,
                             CouturierRestClient couturierRestClient,CustomerRestClient customerRestClient){
         return  args -> {

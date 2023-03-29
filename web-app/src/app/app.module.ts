@@ -12,6 +12,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import {KeycloakSecurityService} from "./services/keycloak-security.service";
 import {RequestInterceptorService} from "./services/request-interceptor.service";
+import { OrdersComponent } from './orders/orders.component';
 
 function kcFactory(kcSecurity:KeycloakSecurityService) {
   return()=>kcSecurity.init();
@@ -23,7 +24,8 @@ function kcFactory(kcSecurity:KeycloakSecurityService) {
     CustomersComponent,
     CouturiersComponent,
     NewCustomerComponent,
-    EditCustomerComponent
+    EditCustomerComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule,

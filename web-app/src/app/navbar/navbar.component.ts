@@ -25,6 +25,9 @@ export class NavbarComponent implements OnInit {
   }
   onChangePassword() {
     this.sec.kc.accountManagement();
+    // update user  data from token
+    console.log(this.sec.kc.tokenParsed)
+      //this.sec.kc.a
   }
 
 }
