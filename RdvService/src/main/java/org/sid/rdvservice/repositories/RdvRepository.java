@@ -8,5 +8,4 @@ import java.util.List;
 public interface RdvRepository extends JpaRepository<Rdv,Long> {
     List<Rdv> findByCustomerId(Long customerId);
     List<Rdv> findByCouturierId(Long couturierId);
-
 }

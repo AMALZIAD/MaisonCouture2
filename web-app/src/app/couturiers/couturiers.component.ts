@@ -26,6 +26,7 @@ export class CouturiersComponent implements OnInit {
   }
 
   getDetails(c: Couturier) {
+    console.log("id cou...",c);
     this.router.navigateByUrl("/couturierdetail/"+c.id);
   }
 

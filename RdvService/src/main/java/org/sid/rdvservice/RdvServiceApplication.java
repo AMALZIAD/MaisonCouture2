@@ -14,8 +14,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootApplication
 @EnableFeignClients
@@ -27,22 +29,32 @@ public class RdvServiceApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(RdvRepository rdvRepository,
-                                               RepositoryRestConfiguration restConfiguration,
-                                               CouturierRestClient couturierRestClient,
-                                               CustomerRestClient customerRestClient) {
+     CommandLineRunner commandLineRunner(RdvRepository rdvRepository,
+                                               CouturierRestClient couturierRestClient,CustomerRestClient customerRestClient) {
         return args -> {
-            // expose id
-            restConfiguration.exposeIdsFor(Rdv.class);
-            // get customes and couturies
             List<Customer> customers=customerRestClient.allCustomers().getContent().stream().toList();
             List<Couturier> couturies=couturierRestClient.allCouturiers().getContent().stream().toList();
-            // create customer
-            Rdv rdv = new Rdv();
+            System.out.println(couturies.get(0).toString());
+            System.out.println(customers.get(0).toString());
+            Random random=new Random();
+
+            Rdv rdv=new Rdv();
+
+            rdv.setCouturierId(couturies.get(random.nextInt(couturies.size())).getId());
+            rdv.setCustomerId(customers.get(random.nextInt(customers.size())).getId());
+            rdv.setStatus(RdvStatus.DISPONIBLE);
             rdv.setRdvDate(new Date());
-            rdv.setStatus(RdvStatus.PRIS);
-            rdv.setHeure("10:30");
-            Rdv srdv = rdvRepository.save(rdv);
+            rdv.setHeure("15");
+            Rdv savedRdv=rdvRepository.save(rdv );
+
+            Rdv rd=new Rdv();
+            rd.setCouturierId(couturies.get(random.nextInt(couturies.size())).getId());
+            rd.setCustomerId(customers.get(random.nextInt(customers.size())).getId());
+            rd.setStatus(RdvStatus.PRIS);
+            rd.setRdvDate(new Date());
+            rd.setHeure("16");
+            rdvRepository.save(rd );
+
 
         };
     }

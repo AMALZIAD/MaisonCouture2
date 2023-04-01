@@ -7,13 +7,14 @@ import { NavbarComponent } from './navbar/navbar.component';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import { CustomersComponent } from './customers/customers.component';
 import { CouturiersComponent } from './couturiers/couturiers.component';
-import { NewCustomerComponent } from './new-customer/new-customer.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import {KeycloakSecurityService} from "./services/keycloak-security.service";
 import {RequestInterceptorService} from "./services/request-interceptor.service";
 import { OrdersComponent } from './orders/orders.component';
 import { CouturierDetailsComponent } from './couturier-details/couturier-details.component';
+import { NewOrderComponent } from './new-order/new-order.component';
+import { MesrdvsComponent } from './mesrdvs/mesrdvs.component';
 
 function kcFactory(kcSecurity:KeycloakSecurityService) {
   return()=>kcSecurity.init();
@@ -24,10 +25,11 @@ function kcFactory(kcSecurity:KeycloakSecurityService) {
     NavbarComponent,
     CustomersComponent,
     CouturiersComponent,
-    NewCustomerComponent,
     EditCustomerComponent,
     OrdersComponent,
-    CouturierDetailsComponent
+    CouturierDetailsComponent,
+    NewOrderComponent,
+    MesrdvsComponent
   ],
   imports: [
     BrowserModule,

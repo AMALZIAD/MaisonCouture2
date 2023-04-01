@@ -40,13 +40,12 @@ public class CouturierServiceApplication {
             couturier.setGallery(gallery);
             Couturier sCouturier =couturierRepository.save(couturier);
 
-
-
             // create reviews add couturier to review
             List<Review> reviews =Arrays.asList(new Review(null,"amal","goood!",sCouturier),
             new Review(null,"sara","awesome!",sCouturier));
             List<Review> reviewList= reviewRepository.saveAll(reviews);
 
+            // 2eme couturue
             Couturier c =new Couturier();
             c.setName("mouad");
             c.setEmail("med@gmail.com");

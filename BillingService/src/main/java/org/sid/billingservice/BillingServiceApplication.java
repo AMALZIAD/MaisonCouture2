@@ -38,7 +38,6 @@ public class BillingServiceApplication {
             System.out.println(couturies.get(0).toString());
             System.out.println(customers.get(0).toString());
             Random random=new Random();
-
                 Order order=new Order();
 
                 order.setCouturierId(couturies.get(random.nextInt(couturies.size())).getId());

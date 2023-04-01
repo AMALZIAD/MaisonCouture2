@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomerService} from "../services/customer.service";
 import {Customer} from "../model/customer.model";
-import {Observable} from "rxjs";
+
 import {KeycloakSecurityService} from "../services/keycloak-security.service";
 import {Mesure} from "../model/mesure.model";
 

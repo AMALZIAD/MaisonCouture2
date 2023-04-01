@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="card-header">Mes Rendez-Vous</div>
+  <div class="card-body">
+    <div class="table " >
+
+      <thead class="table-dark">
+      <tr>
+        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th>Customer</th><th>Couturier</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let m of mesrdvs |async">
+        <td>{{m.id}}</td>
+        <td>{{m.rdvdate}}</td>
+        <td>{{m.heure}}</td>
+        <td>{{m.status}}</td>
+        <td>{{m.customerId}}</td>
+        <td>{{m.couturierId}}</td>
+
+      </tr>
+      </tbody>
+    </div>
+
+
+
+
+  </div>
+</div>

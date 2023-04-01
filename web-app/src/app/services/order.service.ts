@@ -14,6 +14,10 @@ export class OrderService {
 
   constructor(private http:HttpClient) { }
 
+  public saveOrder(order:Order){
+    return this.http.post(environment.bankendhost+"/BILLING-SERVICE/orders",order)
+  }
+
   public getOrders():Observable<Order[]>{
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/orders");
      /* .pipe(map((result:any)=>{

@@ -47,13 +47,22 @@
             <div class="card-body ">
               <div >
                 <div class="w-100">
-                  <h5>Votre avis !</h5>
-                  <div class="form-outline">
-                    <textarea class="form-control" id="textAreaExample" rows="4"></textarea>
-                  </div>
-                  <div >
-                     <button type="button" class="btn btn-danger mt-3" (click)="addReview()">envoyer</button>
-                  </div>
+                  <form [formGroup]="newReviewFormGroup" (ngSubmit)="addReview()">
+                    <h5>Votre avis !</h5>
+                    <div class="form-outline">
+                      <textarea class="form-control" formControlName="comment" rows="4"></textarea>
+                      <span class="text-danger"
+                            *ngIf="newReviewFormGroup.controls['comment'].touched
+                            && newReviewFormGroup.controls['comment'].errors
+                            && newReviewFormGroup.controls['comment'].errors!['comment']">
+                             le commentaire ne doit pas etre vide
+          </span>
+                    </div>
+                    <div >
+                      <button [disabled]="!newReviewFormGroup.valid" class="btn btn-danger mt-3" >envoyer</button>
+                    </div>
+                  </form>
+
                 </div>
               </div>
             </div>

@@ -6,8 +6,10 @@ export interface Order{
   typecouture: number,
   categorie: number,
   tenue: number,
-  orderdate: string,
+  orderdate: Date,
   status: number,
-  customer: Customer,
-  couturier:Couturier
+  customer: any,
+  couturier:any,
+  customerId: number,
+    couturierId:number
 }
