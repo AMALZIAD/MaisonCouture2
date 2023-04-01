@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {catchError, Observable, throwError} from "rxjs";
-import {Customer} from "../model/customer.model";
-import {CustomerService} from "../services/customer.service";
 import {CouturierService} from "../services/couturier.service";
 import {Couturier} from "../model/couturier.model";
+import {Router} from "@angular/router";
+
 
 @Component({
   selector: 'app-couturiers',
@@ -14,7 +14,7 @@ export class CouturiersComponent implements OnInit {
 
   couturiers!:Observable<Array<Couturier>>;
   errorMessage!:string;
-  constructor(private couturierService: CouturierService) { }
+  constructor(private couturierService: CouturierService,private router :Router) { }
 
   ngOnInit(): void {
     this.couturiers=this.couturierService.getCouturiers().pipe(
@@ -24,5 +24,10 @@ export class CouturiersComponent implements OnInit {
       })
     );
   }
+
+  getDetails(c: Couturier) {
+    this.router.navigateByUrl("/couturierdetail/"+c.id);
+  }
+
 
 }

@@ -23,7 +23,7 @@ public class CouturierServiceApplication {
 
         SpringApplication.run(CouturierServiceApplication.class, args);
     }
-    @Bean
+   // @Bean
     public CommandLineRunner commandLineRunner(CouturierRepository couturierRepository, ReviewRepository reviewRepository, RepositoryRestConfiguration restConfiguration){
         return args -> {
             // afficher id
