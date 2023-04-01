@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="card-header">orders</div>
+  <div class="card-body">
+    <div class="table " >
+
+      <thead class="table-dark">
+      <tr>
+        <th>ID</th><th>Name</th><th>Email</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let o of orders |async">
+        <td>{{o.id}}</td>
+        <td>{{o.categorie}}</td>
+        <td>{{o.orderdate}}</td>
+        <td>{{o.status}}</td>
+        <td>{{o.tenue}}</td>
+        <td>{{o.typecouture}}</td>
+        <td>{{o.couturier.name}}</td>
+        <td>{{o.customer.name}}</td>
+      </tr>
+      </tbody>
+    </div>
+
+
+
+
+  </div>
+</div>
