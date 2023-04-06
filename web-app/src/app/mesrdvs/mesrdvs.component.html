@@ -2,7 +2,6 @@
   <div class="card-header">Mes Rendez-Vous</div>
   <div class="card-body">
     <div class="table " >
-
       <thead class="table-dark">
       <tr>
         <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th>Customer</th><th>Couturier</th>
@@ -11,7 +10,7 @@
       <tbody>
       <tr *ngFor="let m of mesrdvs |async">
         <td>{{m.id}}</td>
-        <td>{{m.rdvdate}}</td>
+        <td>{{m.rdvDate}}</td>
         <td>{{m.heure}}</td>
         <td>{{m.status}}</td>
         <td>{{m.customerId}}</td>
@@ -21,7 +20,33 @@
       </tbody>
     </div>
 
-
+    <!--prise rdv------------------------------------------------------------------------------------------------->
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th scope="col">Lundi</th>
+        <th scope="col">Mardi</th>
+        <th scope="col">Mercredi</th>
+        <th scope="col">jeudi</th>
+        <th scope="col">Vendredi</th>
+        <th scope="col">Samedi</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr><td>08:30</td><td>09:00</td><td>09:30</td><td>10:00</td><td>10:30</td><td>11:00</td><td>11:30</td><td>12:00</td>
+        <td>14:00</td><td>14:30</td><td>15:00</td><td>15:30</td><td>16:00</td><td>16:30</td><td>17:00</td><td>17:30</td></tr>
+      <tr><td>08:30</td><td>09:00</td><td>09:30</td><td>10:00</td><td>10:30</td><td>11:00</td><td>11:30</td><td>12:00</td>
+        <td>14:00</td><td>14:30</td><td>15:00</td><td>15:30</td><td>16:00</td><td>16:30</td><td>17:00</td><td>17:30</td></tr>
+      <tr><td>08:30</td><td>09:00</td><td>09:30</td><td>10:00</td><td>10:30</td><td>11:00</td><td>11:30</td><td>12:00</td>
+        <td>14:00</td><td>14:30</td><td>15:00</td><td>15:30</td><td>16:00</td><td>16:30</td><td>17:00</td><td>17:30</td></tr>
+      <tr><td>08:30</td><td>09:00</td><td>09:30</td><td>10:00</td><td>10:30</td><td>11:00</td><td>11:30</td><td>12:00</td>
+        <td>14:00</td><td>14:30</td><td>15:00</td><td>15:30</td><td>16:00</td><td>16:30</td><td>17:00</td><td>17:30</td></tr>
+      <tr><td>08:30</td><td>09:00</td><td>09:30</td><td>10:00</td><td>10:30</td><td>11:00</td><td>11:30</td><td>12:00</td>
+        <td>14:00</td><td>14:30</td><td>15:00</td><td>15:30</td><td>16:00</td><td>16:30</td><td>17:00</td><td>17:30</td></tr>
+      <tr><td>08:30</td><td>09:00</td><td>09:30</td><td>10:00</td><td>10:30</td><td>11:00</td><td>11:30</td><td>12:00</td>
+        <td>14:00</td><td>14:30</td><td>15:00</td><td>15:30</td><td>16:00</td><td>16:30</td><td>17:00</td><td>17:30</td></tr>
+      </tbody>
+    </table>
 
 
   </div>

@@ -15,6 +15,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { CouturierDetailsComponent } from './couturier-details/couturier-details.component';
 import { NewOrderComponent } from './new-order/new-order.component';
 import { MesrdvsComponent } from './mesrdvs/mesrdvs.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 function kcFactory(kcSecurity:KeycloakSecurityService) {
   return()=>kcSecurity.init();
@@ -29,7 +30,8 @@ function kcFactory(kcSecurity:KeycloakSecurityService) {
     OrdersComponent,
     CouturierDetailsComponent,
     NewOrderComponent,
-    MesrdvsComponent
+    MesrdvsComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,

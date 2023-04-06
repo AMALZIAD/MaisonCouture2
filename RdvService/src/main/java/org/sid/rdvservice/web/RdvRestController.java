@@ -1,5 +1,6 @@
 package org.sid.rdvservice.web;
 
+import lombok.AllArgsConstructor;
 import org.sid.rdvservice.entities.Rdv;
 import org.sid.rdvservice.model.Couturier;
 import org.sid.rdvservice.services.CouturierRestClient;
@@ -7,14 +8,17 @@ import org.sid.rdvservice.services.CustomerRestClient;
 import org.sid.rdvservice.services.RdvService;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-
+@RestController
 public class RdvRestController {
     RdvService rdvService;
     CustomerRestClient customerRestClient;
     CouturierRestClient couturierRestClient;
 
-    public RdvRestController(RdvService orderService, CustomerRestClient customerRestClient, CouturierRestClient couturierRestClient) {
+    public RdvRestController(RdvService rdvService, CustomerRestClient customerRestClient, CouturierRestClient couturierRestClient) {
         this.rdvService = rdvService;
         this.customerRestClient = customerRestClient;
         this.couturierRestClient = couturierRestClient;
@@ -41,13 +45,21 @@ public class RdvRestController {
     public List<Rdv> getRdvs(){
         return rdvService.getRdvs();
     }
+
     @GetMapping("/RdvsByCustomer/{id}")
-    public List<Rdv> getCustomerOrders(@PathVariable Long id){
+    public List<Rdv> getCouturierRdvs(@PathVariable Long id){
         return rdvService.getCustomerRdvs(id);
     }
     @GetMapping("/RdvsByCouturier/{id}")
-    public List<Rdv> getCouturierOrders(@PathVariable Long id){
+    public List<Rdv> getCustomerRdvs(@PathVariable Long id){
         return rdvService.getCouturierRdvs(id);
+    }
+    @GetMapping("/CurrentRdv/{rdvDate}/{id}")
+    public List<Rdv> getCouturierCurrentRdv(@PathVariable String rdvDate,@PathVariable Long id) throws ParseException {
+
+        Date date=new SimpleDateFormat("dd-MM-yyyy").parse(rdvDate);
+        System.out.println(date.toString());
+        return rdvService.getCouturierCurrentRdv(date,id);
     }
 
     // save and update

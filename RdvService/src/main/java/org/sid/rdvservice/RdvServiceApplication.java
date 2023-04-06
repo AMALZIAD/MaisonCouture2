@@ -28,7 +28,7 @@ public class RdvServiceApplication {
         SpringApplication.run(RdvServiceApplication.class, args);
     }
 
-    @Bean
+    //@Bean
      CommandLineRunner commandLineRunner(RdvRepository rdvRepository,
                                                CouturierRestClient couturierRestClient,CustomerRestClient customerRestClient) {
         return args -> {

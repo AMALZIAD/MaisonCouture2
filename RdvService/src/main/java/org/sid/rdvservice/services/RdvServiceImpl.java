@@ -12,6 +12,7 @@ import org.sid.rdvservice.repositories.RdvRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -84,6 +85,14 @@ public class RdvServiceImpl implements RdvService {
             rdv.setCustomer(customer);
             rdv.setCouturier(couturier);
         });
+        return rdvs;
+    }
+
+    @Override
+    public List<Rdv> getCouturierCurrentRdv(Date rdvDate, Long id) {
+       /* Couturier couturier=couturierRestClient.couturierById(couturierId);
+        if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");*/
+        List<Rdv> rdvs=rdvRepository.findRdvsByRdvDateGreaterThanAndCouturierId(rdvDate,id);
         return rdvs;
     }
 }
