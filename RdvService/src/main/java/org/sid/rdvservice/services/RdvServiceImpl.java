@@ -3,6 +3,7 @@ package org.sid.rdvservice.services;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sid.rdvservice.entities.Rdv;
+import org.sid.rdvservice.enums.RdvStatus;
 import org.sid.rdvservice.exceptions.CouturierNotFoundException;
 import org.sid.rdvservice.exceptions.CustomerNotFoundException;
 import org.sid.rdvservice.exceptions.RdvNotFoundException;
@@ -40,8 +41,20 @@ public class RdvServiceImpl implements RdvService {
     }
 
     @Override
-    public Rdv updateRdv(Rdv rdv) {
-        return rdvRepository.save(rdv);
+    public void updateRdv(List<Rdv> lst) {
+        Date mtn=new Date();
+        mtn.setHours(0);
+        mtn.setMinutes(0);
+        mtn.setSeconds(0);
+        lst.forEach(rdv -> {
+            if(rdv.getRdvDate().compareTo(mtn)<0){
+                System.out.println("Date "+rdv.getRdvDate().toString()+" occurs before Date "+mtn.toString());
+                   if(rdv.getStatus()==RdvStatus.PRIS){
+                       rdv.setStatus(RdvStatus.DEPASSE);
+                       rdvRepository.save(rdv);
+                   }
+            }
+        });
     }
 
     @Override
@@ -69,7 +82,6 @@ public class RdvServiceImpl implements RdvService {
         List<Rdv> rdvs=rdvRepository.findByCustomerId(customerId);
         rdvs.forEach( rdv -> {
             Couturier couturier=couturierRestClient.couturierById(rdv.getCouturierId());
-            rdv.setCustomer(customer);
             rdv.setCouturier(couturier);
         });
         return rdvs;
@@ -83,15 +95,12 @@ public class RdvServiceImpl implements RdvService {
         rdvs.forEach( rdv -> {
             Customer customer=customerRestClient.customerById(rdv.getCustomerId());
             rdv.setCustomer(customer);
-            rdv.setCouturier(couturier);
         });
         return rdvs;
     }
 
     @Override
     public List<Rdv> getCouturierCurrentRdv(Date rdvDate, Long id) {
-       /* Couturier couturier=couturierRestClient.couturierById(couturierId);
-        if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");*/
         List<Rdv> rdvs=rdvRepository.findRdvsByRdvDateGreaterThanAndCouturierId(rdvDate,id);
         return rdvs;
     }

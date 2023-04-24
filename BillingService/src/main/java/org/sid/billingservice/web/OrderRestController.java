@@ -22,18 +22,6 @@ public class OrderRestController {
         this.couturierRestClient = couturierRestClient;
     }
 
-    /*@GetMapping("/fullorder/{id}")
-    public Order order(@PathVariable Long id){
-        Order order=orderRepository.findById(id).get();
-        Customer customer=customerRestClient.customerById(order.getCustomerId());
-        Couturier couturier=couturierRestClient.couturierById(order.getCouturierId());
-        System.out.println(customer);
-        System.out.println(customer);
-        order.setCustomer(customer);
-        order.setCouturier(couturier);
-        return order;
-    }*/
-
     // get one and many
     @GetMapping("/orders/{id}")
     public Order getOrder(@PathVariable Long id){
@@ -49,6 +37,7 @@ public class OrderRestController {
     }
     @GetMapping("/OrderByCouturier/{id}")
     public List<Order> getCouturierOrders(@PathVariable Long id){
+        // get id from couturier RestClient
         return orderService.getCouturierOrders(id);
     }
     //getCustomersByCouturier

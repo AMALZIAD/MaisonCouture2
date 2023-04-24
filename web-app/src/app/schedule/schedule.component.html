@@ -1,38 +1,22 @@
 <div class="container">
+  <div class="card-header">Mes Rendez-Vous</div>
+  <div class="card-body">
+
+
   <table class="table table-bordered">
     <thead>
     <tr>
       <th scope="col" *ngFor="let d of days">{{d | date: 'dd-MM-yyyy'}}</th>
-
     </tr>
     </thead>
-
     <tbody (click)="valideRdv($event)" >
-    <tr *ngFor="let t of times">
-      <td *ngFor="let d of t"    >
-        <button *ngIf="d.s != 'taken'" name="{{d.d}}">{{d.h}}</button>
+    <tr *ngFor="let time of mesrdvs">
+      <td *ngFor="let d of time" >
+        <button *ngIf="d.s!=1" name="{{d.j}}">{{d.h}}</button>
       </td>
     </tr>
     </tbody>
   </table>
 
-  <div class="table " >
-    <thead class="table-dark">
-    <tr>
-      <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th>Customer</th><th>Couturier</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let m of mesrdvs |async">
-      <td>{{m.id}}</td>
-      <td>{{m.rdvDate}}</td>
-      <td>{{m.heure}}</td>
-      <td>{{m.status}}</td>
-      <td>{{m.customerId}}</td>
-      <td>{{m.couturierId}}</td>
-
-    </tr>
-    </tbody>
-  </div>
 
 </div>

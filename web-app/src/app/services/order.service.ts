@@ -14,33 +14,28 @@ export class OrderService {
 
   constructor(private http:HttpClient) { }
 
+  // save 1 order----------------------------------------------------------------------------------------
   public saveOrder(order:Order){
     return this.http.post(environment.bankendhost+"/BILLING-SERVICE/orders",order)
   }
-
+  // get all orders---------------------------------------------------------------------------------------
   public getOrders():Observable<Order[]>{
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/orders");
-     /* .pipe(map((result:any)=>{
-        return result._embedded.couturiers; //just return "couturiers"
-      }));*/
   }
 
-  // get list of cutomers by id couturier
+  // get list of cutomers by id couturier----------------------------------------------------------------
   public getCustomersByCouturier(id: number):Observable<Customer[]>{
     return this.http.get<Customer[]>(environment.bankendhost+"/BILLING-SERVICE/CustomersByCouturier/"+id)
       .pipe(map((result:any)=>{
         return result._embedded.customers; //just return "customers"
       }));
   }
-  // GET ORDERS BY CUSTOMER ID
+  // GET ORDERS BY CUSTOMER ID ----------------------------------------------------------------------------
   getCustomerOrders(idkc: string):Observable<Order[]> {
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/OrderByCustomer/"+idkc);
-    /* .pipe(map((result:any)=>{
-       return result._embedded.couturiers; //just return "couturiers"
-     }));*/
   }
 
-// GET ORDERS BY COUTURIER ID
+// GET ORDERS BY COUTURIER ID------------------------------------------------------------------------------
   getCouturierOrders(idkc: string) :Observable<Order[]> {
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/OrderByCouturier/"+idkc);
     /* .pipe(map((result:any)=>{

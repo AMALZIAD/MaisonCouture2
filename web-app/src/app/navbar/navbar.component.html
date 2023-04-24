@@ -9,7 +9,7 @@
         <a class="nav-link active" routerLink="/couturiers">Maison de Couture</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/customers" >Customers</a>
+        <a class="nav-link" routerLink="/customers" *ngIf="sec.kc.hasRealmRole('COUTURIER')">Customers</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/mesrdvs"  >Mes Rdvs</a>
@@ -19,9 +19,6 @@
       </li>
       <li class="nav-item">
         <a class="nav-link active" routerLink="/neworder">New Order</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active" routerLink="/schedule">rdv</a>
       </li>
     </ul>
     <ul class="navbar-nav " >

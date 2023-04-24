@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {OrderService} from "../services/order.service";
 import {Order} from "../model/order.model";
+import {Mesrdv} from "../model/mesrdv";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-new-order',
@@ -11,7 +13,10 @@ import {Order} from "../model/order.model";
 export class NewOrderComponent implements OnInit {
 
   newOrderFormGroup!:FormGroup
-  constructor(private fb:FormBuilder,private serviceOrder:OrderService ) { }
+  rdv!:Mesrdv;
+  constructor(private fb:FormBuilder,private serviceOrder:OrderService,private route:ActivatedRoute ) {
+    this.rdv=JSON.parse(this.route.snapshot.params["rdv"]);
+  }
 
   ngOnInit(): void {
 
@@ -23,18 +28,14 @@ export class NewOrderComponent implements OnInit {
   }
 
   handleSaveOrder() {
-    console.log("im here...");
     let order: Order = this.newOrderFormGroup.value;
-    console.log("value"+order);
-
-    order.customerId=1;// list customer from rdvn,;bk,bkjb
-    order.couturierId=1;// from token
+    order.customerId=this.rdv.customerId;
+    order.couturierId=this.rdv.couturierId;
     order.status=0;
     order.orderdate=new Date();
-    console.log(order);
     this.serviceOrder.saveOrder(order).subscribe({
       next: data => {
-        alert("Order has been successfully updated!");
+        alert("Order has been successfully Created!");
       },
       error: err => {
         console.log(err);

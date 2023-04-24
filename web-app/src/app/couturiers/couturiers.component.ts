@@ -31,4 +31,7 @@ export class CouturiersComponent implements OnInit {
   }
 
 
+  schedule(c: Couturier) {
+    this.router.navigateByUrl("/schedule/"+c.id);
+  }
 }

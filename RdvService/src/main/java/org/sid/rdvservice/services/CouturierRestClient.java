@@ -13,6 +13,9 @@ public interface CouturierRestClient {
     @GetMapping(value = "/couturiers/{id}")
     public Couturier couturierById(@PathVariable Long id);
 
+    @GetMapping("/CouturierByIdkc/{id}")
+    public Couturier getByIdkc(@PathVariable String id);
+
     @GetMapping("/couturiers")
     public PagedModel<Couturier> allCouturiers();
 

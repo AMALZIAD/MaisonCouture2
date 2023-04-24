@@ -11,19 +11,26 @@ export class MesrdvService {
 
   constructor(private http:HttpClient) { }
 
-  //All rdvs
+  //All rdvs-------------------------------------------------------------------------------
   public getRdvs():Observable<Mesrdv[]>{
     return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/rdvs")
       .pipe(map((result:any)=>{
         return result._embedded.rdvs; //just return "couturiers"
       }));
   }
-  //current couturier rdvs----------------------------------------------------------------
-  public getCurrentRdvs(id:number,date:any):Observable<Mesrdv[]>{
-    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/CurrentRdv/"+date+"/"+id)
-     /* .pipe(map((result:any)=>{
-        return result._embedded.rdvs; //just return "couturiers"
-      }));*/
+  //CUSTOMER rdvs------------------------------------------------------------------------------------
+  public getCustomerRdvs(id:string):Observable<Mesrdv[]>{
+    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/RdvsByCustomer/"+id);
+  }
+  //COUTURIER rdvs---------------------------------------------------------------------------------------
+  public getCouturierRdvs(id:string):Observable<Mesrdv[]>{
+    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/RdvsByCouturier/"+id);
+  }
+
+
+  //current couturier rdvs-------les rdvs qui sont deja pris dans la periode de today +14jours-----------------------------------------------------
+  public getCurrentRdvs(id:number){
+    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/CurrentRdv/"+id);
   }
 
   // save rdv ----------------------------------------------------------------------------------------

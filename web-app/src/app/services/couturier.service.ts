@@ -17,9 +17,9 @@ export class CouturierService {
   // LITS OF COUTURIERS
   public getCouturiers():Observable<Couturier[]>{
     return this.http.get<Couturier[]>(environment.bankendhost+"/COUTURIER-SERVICE/couturiers/?projection=fCouturier")
-      .pipe(map((result:any)=>{
+      /*.pipe(map((result:any)=>{
         return result._embedded.couturiers; //just return "couturiers"
-      }));
+      }));*/
   }
   //  get one couturuer by ID
   public getCouturier(id:number):Observable<Couturier>{
@@ -27,6 +27,11 @@ export class CouturierService {
       /*.pipe(map((result:any)=>{
         return result._embedded.couturiers; //just return "couturiers"
       }));*/
+  }
+  // save couturier
+//create account in web site
+  public saveCouturier(couturier: Couturier):Observable<Couturier>{
+    return this.http.post<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/couturiers",couturier);
   }
   //  get oCOUTURIER REVIEWS
   public getReviews(id:number):Observable<Review[]>{

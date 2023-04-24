@@ -33,6 +33,7 @@ public class CustomerRestController {
     // get Customer byIdkc for updating mesure!!!!
     @GetMapping("/CustomerByIdkc/{id}")
     public Customer findCustomerByIdkc(@PathVariable String id){
+        System.out.println("im inside customer service  --- customer by idkc");
         return rep.findCustomerByIdkc(id);
     }
 

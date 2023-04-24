@@ -17,6 +17,7 @@ public class Couturier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String idkc;
     private String name;
     private String email;
     private String adresse;

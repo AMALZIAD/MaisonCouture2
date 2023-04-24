@@ -42,7 +42,7 @@ public class RdvServiceApplication {
 
             rdv.setCouturierId(couturies.get(random.nextInt(couturies.size())).getId());
             rdv.setCustomerId(customers.get(random.nextInt(customers.size())).getId());
-            rdv.setStatus(RdvStatus.DISPONIBLE);
+            rdv.setStatus(RdvStatus.DISPO);
             rdv.setRdvDate(new Date());
             rdv.setHeure("15");
             Rdv savedRdv=rdvRepository.save(rdv );
