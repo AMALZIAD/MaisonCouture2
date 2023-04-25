@@ -22,7 +22,8 @@
           <button class="btn btn-success btn-sm float-right"  (click)="newOrder(m)">New Order</button>
         </td>
         <td *ngIf="this.sec.kc.hasRealmRole('CUSTOMER') ">
-          <button class="btn btn-danger btn-sm float-right"  (click)="cancelRdv(m)">Cancel</button>
+          <button [disabled]="toCancel != m.status" class="btn btn-danger btn-sm float-right"
+                  (click)="cancelRdv(m)">Cancel</button>
         </td>
       </tr>
       </tbody>

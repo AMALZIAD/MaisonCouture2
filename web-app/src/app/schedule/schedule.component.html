@@ -12,11 +12,13 @@
     <tbody (click)="valideRdv($event)" >
     <tr *ngFor="let time of mesrdvs">
       <td *ngFor="let d of time" >
-        <button *ngIf="d.s!=1" name="{{d.j}}">{{d.h}}</button>
+        <button class="btn btn-block" [ngClass]="{'btn-danger ': d.s=='PRIS'|| d.s=='TRAITE',
+         'btn-light text-success': d.s=='0','btn-dark ': d.s=='CONGE'}"
+               [disabled]="booked != d.s" name="{{d.j}}">{{d.h}}</button>
       </td>
     </tr>
     </tbody>
   </table>
-
+  </div>
 
 </div>

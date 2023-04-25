@@ -3,6 +3,7 @@ import {map, Observable} from "rxjs";
 import {Mesrdv} from "../model/mesrdv";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import {Customer} from "../model/customer.model";
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,12 @@ export class MesrdvService {
   // save rdv ----------------------------------------------------------------------------------------
   public saveRdv(rdv:Mesrdv){
     return this.http.post(environment.bankendhost+"/RDV-SERVICE/rdvs",rdv)
+  }
+
+  // DELETE RDV ---------------------------------------------------------------------------------------
+  public  deleteRdv(id: number){
+    console.log("id ",id)
+     return this.http.delete(environment.bankendhost+"/RDV-SERVICE/rdvs/"+id);
+
   }
 }

@@ -3,6 +3,7 @@ import {catchError, Observable, throwError} from "rxjs";
 import {CouturierService} from "../services/couturier.service";
 import {Couturier} from "../model/couturier.model";
 import {Router} from "@angular/router";
+import {KeycloakSecurityService} from "../services/keycloak-security.service";
 
 
 @Component({
@@ -14,7 +15,8 @@ export class CouturiersComponent implements OnInit {
 
   couturiers!:Observable<Array<Couturier>>;
   errorMessage!:string;
-  constructor(private couturierService: CouturierService,private router :Router) { }
+  constructor(private couturierService: CouturierService,private router :Router
+              ,public sec :KeycloakSecurityService) { }
 
   ngOnInit(): void {
     this.couturiers=this.couturierService.getCouturiers().pipe(

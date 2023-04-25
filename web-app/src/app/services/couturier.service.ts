@@ -17,17 +17,11 @@ export class CouturierService {
   // LITS OF COUTURIERS
   public getCouturiers():Observable<Couturier[]>{
     return this.http.get<Couturier[]>(environment.bankendhost+"/COUTURIER-SERVICE/couturiers/?projection=fCouturier")
-      /*.pipe(map((result:any)=>{
-        return result._embedded.couturiers; //just return "couturiers"
-      }));*/
   }
   //  get one couturuer by ID
   public getCouturier(id:number):Observable<Couturier>{
     return this.http.get<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/couturiers/"+id)
-      /*.pipe(map((result:any)=>{
-        return result._embedded.couturiers; //just return "couturiers"
-      }));*/
-  }
+   }
   // save couturier
 //create account in web site
   public saveCouturier(couturier: Couturier):Observable<Couturier>{
@@ -40,16 +34,7 @@ export class CouturierService {
        return result._embedded.reviews; //just return "couturiers"
      }));
   }
-  //  post a review--------------------------------------------------------------------
-  public addReviewb(id:number,review:Review):any{
-    let couturier ={id:<number>id};
-    review.couturier=couturier;
-    let lien="http://localhost:8888/COUTURIER-SERVICE/reviews";
-    console.log(review);
-    console.log(lien);
-    return this.http.post("http://localhost:8888/COUTURIER-SERVICE/reviews",review);
 
-  }
   public addReview(review: Review):Observable<Review>{
     return this.http.post<Review>(environment.bankendhost+"/COUTURIER-SERVICE/reviews",review);
   }

@@ -63,7 +63,9 @@ public class RdvRestController {
     }
     @DeleteMapping("/rdvs/{id}")
     public void deleteRdv(@PathVariable Long id){
+        System.out.println("im inside server DELETE ");
         rdvService.deleteRdv(id);
+        System.out.println("rdv deleted ");
     }
     /*@PutMapping("/rdvs/{id}")
     public Rdv updateRdv(@PathVariable Long id, @RequestBody Rdv rdv){

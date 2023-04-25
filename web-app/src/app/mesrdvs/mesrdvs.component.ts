@@ -14,11 +14,12 @@ export class MesrdvsComponent implements OnInit {
 
   mesrdvs!:Observable<Mesrdv[]>;
   errorMessage!:string;
-
+  toCancel!:any;
   constructor(private mesrdvsService:MesrdvService,public sec:KeycloakSecurityService,
               private router :Router) { }
 
   ngOnInit(): void {
+    this.toCancel="PRIS";
     let idkc:string = <string>this.sec.kc.tokenParsed?.sub;
     console.log(idkc);
     if(this.sec.kc.hasRealmRole("CUSTOMER")){
@@ -29,6 +30,7 @@ export class MesrdvsComponent implements OnInit {
           return throwError(err);
         })
       );
+
     }else{
       console.log("im couturier")
       this.mesrdvs=this.mesrdvsService.getCouturierRdvs(idkc).pipe(
@@ -45,6 +47,16 @@ export class MesrdvsComponent implements OnInit {
   }
 
   cancelRdv(m: Mesrdv) {
+    console.log(m)
+    this.mesrdvsService.deleteRdv(m.id).subscribe({
+      next: data => {
+        alert("Rdv has been successfully Deleted!");
+        console.log(data);
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
 
   }
 }

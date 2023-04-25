@@ -1,8 +1,6 @@
-import {Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {DomSanitizer} from "@angular/platform-browser";
+import {Component,OnInit,} from '@angular/core';
 import {MesrdvService} from "../services/mesrdv.service";
 import {Mesrdv} from "../model/mesrdv";
-import {catchError, Observable, pipe, throwError} from "rxjs";
 import {DatePipe} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {CustomerService} from "../services/customer.service";
@@ -26,6 +24,7 @@ export class ScheduleComponent implements OnInit {
 
   couturierId!:number;
   customerId!:number;
+  booked=0;
   constructor(private rdvService:MesrdvService,private route:ActivatedRoute ,
               private customerService :CustomerService,private  sec:KeycloakSecurityService) {
    //get couturier id from route(clickedlink )
@@ -34,6 +33,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     //get customer ID using backend and idkc
     let idkc: string | undefined  = "";
     idkc=this.sec.kc.tokenParsed?.sub ;
@@ -71,7 +71,7 @@ export class ScheduleComponent implements OnInit {
          this.days.forEach(day=>{
            let curr :string | null ="";
            curr = this.pipe.transform(day, 'MM-dd-yyyy');
-           console.log("test  "+this.rdvcheck(time,curr));
+           //console.log("test  "+this.rdvcheck(time,curr));
            // create object
            let obj={h:time,j:day,s:this.rdvcheck(time,curr)}
            jour.push(obj);
@@ -83,12 +83,13 @@ export class ScheduleComponent implements OnInit {
   rdvcheck(h: string, d: string | null):number | null{
     let status :number =0;
     this.currents.forEach(current=>{
-      current.forEach((c: { rdvDate: string | number | Date; heure: string; })=>{
+      current.forEach((c: { rdvDate: string | number | Date; heure: string;status:number })=>{
         let curr :string | null ="";
         curr = this.pipe.transform(c.rdvDate, 'MM-dd-yyyy');
+       // console.log("my new status ",c.status);
         if (c.heure==h){
           if(curr==d){
-            status=1;
+            status=c.status;
           }
         }
       });
@@ -110,7 +111,7 @@ fillData():boolean{
   });
   return true;
 }
-  // validate rdv ----------------------------------------------------
+  // validate rdv -CUSTOMER---------------------------------------------------
   valideRdv(event:any) {
     // get only buttons clicked
     if(event.target.localName=="button"){
@@ -119,7 +120,7 @@ fillData():boolean{
       var date = event.target.name;
       //save it to BD
       let rdvDate=new Date(new Date(date).setHours(0, 0, 0, 0));
-      let rdv:Mesrdv={id:0,rdvDate:rdvDate,heure:heure,customerId:this.customerId,couturierId:this.couturierId,status:0};
+      let rdv:Mesrdv={id:0,rdvDate:rdvDate,heure:heure,customerId:this.customerId,couturierId:this.couturierId,status:1};
       this.rdvService.saveRdv(rdv).subscribe({
         next: data => {
           alert("Rdv has been successfully saved!");
