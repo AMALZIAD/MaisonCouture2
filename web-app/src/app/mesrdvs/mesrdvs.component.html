@@ -1,12 +1,15 @@
 <div class="container">
   <div class="card-header">Mes Rendez-Vous /</div>
-  <div class="card-body">
+  <button class="btn btn-success btn-sm float-right"
+          *ngIf="sec.kc.hasRealmRole('COUTURIER')"
+          (click)="declarerConge()">Déclarer Mes Congés</button>
+
+  <div class="card-body" *ngIf="this.sec.kc.hasRealmRole('CUSTOMER')">
     <div class="table " >
       <thead class="table-dark">
       <tr>
         <th>ID</th><th>Date</th><th>Heure</th><th>Status</th>
-        <th *ngIf="this.sec.kc.hasRealmRole('COUTURIER')">Customer</th>
-        <th *ngIf="this.sec.kc.hasRealmRole('CUSTOMER')">Couturier</th>
+        <th >Couturier</th>
         <th>Action</th>
       </tr>
       </thead>
@@ -16,15 +19,57 @@
         <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
         <td>{{m.heure}}</td>
         <td>{{m.status}}</td>
-        <td *ngIf="this.sec.kc.hasRealmRole('COUTURIER')">{{m.customerId}}</td>
-        <td *ngIf="this.sec.kc.hasRealmRole('CUSTOMER')">{{m.couturierId}}</td>
-        <td *ngIf="this.sec.kc.hasRealmRole('COUTURIER')">
-          <button class="btn btn-success btn-sm float-right"  (click)="newOrder(m)">New Order</button>
-        </td>
-        <td *ngIf="this.sec.kc.hasRealmRole('CUSTOMER') ">
-          <button [disabled]="toCancel != m.status" class="btn btn-danger btn-sm float-right"
+        <td>{{m.couturierId}}</td>
+        <td>
+          <button [disabled]="toCancel != m.status" class="btn btn-warning btn-sm float-right"
                   (click)="cancelRdv(m)">Cancel</button>
         </td>
+
+      </tr>
+      </tbody>
+    </div>
+  </div>
+
+
+  <div class="card-body" *ngIf="sec.kc.hasRealmRole('COUTURIER')">
+    <div class="table " >
+      <thead class="table-dark">
+      <tr>
+        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th>
+        <th>Customer</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let m of todays |async" >
+          <td>{{m.id}}</td>
+          <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
+          <td>{{m.heure}}</td>
+          <td>{{m.status}}</td>
+          <td>{{m.customerId}}</td>
+          <td >
+            <button *ngIf="m.status=='PRIS'" class="btn btn-success btn-sm float-right"
+                    (click)="newOrder(m)">New Order</button>
+            <button *ngIf="m.status=='CONGE'"
+                    class="btn btn-danger btn-sm float-right"  (click)="cancelConge(m)">Cancel</button>
+          </td>
+      </tr>
+      </tbody>
+    </div>
+
+    <div class="table" >
+      <thead class="table-dark">
+      <tr>
+        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th> <th>Customer</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let m of olds |async">
+        <td>{{m.id}}</td>
+        <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
+        <td>{{m.heure}}</td>
+        <td>{{m.status}}</td>
+        <td>{{m.customerId}}</td>
       </tr>
       </tbody>
     </div>

@@ -35,7 +35,7 @@ export class OrderService {
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/OrderByCustomer/"+idkc);
   }
 
-// GET ORDERS BY COUTURIER ID------------------------------------------------------------------------------
+// GET ORDERS BY COUTURIER IDKC------------------------------------------------------------------------------
   getCouturierOrders(idkc: string) :Observable<Order[]> {
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/OrderByCouturier/"+idkc);
     /* .pipe(map((result:any)=>{

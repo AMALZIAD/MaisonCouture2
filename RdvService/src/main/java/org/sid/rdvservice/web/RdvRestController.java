@@ -11,9 +11,13 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
+
 @RestController
 public class RdvRestController {
     RdvService rdvService;
@@ -36,11 +40,30 @@ public class RdvRestController {
         return rdvService.getRdvs();
     }
 
+    // rdv encours couturioer from today !!! ( mesrdvs)
+    @GetMapping("/TodayRdv/{id}")
+    public List<Rdv> getTodayRdvs(@PathVariable String id){
+        Long couturierId=this.couturierRestClient.getByIdkc(id).getId();
+        Date dt = new Date();
+        Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
+        System.out.println(hier.toString());
+        return  rdvService.getCouturierCurrentRdv(hier,couturierId);
+    }
+    // rdv old couturioer from yesterday!!! (mesrdvs)
     @GetMapping("/RdvsByCouturier/{id}")
     public List<Rdv> getCouturierRdvs(@PathVariable String id){
-        Long couturierId=this.couturierRestClient.getByIdkc(id).getId();
-        return  rdvService.getCouturierCurrentRdv(new Date(),couturierId);
+        System.out.println("im inside rdv rest --- rdvby couturier");
+        Long code =this.couturierRestClient.getByIdkc(id).getId();
+        System.out.println(code);
+        return rdvService.getCouturierRdvs(code);
     }
+    // rdv encours couturioer from tomorow !!! (schedule)
+    @GetMapping("/CurrentRdv/{id}")
+    public List<Rdv> getCouturierCurrentRdv(@PathVariable Long id)  {
+        return rdvService.getCouturierCurrentRdv(new Date(),id);
+    }
+
+    ////////////////////////////////////CUSTOMER///////////////////////////////////////
     @GetMapping("/RdvsByCustomer/{id}")
     public List<Rdv> getCustomerRdvs(@PathVariable String id){
         System.out.println("im inside rdv rest --- rdvby customer");
@@ -51,22 +74,18 @@ public class RdvRestController {
         return lst;
     }
 
-    @GetMapping("/CurrentRdv/{id}")
-    public List<Rdv> getCouturierCurrentRdv(@PathVariable Long id)  {
-        return rdvService.getCouturierCurrentRdv(new Date(),id);
-    }
-
-    // save and update
+    // save and update rdv
     @PostMapping("/rdvs")
-    public Rdv saveRdv(@RequestBody Rdv order){
-        return rdvService.saveRdv(order);
+    public Rdv saveRdv(@RequestBody Rdv rdv){
+        return rdvService.saveRdv(rdv);
     }
     @DeleteMapping("/rdvs/{id}")
-    public void deleteRdv(@PathVariable Long id){
+    public void deleteConge(@PathVariable Long id){
         System.out.println("im inside server DELETE ");
         rdvService.deleteRdv(id);
         System.out.println("rdv deleted ");
     }
+
     /*@PutMapping("/rdvs/{id}")
     public Rdv updateRdv(@PathVariable Long id, @RequestBody Rdv rdv){
         rdv.setId(id);

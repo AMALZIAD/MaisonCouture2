@@ -5,19 +5,29 @@
 
       <thead class="table-dark">
       <tr>
-        <th>ID</th><th>Name</th><th>Email</th>
+        <th>ID</th><th>Order Date</th><th>Tenue</th><th>Categorie</th><th>Type Couture</th>
+        <th>Status</th>
+        <th *ngIf="sec.kc.hasRealmRole('COUTURIER')">Customer</th>
+        <th *ngIf="sec.kc.hasRealmRole('CUSTOMER')">Couturier</th>
+        <th>Action</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let o of orders |async">
         <td>{{o.id}}</td>
-        <td>{{o.categorie}}</td>
         <td>{{o.orderdate}}</td>
-        <td>{{o.status}}</td>
         <td>{{o.tenue}}</td>
+        <td>{{o.categorie}}</td>
         <td>{{o.typecouture}}</td>
-        <td>{{o.couturier.name}}</td>
-        <td>{{o.customer.name}}</td>
+        <td>{{o.status}}</td>
+        <td *ngIf="sec.kc.hasRealmRole('COUTURIER')">{{o.customer.name}}</td>
+        <td *ngIf="sec.kc.hasRealmRole('CUSTOMER')">{{o.couturier.name}}</td>
+        <td *ngIf="sec.kc.hasRealmRole('COUTURIER')">
+          <button class="btn btn-success btn-sm float-right"
+                  (click)="updateOrder(o,1)">{{checkstatus(o.status)}}</button>
+          <button *ngIf="o.status=='CREE'" class="btn btn-danger btn-sm float-right"
+                  (click)="updateOrder(o,0)">ANNULER</button>
+        </td>
       </tr>
       </tbody>
     </div>

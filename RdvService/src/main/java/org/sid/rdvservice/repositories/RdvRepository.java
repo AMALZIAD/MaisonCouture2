@@ -9,6 +9,8 @@ import java.util.List;
 public interface RdvRepository extends JpaRepository<Rdv,Long> {
     List<Rdv> findByCustomerId(Long customerId);
     List<Rdv> findByCouturierId(Long couturierId);
-    List<Rdv> findRdvsByRdvDate(String date);
+    List<Rdv> findRdvsByRdvDateEquals(String date);
     List<Rdv> findRdvsByRdvDateGreaterThanAndCouturierId(Date rdvDate, Long id);
+    List<Rdv> findRdvsByRdvDateLessThanAndCouturierId(Date rdvDate, Long id);
+
 }

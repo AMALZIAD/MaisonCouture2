@@ -47,9 +47,9 @@ public class RdvServiceImpl implements RdvService {
         mtn.setMinutes(0);
         mtn.setSeconds(0);
         lst.forEach(rdv -> {
-            if(rdv.getRdvDate().compareTo(mtn)<0){
+            if(rdv.getRdvDate().compareTo(mtn)<=0){
                 System.out.println("Date "+rdv.getRdvDate().toString()+" occurs before Date "+mtn.toString());
-                   if(rdv.getStatus()==RdvStatus.PRIS){
+                   if(rdv.getStatus()==RdvStatus.PRIS) {
                        rdv.setStatus(RdvStatus.DEPASSE);
                        rdvRepository.save(rdv);
                    }
@@ -87,18 +87,27 @@ public class RdvServiceImpl implements RdvService {
         return rdvs;
     }
 
+    // get couturier old rdvs
     @Override
     public List<Rdv> getCouturierRdvs(Long couturierId) {
         Couturier couturier=couturierRestClient.couturierById(couturierId);
         if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
-        List<Rdv> rdvs=rdvRepository.findByCouturierId(couturierId);
+        Date dt = new Date();
+        Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
+        List<Rdv> rdvs=rdvRepository.findRdvsByRdvDateLessThanAndCouturierId(hier,couturierId);
         rdvs.forEach( rdv -> {
-            Customer customer=customerRestClient.customerById(rdv.getCustomerId());
-            rdv.setCustomer(customer);
+            if(rdv.getCustomerId()!=0){
+                Customer customer=customerRestClient.customerById(rdv.getCustomerId());
+                rdv.setCustomer(customer);
+            }
+            if(rdv.getStatus()==RdvStatus.PRIS){
+                rdv.setStatus(RdvStatus.DEPASSE);
+                rdvRepository.save(rdv);
+            }
         });
         return rdvs;
     }
-
+    // recuperer la liste des rdv encours pour la prise des rdvs from tomoroow
     @Override
     public List<Rdv> getCouturierCurrentRdv(Date rdvDate, Long id) {
         List<Rdv> rdvs=rdvRepository.findRdvsByRdvDateGreaterThanAndCouturierId(rdvDate,id);

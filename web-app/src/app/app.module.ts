@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { CustomersComponent } from './customers/customers.component';
 import { CouturiersComponent } from './couturiers/couturiers.component';
 import {ReactiveFormsModule} from "@angular/forms";
@@ -16,6 +16,7 @@ import { CouturierDetailsComponent } from './couturier-details/couturier-details
 import { NewOrderComponent } from './new-order/new-order.component';
 import { MesrdvsComponent } from './mesrdvs/mesrdvs.component';
 import { ScheduleComponent } from './schedule/schedule.component';
+import { EditCouturierComponent } from './edit-couturier/edit-couturier.component';
 
 function kcFactory(kcSecurity:KeycloakSecurityService) {
   return()=>kcSecurity.init();
@@ -31,7 +32,8 @@ function kcFactory(kcSecurity:KeycloakSecurityService) {
     CouturierDetailsComponent,
     NewOrderComponent,
     MesrdvsComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    EditCouturierComponent
   ],
   imports: [
     BrowserModule,

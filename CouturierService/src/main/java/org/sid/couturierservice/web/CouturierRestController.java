@@ -44,6 +44,11 @@ public class CouturierRestController {
        assignRole(couturier.getIdkc());
         return  couturierRepository.save(couturier);
     }
+    @PostMapping("/editCouturier")
+    public Couturier editCustomer(@RequestBody Couturier couturier){
+        System.out.println(couturier);
+        return  couturierRepository.save(couturier);
+    }
     // get Couturier byIdkc !!!!
     @GetMapping("/CouturierByIdkc/{id}")
     public Couturier findCustomerByIdkc(@PathVariable String id){

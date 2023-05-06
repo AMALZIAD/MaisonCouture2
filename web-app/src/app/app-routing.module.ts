@@ -8,17 +8,17 @@ import {CouturierDetailsComponent} from "./couturier-details/couturier-details.c
 import {NewOrderComponent} from "./new-order/new-order.component";
 import {MesrdvsComponent} from "./mesrdvs/mesrdvs.component";
 import {ScheduleComponent} from "./schedule/schedule.component";
+import {EditCouturierComponent} from "./edit-couturier/edit-couturier.component";
 
 const routes: Routes = [
   { path :"customers",component :CustomersComponent},
- { path :"couturiers",component :CouturiersComponent},
+  { path :"couturiers",component :CouturiersComponent},
   { path :"editcustomer",component :EditCustomerComponent},
+  { path :"editcouturier",component :EditCouturierComponent},
   { path :"orders",component :OrdersComponent},
-  { path :"neworder",component :NewOrderComponent},
   { path :"neworder/:rdv",component :NewOrderComponent},
   { path :"mesrdvs",component :MesrdvsComponent},
   { path :"couturierdetail/:id",component :CouturierDetailsComponent},
-  { path :"schedule",component :ScheduleComponent},
   { path :"schedule/:id",component :ScheduleComponent}
 
 ];

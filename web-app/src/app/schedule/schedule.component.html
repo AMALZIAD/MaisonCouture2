@@ -1,5 +1,9 @@
 <div class="container">
   <div class="card-header">Mes Rendez-Vous</div>
+  <button class="btn btn-success btn-sm float-right"
+          *ngIf="sec.kc.hasRealmRole('COUTURIER')"
+          (click)="declarerConge()">Déclarer Mes Congés</button>
+
   <div class="card-body">
 
 
@@ -13,8 +17,8 @@
     <tr *ngFor="let time of mesrdvs">
       <td *ngFor="let d of time" >
         <button class="btn btn-block" [ngClass]="{'btn-danger ': d.s=='PRIS'|| d.s=='TRAITE',
-         'btn-light text-success': d.s=='0','btn-dark ': d.s=='CONGE'}"
-               [disabled]="booked != d.s" name="{{d.j}}">{{d.h}}</button>
+         'btn-light text-success': d.s=='0'||d.s=='ANNULE','btn-dark ': d.s=='CONGE'}"
+               [disabled]="d.s != 0 && d.s != 'ANNULE'" name="{{d.j}}">{{d.h}}</button>
       </td>
     </tr>
     </tbody>

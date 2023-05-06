@@ -4,6 +4,7 @@ import {OrderService} from "../services/order.service";
 import {Order} from "../model/order.model";
 import {Mesrdv} from "../model/mesrdv";
 import {ActivatedRoute} from "@angular/router";
+import {MesrdvService} from "../services/mesrdv.service";
 
 @Component({
   selector: 'app-new-order',
@@ -14,7 +15,8 @@ export class NewOrderComponent implements OnInit {
 
   newOrderFormGroup!:FormGroup
   rdv!:Mesrdv;
-  constructor(private fb:FormBuilder,private serviceOrder:OrderService,private route:ActivatedRoute ) {
+  constructor(private fb:FormBuilder,private serviceOrder:OrderService,private route:ActivatedRoute,
+              private rdvService:MesrdvService) {
     this.rdv=JSON.parse(this.route.snapshot.params["rdv"]);
   }
 
@@ -35,6 +37,9 @@ export class NewOrderComponent implements OnInit {
     order.orderdate=new Date();
     this.serviceOrder.saveOrder(order).subscribe({
       next: data => {
+        // set rdv status to TRAITE
+        this.rdv.status=4;
+        this.rdvService.saveRdv(this.rdv);
         alert("Order has been successfully Created!");
       },
       error: err => {

@@ -18,7 +18,8 @@ export class EditCustomerComponent implements OnInit {
   newCustomerFormGroup !:FormGroup;
   editMesureFormGroup!:FormGroup;
 
-  constructor(private fb:FormBuilder,private customerService:CustomerService,private sec:KeycloakSecurityService) {  }
+  constructor(private fb:FormBuilder,private customerService:CustomerService,
+              private sec:KeycloakSecurityService) {  }
 
   ngOnInit(): void {
     // get Customer idkc from Token

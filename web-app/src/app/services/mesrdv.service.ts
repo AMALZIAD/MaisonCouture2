@@ -23,13 +23,16 @@ export class MesrdvService {
   public getCustomerRdvs(id:string):Observable<Mesrdv[]>{
     return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/RdvsByCustomer/"+id);
   }
-  //COUTURIER rdvs---------------------------------------------------------------------------------------
+  //COUTURIER rdvs------------------OLD---------------------------------------------------------------------
   public getCouturierRdvs(id:string):Observable<Mesrdv[]>{
     return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/RdvsByCouturier/"+id);
   }
+//current couturier rdvs-------les rdvs qui sont deja pris dans la periode de TOMROW +14jours-----------------------------------------------------
+  public getTodayRdvs(id:string){
+    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/TodayRdv/"+id);
+  }
 
-
-  //current couturier rdvs-------les rdvs qui sont deja pris dans la periode de today +14jours-----------------------------------------------------
+  //SCHEDULE current couturier rdvs-------les rdvs qui sont deja pris dans la periode de TOMROW +14jours-----------------------------------------------------
   public getCurrentRdvs(id:number){
     return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/CurrentRdv/"+id);
   }

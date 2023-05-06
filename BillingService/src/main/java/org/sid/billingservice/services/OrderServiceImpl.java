@@ -88,10 +88,10 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
     @Override
-    public List<Order> getCouturierOrders(Long couturierId) {
-        Couturier couturier=couturierRestClient.couturierById(couturierId);
+    public List<Order> getCouturierOrders(String idkc) {
+        Couturier couturier=couturierRestClient.getByIdkc(idkc);
         if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
-        List<Order> orders=orderRepository.findByCouturierId(couturierId);
+        List<Order> orders=orderRepository.findByCouturierId(couturier.getId());
         orders.forEach( order -> {
             Customer customer=customerRestClient.customerById(order.getCustomerId());
             order.setCustomer(customer);

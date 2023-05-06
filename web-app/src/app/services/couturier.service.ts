@@ -22,10 +22,18 @@ export class CouturierService {
   public getCouturier(id:number):Observable<Couturier>{
     return this.http.get<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/couturiers/"+id)
    }
+  //  get one couturuer by IDKC
+  public getCouturierIdkc(idkc:string):Observable<Couturier>{
+    return this.http.get<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/CouturierByIdkc/"+idkc)
+  }
   // save couturier
 //create account in web site
   public saveCouturier(couturier: Couturier):Observable<Couturier>{
     return this.http.post<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/couturiers",couturier);
+  }
+  // edit couturier
+  public editCouturier(couturier: Couturier):Observable<Couturier>{
+    return this.http.post<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/editCouturier",couturier);
   }
   //  get oCOUTURIER REVIEWS
   public getReviews(id:number):Observable<Review[]>{

@@ -36,7 +36,7 @@ public class OrderRestController {
         return orderService.getCustomerOrders(id);
     }
     @GetMapping("/OrderByCouturier/{id}")
-    public List<Order> getCouturierOrders(@PathVariable Long id){
+    public List<Order> getCouturierOrders(@PathVariable String id){
         // get id from couturier RestClient
         return orderService.getCouturierOrders(id);
     }

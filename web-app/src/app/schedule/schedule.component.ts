@@ -24,30 +24,32 @@ export class ScheduleComponent implements OnInit {
 
   couturierId!:number;
   customerId!:number;
-  booked=0;
+  couturierIdkc!:string;
+  conges :Array<any>=[];
   constructor(private rdvService:MesrdvService,private route:ActivatedRoute ,
-              private customerService :CustomerService,private  sec:KeycloakSecurityService) {
+              private customerService :CustomerService,public  sec:KeycloakSecurityService) {
    //get couturier id from route(clickedlink )
     this.couturierId=route.snapshot.params['id'];
-    console.log(this.couturierId);
-  }
+     console.log(this.couturierId);
+    }
 
   ngOnInit(): void {
-
-    //get customer ID using backend and idkc
-    let idkc: string | undefined  = "";
-    idkc=this.sec.kc.tokenParsed?.sub ;
-    // get customer data from backend
-    if (idkc != null) {
-      this.customerService.getCustomerByIdkc(idkc).subscribe({
-        next: data => {
-          console.log("customer ",data);
-          this.customerId=data.id;
-        },
-        error: err => {
-          console.log(err);
-        }
-      });
+    if(this.sec.kc.hasRealmRole('CUSTOMER')){
+      //get customer ID using backend and idkc
+      let idkc: string | undefined  = "";
+      idkc=this.sec.kc.tokenParsed?.sub ;
+      // get customer data from backend
+      if (idkc != null) {
+        this.customerService.getCustomerByIdkc(idkc).subscribe({
+          next: data => {
+            console.log("customer ",data);
+            this.customerId=data.id;
+          },
+          error: err => {
+            console.log(err);
+          }
+        });
+      }
     }
 
     // get 2 weeks days table header
@@ -61,7 +63,7 @@ export class ScheduleComponent implements OnInit {
     this.fillTab();
   }
  fillTab(){
-   // get couturier curennt taken rdvs id couturier  a voir !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   // get couturier curennt taken rdvs -----------------------------------------------------------
    this.rdvService.getCurrentRdvs(this.couturierId).subscribe(value => {
        this.currents.push(value);
      },error => {},
@@ -71,9 +73,9 @@ export class ScheduleComponent implements OnInit {
          this.days.forEach(day=>{
            let curr :string | null ="";
            curr = this.pipe.transform(day, 'MM-dd-yyyy');
-           //console.log("test  "+this.rdvcheck(time,curr));
            // create object
            let obj={h:time,j:day,s:this.rdvcheck(time,curr)}
+
            jour.push(obj);
          })
          this.mesrdvs.push(jour);
@@ -86,10 +88,12 @@ export class ScheduleComponent implements OnInit {
       current.forEach((c: { rdvDate: string | number | Date; heure: string;status:number })=>{
         let curr :string | null ="";
         curr = this.pipe.transform(c.rdvDate, 'MM-dd-yyyy');
-       // console.log("my new status ",c.status);
         if (c.heure==h){
           if(curr==d){
             status=c.status;
+           /* if(status==5){            //change status canceled
+              status=0;console.log("status from 5 "+status)
+            }*/
           }
         }
       });
@@ -118,23 +122,51 @@ fillData():boolean{
       // get the time end date
       var heure = event.target.innerHTML;
       var date = event.target.name;
-      //save it to BD
-      let rdvDate=new Date(new Date(date).setHours(0, 0, 0, 0));
-      let rdv:Mesrdv={id:0,rdvDate:rdvDate,heure:heure,customerId:this.customerId,couturierId:this.couturierId,status:1};
-      this.rdvService.saveRdv(rdv).subscribe({
-        next: data => {
-          alert("Rdv has been successfully saved!");
-          // reset tab
-          this.mesrdvs=[];
-          this.fillTab();
-        },
-        error: err => {
-          console.log(err);
-        }
-      });
-      // msg affichage
-      console.log("votre rdv est : "+ date +" à "+heure);
-
+      //check if customer
+      if(this.sec.kc.hasRealmRole('CUSTOMER')){
+        //save it to BD
+        let rdvDate=new Date(new Date(date).setHours(0, 0, 0, 0));
+        let rdv:Mesrdv={id:0,rdvDate:rdvDate,heure:heure,customerId:this.customerId,couturierId:this.couturierId,status:1};
+        this.rdvService.saveRdv(rdv).subscribe({
+          next: data => {
+            alert("Rdv est bien enregistré!");
+            // reset tab
+            this.mesrdvs=[];
+            this.fillTab();
+          }, error: err => { console.log(err); }
+        });
+        // msg affichage
+        console.log("votre rdv est : "+ date +" à "+heure);
+      }
+      else{// is couturier
+        //add rdvs to conges
+        console.log(event);
+        event.target.className="btn btn-block btn-dark ";
+        event.target.disabled=true;
+        let rdvDate=new Date(new Date(date).setHours(0, 0, 0, 0));
+        let rdv:Mesrdv={id:0,rdvDate:rdvDate,heure:heure,customerId:0,couturierId:this.couturierId,status:3};
+        this.conges.push(rdv);
+      }
     }
+  }
+  declarerConge(){
+    if(this.conges.length>0){
+      this.conges.forEach(value => {
+        this.rdvService.saveRdv(value).subscribe({
+          next: data => {
+          }, error: err => { console.log(err); }
+        });
+      });
+      alert("Le congé est bien sauvegardé!");
+      // reset tab
+      this.mesrdvs=[];
+      this.fillTab();
+    }else{
+      alert("Séléctionnez les périodes du congé");
+    }
+  }
+
+  resetConge() {
+    this.conges=[];
   }
 }
