@@ -1,1 +1,99 @@
-<p>edit-couturier works!</p>
+<div  class="row d-flex justify-content-center">
+  <div class="col-md-10 col-lg-8 col-xl-6">
+    <div class="card">
+      <div class="card-body ">
+        <div >
+          <div class="w-100">
+            <form [formGroup]="editProfilFormGroup" (ngSubmit)="editProfil()">
+              <div class="mb-3">
+                <label class="form-label">Name:</label>
+                <input type="text" formControlName="name" class="form-control">
+                <span class="text-danger"
+                      *ngIf="editProfilFormGroup.controls['name'].touched
+                        && editProfilFormGroup.controls['name'].errors
+                        && editProfilFormGroup.controls['name'].errors!['required']">
+                    Name is Required
+                  </span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email:</label>
+                <input type="text" formControlName="email" class="form-control">
+                <span class="text-danger"
+                      *ngIf="editProfilFormGroup.controls['email'].touched
+                        && editProfilFormGroup.controls['email'].errors
+                        && editProfilFormGroup.controls['email'].errors!['email']">
+                    Email is not valid
+                  </span>
+              </div>
+              <div >
+                <button [disabled]="!editProfilFormGroup.valid" class="btn btn-danger mt-3" >envoyer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  FINISH PROFIL--------------------------------------------------------------------------------->
+
+  <!--  begin gallery--------------------------------------------------------------------------------->
+  <div class="ecommerce-gallery" data-mdb-zoom-effect="true" data-mdb-auto-height="true">
+    <div>
+      <form [formGroup]="addPictureFormGroup" (ngSubmit)="onSend()">
+        <div class="mb-3">
+          <label class="form-label">Photo:</label>
+          <input type="file" name ="files" multiple formControlName="photo"
+                 class="form-control" (change)="onUploadFiles($event)">
+        </div>
+        <div >
+          <button  class="btn btn-danger mt-3" >Upload</button>
+        </div>
+      </form>
+    </div>
+    <div class="row py-3 shadow-5">
+      <div class="col-12 mb-1">
+        <div class="lightbox">
+          <img
+            src="{{couturier.gallery[0]}}"
+            alt="Gallery image 1"
+            class="ecommerce-gallery-main-img active w-100"
+          />
+        </div>
+      </div>
+      <div class="col-3 mt-1" *ngFor=" let img of couturier.gallery">
+        <img
+          src="{{img}}" alt="Gallery image 1"class="active w-100"
+        />
+      </div>
+
+    </div>
+  </div>
+
+  <!--  end galleryeeeeeeeeeeeeeeeeeee----------------------------------------------------------------------->
+
+  <!--  begin reviews----------------------------------------------------------------------->
+
+  <section >
+    <div class="container my-5 py-5 text-dark">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-6">
+          <div class="card">
+            <div class="card-body ">
+              <div >
+                <div class="w-100">
+                  <h5>Les avis </h5>
+                  <div class="form-outline" *ngFor="let r of reviews|async">
+                    <h6   rows="4">{{r.name}}</h6>
+                    <p   rows="4">{{r.comment}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--  begin reviews----------------------------------------------------------------------->
+</div>

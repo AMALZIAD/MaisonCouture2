@@ -1,7 +1,7 @@
 <div class="container">
 
-  <!--  PROFIL--FOR CUSTOMER---------------------------------------------------------------------------->
-  <div class="card mb-3" *ngIf="sec.kc.hasRealmRole('CUSTOMER')">
+  <!--  PROFIL------------------------------------------------------------------------------>
+  <div class="card mb-3">
     <img class="card-img-top" src="{{couturier.photo}}" alt="Card image cap">
     <div class="card-body">
       <h5 class="card-title">Card title</h5>
@@ -12,57 +12,10 @@
       </div>
     </div>
   </div>
-  <div *ngIf="sec.kc.hasRealmRole('COUTURIER')" class="row d-flex justify-content-center">
-    <div class="col-md-10 col-lg-8 col-xl-6">
-      <div class="card">
-        <div class="card-body ">
-          <div >
-            <div class="w-100">
-              <form [formGroup]="editProfilFormGroup" (ngSubmit)="editProfil()">
-                <div class="mb-3">
-                  <label class="form-label">Name:</label>
-                  <input type="text" formControlName="name" class="form-control">
-                  <span class="text-danger"
-                        *ngIf="editProfilFormGroup.controls['name'].touched
-                        && editProfilFormGroup.controls['name'].errors
-                        && editProfilFormGroup.controls['name'].errors!['required']">
-                    Name is Required
-                  </span>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Email:</label>
-                  <input type="text" formControlName="email" class="form-control">
-                  <span class="text-danger"
-                        *ngIf="editProfilFormGroup.controls['email'].touched
-                        && editProfilFormGroup.controls['email'].errors
-                        && editProfilFormGroup.controls['email'].errors!['email']">
-                    Email is not valid
-                  </span>
-                </div>
-                <div >
-                  <button [disabled]="!editProfilFormGroup.valid" class="btn btn-danger mt-3" >envoyer</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  <!--  FINISH PROFIL--------------------------------------------------------------------------------->
+  <div  class="row d-flex justify-content-center">
 
 <!--  begin gallery--------------------------------------------------------------------------------->
   <div class="ecommerce-gallery" data-mdb-zoom-effect="true" data-mdb-auto-height="true">
-    <div>
-      <form [formGroup]="addPictureFormGroup" (ngSubmit)="addPictures()">
-        <div class="mb-3">
-          <label class="form-label">Photo:</label>
-          <input type="file" formControlName="photo" class="form-control" (change)="onFileSelected($event)">
-        </div>
-        <div >
-          <button  class="btn btn-danger mt-3" >Upload</button>
-        </div>
-      </form>
-    </div>
     <div class="row py-3 shadow-5">
       <div class="col-12 mb-1">
         <div class="lightbox">
@@ -74,11 +27,8 @@
         </div>
       </div>
       <div class="col-3 mt-1" *ngFor=" let img of couturier.gallery">
-        <img
-          src="{{img}}" alt="Gallery image 1"class="active w-100"
-        />
+        <img src="{{img}}" alt="Gallery image 1"class="active w-100"/>
       </div>
-
     </div>
   </div>
 

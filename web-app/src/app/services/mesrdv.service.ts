@@ -20,8 +20,11 @@ export class MesrdvService {
       }));
   }
   //CUSTOMER rdvs------------------------------------------------------------------------------------
-  public getCustomerRdvs(id:string):Observable<Mesrdv[]>{
-    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/RdvsByCustomer/"+id);
+  public getCustomerOldRdvs(id:string):Observable<Mesrdv[]>{
+    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/OldRdvsByCustomer/"+id);
+  }
+  public getCustomerNewRdvs(id:string):Observable<Mesrdv[]>{
+    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/NewRdvsByCustomer/"+id);
   }
   //COUTURIER rdvs------------------OLD---------------------------------------------------------------------
   public getCouturierRdvs(id:string):Observable<Mesrdv[]>{

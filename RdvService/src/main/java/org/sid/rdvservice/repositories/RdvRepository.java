@@ -12,5 +12,7 @@ public interface RdvRepository extends JpaRepository<Rdv,Long> {
     List<Rdv> findRdvsByRdvDateEquals(String date);
     List<Rdv> findRdvsByRdvDateGreaterThanAndCouturierId(Date rdvDate, Long id);
     List<Rdv> findRdvsByRdvDateLessThanAndCouturierId(Date rdvDate, Long id);
+    List<Rdv> findRdvsByRdvDateGreaterThanAndCustomerId(Date rdvDate, Long id);
+    List<Rdv> findRdvsByRdvDateLessThanAndCustomerId(Date rdvDate, Long id);
 
 }

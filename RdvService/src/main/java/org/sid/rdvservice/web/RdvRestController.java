@@ -64,13 +64,22 @@ public class RdvRestController {
     }
 
     ////////////////////////////////////CUSTOMER///////////////////////////////////////
-    @GetMapping("/RdvsByCustomer/{id}")
-    public List<Rdv> getCustomerRdvs(@PathVariable String id){
+    @GetMapping("/NewRdvsByCustomer/{id}")
+    public List<Rdv> getCustomerNewRdvs(@PathVariable String id){
         System.out.println("im inside rdv rest --- rdvby customer");
         Long code =this.customerRestClient.getByIdkc(id).getId();
         System.out.println(code);
-        List<Rdv> lst= rdvService.getCustomerRdvs(code);
-        rdvService.updateRdv(lst);
+        List<Rdv> lst= rdvService.getCustomerNewRdvs(code);
+        //rdvService.updateRdv(lst);
+        return lst;
+    }
+    @GetMapping("/OldRdvsByCustomer/{id}")
+    public List<Rdv> getCustomerOldRdvs(@PathVariable String id){
+        System.out.println("im inside rdv rest --- rdvby customer");
+        Long code =this.customerRestClient.getByIdkc(id).getId();
+        System.out.println(code);
+        List<Rdv> lst= rdvService.getCustomerOldRdvs(code);
+       // rdvService.updateRdv(lst);
         return lst;
     }
 

@@ -6,6 +6,8 @@ import {KeycloakSecurityService} from "../services/keycloak-security.service";
 import {Router} from "@angular/router";
 import { Couturier } from '../model/couturier.model';
 import {CouturierService} from "../services/couturier.service";
+import {DatePipe} from "@angular/common";
+import {Order} from "../model/order.model";
 
 @Component({
   selector: 'app-mesrdvs',
@@ -19,19 +21,28 @@ export class MesrdvsComponent implements OnInit {
   olds!:Observable<Mesrdv[]>;
   errorMessage!:string;
   toCancel!:any;
+  lyom !:any;
+  pipe = new DatePipe('en-US');
   constructor(private mesrdvsService:MesrdvService,public sec:KeycloakSecurityService,
               private router :Router,private couturierService :CouturierService) { }
 
   ngOnInit(): void {
-    this.toCancel="PRIS";
     this.fillTable();
+    let curr :string | null ="";
+    this.toCancel = this.pipe.transform(new Date(), 'dd-MM-yyyy');
   }
  fillTable(){
    let idkc:string = <string>this.sec.kc.tokenParsed?.sub;
    console.log(idkc);
    if(this.sec.kc.hasRealmRole("CUSTOMER")){
      console.log("im customer")
-     this.mesrdvs=this.mesrdvsService.getCustomerRdvs(idkc).pipe(
+     this.todays=this.mesrdvsService.getCustomerNewRdvs(idkc).pipe(
+       catchError(err =>{
+         this.errorMessage=err.message;
+         return throwError(err);
+       })
+     );
+     this.olds=this.mesrdvsService.getCustomerOldRdvs(idkc).pipe(
        catchError(err =>{
          this.errorMessage=err.message;
          return throwError(err);
@@ -60,9 +71,10 @@ export class MesrdvsComponent implements OnInit {
   }
   // annuler rdv customer
   cancelRdv(m: Mesrdv) {
-    m.status=5;
-    console.log(m);
-    this.mesrdvsService.saveRdv(m).subscribe({
+    m.status='ANNULE';
+    let rdv: Mesrdv ={id:m.id,heure:m.heure,rdvDate:m.rdvDate,status:5,customerId:m.customerId,couturierId:m.couturierId}
+    console.log(rdv);
+    this.mesrdvsService.saveRdv(rdv).subscribe({
       next: data => {
         alert("Rdv est bien annulé!");
         // reset tab

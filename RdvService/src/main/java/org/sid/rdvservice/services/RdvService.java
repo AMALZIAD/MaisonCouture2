@@ -11,7 +11,9 @@ public interface RdvService {
     void updateRdv(List<Rdv> lst);
     void deleteRdv(Long id);
     List<Rdv> getRdvs();
-    List<Rdv> getCustomerRdvs(Long customerId);
+    //List<Rdv> getCustomerRdvs(Long customerId);
+    List<Rdv> getCustomerOldRdvs(Long customerId);
+    List<Rdv> getCustomerNewRdvs(Long customerId);
     List<Rdv> getCouturierRdvs(Long couturierId);
     List<Rdv> getCouturierCurrentRdv(Date rdvDate, Long id);
 }

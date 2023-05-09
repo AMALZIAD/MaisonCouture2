@@ -31,13 +31,25 @@ export class OrderService {
       }));
   }
   // GET ORDERS BY CUSTOMER ID ----------------------------------------------------------------------------
-  getCustomerOrders(idkc: string):Observable<Order[]> {
-    return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/OrderByCustomer/"+idkc);
+  getCustomerFinishedOrders(idkc: string):Observable<Order[]> {
+    return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/FinishedOrderByCustomer/"+idkc);
+  }
+  getCustomerYetOrders(idkc: string):Observable<Order[]> {
+    return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/YetOrderByCustomer/"+idkc);
   }
 
+
 // GET ORDERS BY COUTURIER IDKC------------------------------------------------------------------------------
-  getCouturierOrders(idkc: string) :Observable<Order[]> {
-    return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/OrderByCouturier/"+idkc);
+  // finished
+  getCouturierFinishedOrders(idkc: string) :Observable<Order[]> {
+    return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/FinishedOrderByCouturier/"+idkc);
+    /* .pipe(map((result:any)=>{
+       return result._embedded.couturiers; //just return "couturiers"
+     }));*/
+  }
+ // encours
+  getCouturierYetOrders(idkc: string) :Observable<Order[]> {
+    return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/YetOrderByCouturier/"+idkc);
     /* .pipe(map((result:any)=>{
        return result._embedded.couturiers; //just return "couturiers"
      }));*/

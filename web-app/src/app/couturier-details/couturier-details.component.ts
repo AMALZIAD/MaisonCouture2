@@ -33,26 +33,13 @@ export class CouturierDetailsComponent implements OnInit {
     this.couturierService.getCouturier(this.couturierId)
       .subscribe({ next : (data)=>{
           this.couturier= data;
-          this.initializeForm(this.couturier);
         },
         error : ()=>{}
       });
   }
-  // initialze form with backend data
-  initializeForm(couturier:Couturier) {
-    // initialise inputs in the form with control
-    this.editProfilFormGroup = this.fb.group({
-      name: this.fb.control(couturier.name, [Validators.required, Validators.minLength(4)]),
-      email: this.fb.control(couturier.email, [Validators.required, Validators.email])
-    });
-    // initialise inputs in the form with control
-    this.addPictureFormGroup = this.fb.group({
-      photo: this.fb.control(null)
-    });
-  }
 
   ngOnInit(): void {
-    // if customer is connected
+    // if customer is connected --------
     if(this.sec.kc.hasRealmRole('CUSTOMER')){
       // comment form
       this.newReviewFormGroup=this.fb.group({
@@ -85,45 +72,5 @@ export class CouturierDetailsComponent implements OnInit {
      }
    });
   }
-//edit profil function------------------------------------------------------------
 
-  editProfil() {
-    let cout: Couturier = this.editProfilFormGroup.value;
-    cout.id=this.couturier.id;
-    //cust.mesure=this.customer.mesure
-    cout.idkc=this.couturier.idkc
-    this.couturierService.editCouturier(cout).subscribe({
-      next: data => {
-        alert("Les données sont bien sauvegardées!");
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
-  }
-
-  addPictures() {
-
-  }
-
-  onFileSelected(event: Event) {
-   // console.log(event.target);
-    const target = event.target as HTMLInputElement;
-    console.log(target.files)
-    // @ts-ignore
-    let file :File = target.files[0];
-
-    if (file) {
-
-      this.fileName = file.name;
-
-      const formData = new FormData();
-
-      formData.append("thumbnail", file);
-
-      const upload$ = this.http.post("/api/thumbnail-upload", formData);
-
-      upload$.subscribe();
-    }
-  }
 }

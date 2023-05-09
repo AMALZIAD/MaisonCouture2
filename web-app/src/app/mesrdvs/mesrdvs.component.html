@@ -8,23 +8,38 @@
     <div class="table " >
       <thead class="table-dark">
       <tr>
-        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th>
-        <th >Couturier</th>
-        <th>Action</th>
+        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th >Couturier</th> <th>Action</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let m of mesrdvs |async">
+      <tr *ngFor="let m of todays |async">
         <td>{{m.id}}</td>
         <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
         <td>{{m.heure}}</td>
         <td>{{m.status}}</td>
         <td>{{m.couturierId}}</td>
         <td>
-          <button [disabled]="toCancel != m.status" class="btn btn-warning btn-sm float-right"
-                  (click)="cancelRdv(m)">Cancel</button>
+          <button [disabled]="toCancel == (m.rdvDate| date: 'dd-MM-yyyy') || m.status=='ANNULE'"
+                  class="btn btn-warning btn-sm float-right" (click)="cancelRdv(m)">Cancel</button>
         </td>
 
+      </tr>
+      </tbody>
+    </div>
+    <div class="table " >
+      <thead class="table-dark">
+      <tr>
+        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th >Couturier</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let m of olds |async">
+        <td>{{m.id}}</td>
+        <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
+        <td>{{m.heure}}</td>
+        <td>{{m.status}}</td>
+        <td>{{m.couturierId}}</td>
       </tr>
       </tbody>
     </div>

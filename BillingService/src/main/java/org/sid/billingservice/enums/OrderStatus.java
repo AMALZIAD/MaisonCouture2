@@ -3,14 +3,14 @@ package org.sid.billingservice.enums;
 import java.util.Random;
 
 public enum OrderStatus {
-    CREE, VALIDE , ENCOURS, TERMINE, ANNULE, LIVRE;
+    CREE, VALIDE , ENCOURS, TERMINE, LIVRE , ANNULE;
     /*
-    * CREE : btn :valide/ or btn annule
-    * annule :  annule history
-    * VALIDE ; valide /btn traiter
-    * ENCOURS: btn TERMINE,
-    * Termine : btn LIVRE;
-    * LIVRE/ : history
+    * CREE 0 btn :valide/ or btn annule
+    * annule 5 :  annule history
+    * VALIDE 1; valide /btn traiter
+    * ENCOURS 2: btn TERMINE,
+    * Termine 3 : btn LIVRE;
+    * LIVRE 4/ : history
     * */
     private static final Random PRNG = new Random();
     private static final OrderStatus[] statuses = values();

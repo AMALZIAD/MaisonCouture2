@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {map, Observable} from "rxjs";
 import {Customer} from "../model/customer.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpEvent} from "@angular/common/http";
 import {Couturier} from "../model/couturier.model";
 import {Review} from "../model/review.model";
 import {environment} from "../../environments/environment";
@@ -20,7 +20,7 @@ export class CouturierService {
   }
   //  get one couturuer by ID
   public getCouturier(id:number):Observable<Couturier>{
-    return this.http.get<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/couturiers/"+id)
+    return this.http.get<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/couturiers/"+id);
    }
   //  get one couturuer by IDKC
   public getCouturierIdkc(idkc:string):Observable<Couturier>{
@@ -54,4 +54,13 @@ export class CouturierService {
         return result._embedded.customers; //just return "customers"
       }));
   }
+
+  // define fucntion to uplaod file
+  upload(formData:FormData):Observable<HttpEvent<string[]>>{
+    return this.http.post<string[]>(environment.bankendhost+'/COUTURIER-SERVICE/upload',formData,{
+      reportProgress:true,
+      observe:'events'
+    });
+  }
+
 }

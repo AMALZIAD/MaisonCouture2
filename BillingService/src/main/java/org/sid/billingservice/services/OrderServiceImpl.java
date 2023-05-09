@@ -3,6 +3,7 @@ package org.sid.billingservice.services;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sid.billingservice.entities.Order;
+import org.sid.billingservice.enums.OrderStatus;
 import org.sid.billingservice.exceptions.CouturierNotFoundException;
 import org.sid.billingservice.exceptions.CustomerNotFoundException;
 import org.sid.billingservice.exceptions.OrderNotFoundException;
@@ -62,24 +63,17 @@ public class OrderServiceImpl implements OrderService {
         return orders ;
     }
 
-    @Override
-    public List<Order> getCustomerOrders(Long customerId) {
-        Customer customer=customerRestClient.customerById(customerId);
-        if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
-        List<Order> orders=orderRepository.findByCustomerId(customerId);
-        orders.forEach( order -> {
-            Couturier couturier=couturierRestClient.couturierById(order.getCouturierId());
-            order.setCustomer(customer);
-            order.setCouturier(couturier);
-        });
-        return orders;
-    }
 
+// CUSTOMERS ORDERS------------------------------------------------------------------
+    // FINISHED CUTOMER ORDERS --------------------------------
     @Override
-    public List<Order> getCustomerOrders(String idkc) {
+    public List<Order> getFinishedCustomerOrders(String idkc) {
         Customer customer=customerRestClient.findCustomerByIdkc(idkc);
         if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
-        List<Order> orders=orderRepository.findByCustomerId(customer.getId());
+        List<OrderStatus> stat =new ArrayList<>();
+        stat.add(OrderStatus.ANNULE);
+        stat.add(OrderStatus.LIVRE);
+        List<Order> orders=orderRepository.findByCustomerIdAndStatusIn(customer.getId(),stat);
         orders.forEach( order -> {
             Couturier couturier=couturierRestClient.couturierById(order.getCouturierId());
             order.setCustomer(customer);
@@ -87,11 +81,52 @@ public class OrderServiceImpl implements OrderService {
         });
         return orders;
     }
+    // YET CUSTOMER ORDERS ---------------------------------------------------
     @Override
-    public List<Order> getCouturierOrders(String idkc) {
+    public List<Order> getYetCustomerOrders(String idkc) {
+        Customer customer=customerRestClient.findCustomerByIdkc(idkc);
+        if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
+        List<OrderStatus> stat =new ArrayList<>();
+        stat.add(OrderStatus.CREE);
+        stat.add(OrderStatus.ENCOURS);
+        stat.add(OrderStatus.VALIDE);
+        stat.add(OrderStatus.TERMINE);
+        List<Order> orders=orderRepository.findByCustomerIdAndStatusIn(customer.getId(),stat);
+        orders.forEach( order -> {
+            Couturier couturier=couturierRestClient.couturierById(order.getCouturierId());
+            order.setCustomer(customer);
+            order.setCouturier(couturier);
+        });
+        return orders;
+    }
+    // finished orders
+    //    List<Order> findByCouturierIdAndStatusGreaterThan(Long couturierId,Long stat);
+    @Override
+    public List<Order> getCouturierFinishedOrders(String idkc) {
         Couturier couturier=couturierRestClient.getByIdkc(idkc);
         if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
-        List<Order> orders=orderRepository.findByCouturierId(couturier.getId());
+        List<OrderStatus> stat =new ArrayList<>();
+        stat.add(OrderStatus.ANNULE);
+        stat.add(OrderStatus.LIVRE);
+        List<Order> orders=orderRepository.findByCouturierIdAndStatusIn(couturier.getId(),stat);
+        orders.forEach( order -> {
+            Customer customer=customerRestClient.customerById(order.getCustomerId());
+            order.setCustomer(customer);
+            order.setCouturier(couturier);
+        });
+        return orders;
+    }
+    // not finished yet  orders
+    @Override
+    public List<Order> getCouturierYetOrders(String idkc) {
+        Couturier couturier=couturierRestClient.getByIdkc(idkc);
+        if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
+        List<OrderStatus> stat =new ArrayList<>();
+        stat.add(OrderStatus.CREE);
+        stat.add(OrderStatus.ENCOURS);
+        stat.add(OrderStatus.VALIDE);
+        stat.add(OrderStatus.TERMINE);
+        List<Order> orders=orderRepository.findByCouturierIdAndStatusIn(couturier.getId(),stat);
         orders.forEach( order -> {
             Customer customer=customerRestClient.customerById(order.getCustomerId());
             order.setCustomer(customer);

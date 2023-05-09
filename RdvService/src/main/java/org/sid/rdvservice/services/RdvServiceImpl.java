@@ -75,11 +75,32 @@ public class RdvServiceImpl implements RdvService {
         return rdvs ;
     }
 
+    // old customer rdvs
     @Override
-    public List<Rdv> getCustomerRdvs(Long customerId) {
+    public List<Rdv> getCustomerOldRdvs(Long customerId) {
         Customer customer=customerRestClient.customerById(customerId);
         if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
-        List<Rdv> rdvs=rdvRepository.findByCustomerId(customerId);
+        Date dt = new Date();
+        Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
+        List<Rdv> rdvs=rdvRepository.findRdvsByRdvDateLessThanAndCustomerId(hier,customerId);
+        rdvs.forEach( rdv -> {
+            Couturier couturier=couturierRestClient.couturierById(rdv.getCouturierId());
+            rdv.setCouturier(couturier);
+            if(rdv.getStatus()==RdvStatus.PRIS){
+                rdv.setStatus(RdvStatus.DEPASSE);
+                rdvRepository.save(rdv);
+            }
+        });
+        return rdvs;
+    }
+    // new customer rdvs
+    @Override
+    public List<Rdv> getCustomerNewRdvs(Long customerId) {
+        Customer customer=customerRestClient.customerById(customerId);
+        if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
+        Date dt = new Date();
+        Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
+        List<Rdv> rdvs=rdvRepository.findRdvsByRdvDateGreaterThanAndCustomerId(hier,customerId);
         rdvs.forEach( rdv -> {
             Couturier couturier=couturierRestClient.couturierById(rdv.getCouturierId());
             rdv.setCouturier(couturier);

@@ -31,14 +31,23 @@ public class OrderRestController {
     public List<Order> getOrders(){
         return orderService.getOrders();
     }
-    @GetMapping("/OrderByCustomer/{id}")
-    public List<Order> getCustomerOrders(@PathVariable String id){
-        return orderService.getCustomerOrders(id);
+    @GetMapping("/FinishedOrderByCustomer/{id}")
+    public List<Order> getFinishedCustomerOrders(@PathVariable String id){
+        return orderService.getFinishedCustomerOrders(id);
     }
-    @GetMapping("/OrderByCouturier/{id}")
-    public List<Order> getCouturierOrders(@PathVariable String id){
+    @GetMapping("/YetOrderByCustomer/{id}")
+    public List<Order> getYetCustomerOrders(@PathVariable String id){
+        return orderService.getYetCustomerOrders(id);
+    }
+    @GetMapping("/FinishedOrderByCouturier/{id}")
+    public List<Order> getFinishedOrderByCouturier(@PathVariable String id){
         // get id from couturier RestClient
-        return orderService.getCouturierOrders(id);
+        return orderService.getCouturierFinishedOrders(id);
+    }
+    @GetMapping("/YetOrderByCouturier/{id}")
+    public List<Order> getYetOrderByCouturier(@PathVariable String id){
+        // get id from couturier RestClient
+        return orderService.getCouturierYetOrders(id);
     }
     //getCustomersByCouturier
     @GetMapping("/CustomersByCouturier/{id}")
