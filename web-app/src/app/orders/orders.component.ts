@@ -14,7 +14,6 @@ export class OrdersComponent implements OnInit {
   orders!:Observable<Order[]>;
   Oldorders!:Observable<Order[]>;
   errorMessage!:string;
-
   stOrder = [{i:'CREE',r:'VALIDER'},{i:'VALIDE',r:'TRAITER'},{i:'ENCOURS',r:'TERMINER'},{i:'TERMINE',r:'LIVRER'}];
   /*
       * CREE 0 btn :valide/ or btn annule
@@ -90,7 +89,7 @@ export class OrdersComponent implements OnInit {
 
     //o.status='ANNULE';
     let order: Order ={id:o.id,typecouture:o.typecouture,categorie:o.categorie,tenue:o.tenue,orderdate:o.orderdate,
-      status:st,customer:o.customer,couturier:o.couturier,customerId:o.customerId,couturierId:o.couturierId}
+     amount:o.amount, status:st,customer:o.customer,couturier:o.couturier,customerId:o.customerId,couturierId:o.couturierId}
     this.orderService.saveOrder(order).subscribe({
       next: data => {
         console.log("Order has been successfully Updated!");

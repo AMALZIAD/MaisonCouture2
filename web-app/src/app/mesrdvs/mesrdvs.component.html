@@ -64,7 +64,8 @@
           <td>{{m.customerId}}</td>
           <td >
             <button *ngIf="m.status=='PRIS'" class="btn btn-success btn-sm float-right"
-                    (click)="newOrder(m)">New Order</button>
+                    (click)="newOrder(m)"
+                    [disabled]="(m.rdvDate | date: 'dd-MM-yyyy')!=(lyom| date: 'dd-MM-yyyy')">New Order</button>
             <button *ngIf="m.status=='CONGE'"
                     class="btn btn-danger btn-sm float-right"  (click)="cancelConge(m)">Cancel</button>
           </td>

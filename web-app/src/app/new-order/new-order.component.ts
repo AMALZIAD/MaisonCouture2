@@ -25,7 +25,8 @@ export class NewOrderComponent implements OnInit {
     this.newOrderFormGroup=new FormGroup({
       tenue: new FormControl(),
       typecouture:new FormControl(),
-      categorie:new FormControl()
+      categorie:new FormControl(),
+      amount:new FormControl()
     });
   }
 
@@ -41,6 +42,7 @@ export class NewOrderComponent implements OnInit {
         this.rdv.status=4;
         this.rdvService.saveRdv(this.rdv);
         alert("Order has been successfully Created!");
+        this.newOrderFormGroup.reset();
       },
       error: err => {
         console.log(err);

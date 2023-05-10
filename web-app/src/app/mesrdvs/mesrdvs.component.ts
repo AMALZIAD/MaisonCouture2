@@ -21,7 +21,7 @@ export class MesrdvsComponent implements OnInit {
   olds!:Observable<Mesrdv[]>;
   errorMessage!:string;
   toCancel!:any;
-  lyom !:any;
+  lyom =new Date();
   pipe = new DatePipe('en-US');
   constructor(private mesrdvsService:MesrdvService,public sec:KeycloakSecurityService,
               private router :Router,private couturierService :CouturierService) { }

@@ -8,6 +8,7 @@ export interface Order{
   tenue: number,
   orderdate: Date,
   status: any,
+  amount:number,
   customer: any,
   couturier:any,
   customerId: number,

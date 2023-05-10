@@ -27,6 +27,7 @@ public class Order {
     private Tenue tenue;
     private Date orderdate;
     private OrderStatus status;
+    private double amount ;
 
     // customer data
     private Long customerId;
