@@ -17,6 +17,7 @@ import { NewOrderComponent } from './new-order/new-order.component';
 import { MesrdvsComponent } from './mesrdvs/mesrdvs.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { EditCouturierComponent } from './edit-couturier/edit-couturier.component';
+import { SimulateurComponent } from './simulateur/simulateur.component';
 
 function kcFactory(kcSecurity:KeycloakSecurityService) {
   return()=>kcSecurity.init();
@@ -33,7 +34,8 @@ function kcFactory(kcSecurity:KeycloakSecurityService) {
     NewOrderComponent,
     MesrdvsComponent,
     ScheduleComponent,
-    EditCouturierComponent
+    EditCouturierComponent,
+    SimulateurComponent
   ],
   imports: [
     BrowserModule,
