@@ -4,19 +4,21 @@ WORKDIR /app
 
 COPY package*.json ./
 
+
 RUN npm install
 
 COPY ./ .
 
-# npm run build
+RUN npm run build
 
-# FROM nginx:latest
+FROM nginx:latest as prod-stage
 
-# RUN mkdir /app
+RUN mkdir /app
 
-# COPY --from=build-stage /app/dist/my-app/ /app
+COPY --from=build-stage --chown=101:101 /app/dist/web-app/ /usr/share/nginx/html/
 
-# EXPOSE 8888
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# COPY nginx.conf /etc/nginx/nginx.conf
-# USER nginx
+EXPOSE 4200
+
+# CMD ["nginx", "-g", "daemon off;"]
