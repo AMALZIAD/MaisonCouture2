@@ -1,1 +1,38 @@
-<p>simulateur works!</p>
+<div class="container">
+  <div class="card">
+    <div class="card-header"> Simulateur de Couture </div>
+    <div class="card-body">
+      <form [formGroup]="simulerFormGroup" (ngSubmit)="handleSimuler()">
+        <div class="mb-3" >
+          <label class="form-label">La Tenue:</label>
+          <select class="form-control" formControlName="tenue">
+            <option value="4" selected>CAFTAN</option>
+            <option value="1" >JALABA</option>
+            <option value="2" >TEKCHITA</option>
+            <option value="3" >JABADOR</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Type de Couture:</label>
+          <select class="form-control" formControlName="typecouture">
+            <option value="3" selected="selected">SFIFA</option>
+            <option value="1" >RANDA</option>
+            <option value="2" >KTTIB</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Couture:</label>
+          <select class="form-control"formControlName="categorie">
+            <option value="2" selected>MAALEM</option>
+            <option value="1" >COMPUTER</option>
+          </select>
+        </div>
+
+        <button  class="btn btn-info">Simuler</button>
+      </form>
+      <div class="mb-3">
+        <h3>{{amount}}</h3>
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,6 +9,7 @@ import {NewOrderComponent} from "./new-order/new-order.component";
 import {MesrdvsComponent} from "./mesrdvs/mesrdvs.component";
 import {ScheduleComponent} from "./schedule/schedule.component";
 import {EditCouturierComponent} from "./edit-couturier/edit-couturier.component";
+import {SimulateurComponent} from "./simulateur/simulateur.component";
 
 const routes: Routes = [
   { path :"customers",component :CustomersComponent},
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path :"neworder/:rdv",component :NewOrderComponent},
   { path :"mesrdvs",component :MesrdvsComponent},
   { path :"couturierdetail/:id",component :CouturierDetailsComponent},
+  { path :"simulateur",component :SimulateurComponent},
   { path :"schedule/:id",component :ScheduleComponent}
 
 ];
