@@ -1,0 +1,161 @@
+version: '3.7'
+services:
+  eureka-server:
+    container_name: eureka-server
+    build:
+      context: ./DiscoveryService
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+  couturier-service:
+    container_name: couturier-service
+    build:
+      context: ./CouturierService
+      dockerfile: Dockerfile
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/couturier-db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - eureka-server
+      - postgresql
+    ports:
+      - "8081:8081"
+  postgresql:
+    container_name: postgresql
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin 
+      - POSTGRES_DB=couturier-db
+    ports:
+      - "5432:5432"
+    
+  front-end:
+    container_name: front-end
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile
+    environment:
+      # - eureka.client.service-url.defaultZone=http://service-registration:8761/eureka
+      - bankendhost=http://spring-cloud-gateway-service:8888
+    depends_on:
+      - spring-cloud-gateway-service
+    ports:
+      - "4200:4200"
+
+  spring-cloud-gateway-service:
+    container_name: spring-cloud-gateway-service
+    build: ./GetawayService
+    # image: vulhub/spring-cloud-gateway
+    ports:
+      - "8888:8888"
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+    depends_on: 
+      - couturier-service
+      - eureka-server
+    #   - airtel-microservice
+    #   - vodaphone-microservice
+    # environment:
+    #   SPRING_CLOUD_GATEWAY_ROUTES[0]_URI: http://couturier-service:9501
+    #   SPRING_CLOUD_GATEWAY_ROUTES[0]_ID: couturier-service
+    #   SPRING_CLOUD_GATEWAY_ROUTES[0]_PREDICATES[0]: Path= /jio/*
+    #   SPRING_CLOUD_GATEWAY_ROUTES[0]_FILTERS[0]: StripPrefix=1
+    #   SPRING_CLOUD_GATEWAY_ROUTES[1]_URI: http://airtel-microservice:9502
+    #   SPRING_CLOUD_GATEWAY_ROUTES[1]_ID: airtel-service
+    #   SPRING_CLOUD_GATEWAY_ROUTES[1]_PREDICATES[0]: Path= /airtel/*
+    #   SPRING_CLOUD_GATEWAY_ROUTES[1]_FILTERS[0]: StripPrefix=1
+    #   SPRING_CLOUD_GATEWAY_ROUTES[2]_URI: http://vodaphone-microservice:9503
+    #   SPRING_CLOUD_GATEWAY_ROUTES[2]_ID: vodaphone-service
+    #   SPRING_CLOUD_GATEWAY_ROUTES[2]_PREDICATES[0]: Path= /vodaphone/*
+    #   SPRING_CLOUD_GATEWAY_ROUTES[2]_FILTERS[0]: StripPrefix=1
+
+
+
+  keycloak:
+    #image: docker.io/bitnami/keycloak:21
+    container_name: keycloak
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
+    environment:
+      - eureka.client.service-url.defaultZone=http://service-registration:8761/eureka
+      - KEYCLOAK_CREATE_ADMIN_USER=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_MANAGEMENT_USER=admin
+      - KEYCLOAK_MANAGEMENT_PASSWORD=admin
+      - KEYCLOAK_DATABASE_VENDOR=postgres
+      - KEYCLOAK_DATABASE_HOST=jdbc:postgresql://postgresql/postgresql
+      - KEYCLOAK_DATABASE_PORT=5432
+      - KEYCLOAK_DATABASE_NAME=postgres
+      - KEYCLOAK_DATABASE_USER=admin
+      - KEYCLOAK_DATABASE_PASSWORD=admin
+      - KEYCLOAK_HTTP_PORT=8080
+      - KEYCLOAK_BIND_ADDRESS=localhost
+      # - KC_DB=postgres
+      # - KC_DB_URL=jdbc:postgresql://postgresql:5432
+      # - KC_DB_USERNAME=admin
+      # - KC_DB_PASSWORD=admin
+      # - KC_HOSTNAME=postgresql
+    depends_on:
+      - postgresql
+    ports:
+      - "8080:8080"
+
+  billing-service:
+    container_name: billing-service
+    build:
+      context: ./BillingService
+      dockerfile: Dockerfile
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/couturier-db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - eureka-server
+      - postgresql
+    ports:
+      - "8083:8083"
+  
+  customer-service:
+    container_name: customer-service
+    build:
+      context: ./CustomerService
+      dockerfile: Dockerfile
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/couturier-db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - eureka-server
+      - postgresql
+    ports:
+      - "8082:8082"
+
+  rdv-service:
+    container_name: rdv-service
+    build:
+      context: ./RdvService
+      dockerfile: Dockerfile
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/couturier-db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - eureka-server
+      - postgresql
+    ports:
+      - "8086:8086"
+  
