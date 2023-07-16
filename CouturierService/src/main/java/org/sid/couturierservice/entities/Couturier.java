@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,5 +29,16 @@ public class Couturier {
     @ElementCollection
     private List<String> gallery ;
     @OneToMany(mappedBy ="couturier" )
-    public List <Review> reviews;
+    public List <Review> reviews = new ArrayList<>();
+
+    public double getRate() {
+        rate=0;
+        for ( int i =0;i<reviews.size();i++){
+            rate+=reviews.get(i).getRate();
+        }
+        if(rate!=0){
+            rate=rate/reviews.size();
+        }
+        return rate;
+    }
 }

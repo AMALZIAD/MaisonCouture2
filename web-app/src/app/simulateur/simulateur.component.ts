@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
+declare let Email: any;
 
 @Component({
   selector: 'app-simulateur',
@@ -44,5 +45,19 @@ export class SimulateurComponent implements OnInit {
           console.log(ligne.value)
         }
       });
+  }
+  sendEmail(){
+
+    Email.send({
+      Host : "smtp.elasticemail.com",
+      Username : "amal.amal.ziad@gmail.com",
+      Password : "26B8FD9BC6729CDAEFB203EF3452793BBC3B",
+      To : 'ziad.amal@outlook.fr',
+      From : "amal.amal.ziad@gmail.com",
+      Subject : "This is the subject",
+      Body : "And this is the body"
+    }).then(
+        (message: any) => alert(message)
+    );
   }
 }

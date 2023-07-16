@@ -20,32 +20,12 @@ export class EditCouturierComponent implements OnInit {
   reviews!:Observable<Review[]>;
   errorMessage!:string;
   filenames:string[]=[];
+  formDataPic=new FormData();
 
 
   constructor( private fb:FormBuilder,private couturierService: CouturierService,
-               public sec: KeycloakSecurityService,private http:HttpClient) {  }
+               public sec: KeycloakSecurityService) {  }
 
-  onSend() {
-    const headers = new HttpHeaders({ "Content-Type": "application/json" });
-    this.http.post(
-      "https://formsubmit.co/alison.gonser@ndsu.edu",
-      { name: "amal@live.fr", replyto: "amal.amal.ziad@gmail.com", subject: "hello sis",
-        message: "hello cute miss you !"},
-      { headers: headers }
-    )
-      .subscribe(response => {
-        console.log(response);
-      });
-    /*Email.send({
-      Host : "smtp-relay.gmail.com",
-    Username : "amal.amal.ziad@gmail.com",
-    Password : "@A248553",
-    To : "amal.amal.ziad@gmail.com",
-    From : this.sec.kc.tokenParsed?.['name'] + "@gmail.com",
-      Subject : "this.model.subject",
-      Body : "<i>This is sent as a feedback from my resume page.</i> " })
-      .then( (message: any) => {alert(message); } );*/
-  }
 
   ngOnInit(): void {
     //get couturier detail
@@ -67,10 +47,12 @@ export class EditCouturierComponent implements OnInit {
 
   // initialze form with backend data
   initializeForm(couturier:Couturier) {
+    console.log(couturier);
     // initialise inputs in the form with control
     this.editProfilFormGroup = this.fb.group({
       name: this.fb.control(couturier.name, [Validators.required, Validators.minLength(2)]),
-      email: this.fb.control(couturier.email, [Validators.required, Validators.email])
+      email: this.fb.control(couturier.email, [Validators.required, Validators.email]),
+      photo: this.fb.control(null)
     });
     // initialise inputs in the form with control
     this.addPictureFormGroup = this.fb.group({
@@ -95,6 +77,7 @@ export class EditCouturierComponent implements OnInit {
     cout.id=this.couturier.id;
     //cust.mesure=this.customer.mesure
     cout.idkc=this.couturier.idkc
+    cout.photo="web-app/src/res/profilPic"+this.couturier.id+".png";
     console.log(cout);
     this.couturierService.editCouturier(cout).subscribe({
       next: data => {
@@ -104,6 +87,14 @@ export class EditCouturierComponent implements OnInit {
         console.log(err);
       }
     });
+    this.couturierService.upload(this.formDataPic).subscribe(
+      event =>{
+        console.log("Photo Profil sauvegardé !");
+      },
+      (error)=>{
+        console.log(error)
+      }
+    );
   }
 
   // upload files to the servers //
@@ -135,7 +126,16 @@ export class EditCouturierComponent implements OnInit {
   }
 
 
+  onUploadPhoto($event: Event) {
+    const target = event!.target as HTMLInputElement;
+    let files :FileList | null;
+    if(target.files){
+      files=target.files;
+      // @ts-ignore
+      for(const file of files){
+        this.formDataPic.append("files", file,"profilPic"+this.couturier.id+".png");
+      }
 
-
-
+    }
+  }
 }

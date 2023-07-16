@@ -8,13 +8,13 @@
           <img src="{{c.photo}}" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title">{{c.name}}</h5>
-            <p class="card-text">Id : {{c.id}}</p>
             <p class="card-text">{{c.profile}}</p>
           </div>
           <div class="card-body">
-            <button class="btn btn-primary" (click)="getDetails(c)">Details</button>
+            <button class="btn btn-info" (click)="getDetails(c)">Details</button>
             <button *ngIf="this.sec.kc.hasRealmRole('CUSTOMER')"
-                    class="btn btn-danger btn-sm float-right"  (click)="schedule(c)">Book</button>
+                    class="btn btn-info btn-sm float-right"
+                    (click)="schedule(c)">Book</button>
           </div>
         </div>
       </div>

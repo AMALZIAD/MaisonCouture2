@@ -3,7 +3,9 @@
     <div class="card">
       <div class="card-body ">
         <div >
-          <div class="w-100">
+          <h3>Modifier mes données personnelle </h3>
+          <div class="w-100 mt-4">
+
             <form [formGroup]="editProfilFormGroup" (ngSubmit)="editProfil()">
               <div class="mb-3">
                 <label class="form-label">Name:</label>
@@ -25,8 +27,13 @@
                     Email is not valid
                   </span>
               </div>
+              <div class="mb-3">
+                  <label class="form-label">Photo:</label>
+                  <input type="file" name ="files" multiple formControlName="photo"
+                     class="form-control" (change)="onUploadPhoto($event)">
+              </div>
               <div >
-                <button [disabled]="!editProfilFormGroup.valid" class="btn btn-danger mt-3" >envoyer</button>
+                <button [disabled]="!editProfilFormGroup.valid" class="btn btn-info mt-3" >Valider</button>
               </div>
             </form>
           </div>
@@ -37,54 +44,59 @@
   <!--  FINISH PROFIL--------------------------------------------------------------------------------->
 
   <!--  begin gallery--------------------------------------------------------------------------------->
-  <div class="ecommerce-gallery" data-mdb-zoom-effect="true" data-mdb-auto-height="true">
-    <div>
-      <form [formGroup]="addPictureFormGroup" (ngSubmit)="onSend()">
+  <!-- START THE FEATURETTES -->
+  <hr class="featurette-divider">
+  <!-- END THE FEATURETTES -->
+  <div class="container" data-mdb-zoom-effect="true" data-mdb-auto-height="true">
+    <div class="container mt-4">
+      <form [formGroup]="addPictureFormGroup" >
         <div class="mb-3">
-          <label class="form-label">Photo:</label>
+          <h2>J'ajoute des créations</h2>
           <input type="file" name ="files" multiple formControlName="photo"
                  class="form-control" (change)="onUploadFiles($event)">
         </div>
-        <div >
-          <button  class="btn btn-danger mt-3" >Send Email</button>
-        </div>
       </form>
     </div>
-    <div class="row py-3 shadow-5">
-      <div class="col-12 mb-1">
-        <div class="lightbox">
-          <img
-            src="{{couturier.gallery[0]}}"
-            alt="Gallery image 1"
-            class="ecommerce-gallery-main-img active w-100"
-          />
+
+    <!--  begin gallery--------------------------------------------------------------------------------->
+    <div class="container mt-4">
+      <h2>Mes creations </h2>
+      <div class="container-gallery m-4">
+        <div class="popup popup-1" *ngFor=" let img of couturier.gallery">
+          <img class="img-responsive" width="250"alt="Pop Up Gallety"
+               src="{{img}}" />
         </div>
       </div>
-      <div class="col-3 mt-1" *ngFor=" let img of couturier.gallery">
-        <img
-          src="{{img}}" alt="Gallery image 1"class="active w-100"
-        />
-      </div>
-
     </div>
+    <!--  end galleryeeeeeeeeeeeeeeeeeee----------------------------------------------------------------------->
+
   </div>
 
   <!--  end galleryeeeeeeeeeeeeeeeeeee----------------------------------------------------------------------->
-
+  <!-- START THE FEATURETTES -->
+  <hr class="featurette-divider">
+  <!-- END THE FEATURETTES -->
   <!--  begin reviews----------------------------------------------------------------------->
 
   <section >
-    <div class="container my-5 py-5 text-dark">
-      <div class="row d-flex justify-content-center">
-        <div class="col-md-10 col-lg-8 col-xl-6">
-          <div class="card">
-            <div class="card-body ">
-              <div >
-                <div class="w-100">
-                  <h5>Les avis </h5>
-                  <div class="form-outline" *ngFor="let r of reviews|async">
-                    <h6   rows="4">{{r.name}}</h6>
-                    <p   rows="4">{{r.comment}}</p>
+    <div class="row d-flex justify-content-center m-4">
+      <div class="col-md-10 col-lg-8 col-xl-6">
+        <div class="card">
+          <div class="card-body ">
+            <div >
+              <div class="w-100">
+                <h5 class="m-2">Les avis </h5>
+
+                <div class="d-flex flex-start w-100 m-2" *ngFor="let r of reviews|async">
+                  <div>
+                    <img class="rounded-circle shadow-1-strong me-3"
+                         src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="65"
+                         height="65" />
+                    <h5>{{r.name}}</h5>
+                  </div>
+                  <div class="w-100 card p-2">
+                    <ngb-rating [max]="5" [(rate)]="r.rate" ></ngb-rating>
+                    <p >{{r.comment}}</p>
                   </div>
                 </div>
               </div>

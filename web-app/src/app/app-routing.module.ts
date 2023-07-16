@@ -10,8 +10,10 @@ import {MesrdvsComponent} from "./mesrdvs/mesrdvs.component";
 import {ScheduleComponent} from "./schedule/schedule.component";
 import {EditCouturierComponent} from "./edit-couturier/edit-couturier.component";
 import {SimulateurComponent} from "./simulateur/simulateur.component";
+import {HomeComponent} from "./home/home.component";
 
 const routes: Routes = [
+  { path :"",component :HomeComponent},
   { path :"customers",component :CustomersComponent},
   { path :"couturiers",component :CouturiersComponent},
   { path :"editcustomer",component :EditCustomerComponent},

@@ -1,10 +1,12 @@
 <div class="container">
-  <div class="card-header">orders</div>
+  <div class="card-header">
+   <h2>Suivez des commandes</h2>
+  </div>
   <div class="card-body">
     <div class="table " >
-      <thead class="table-dark">
+      <thead class="table-info">
       <tr>
-        <th>ID</th><th>Order Date</th><th>Tenue</th><th>Categorie</th><th>Type Couture</th>
+        <th>ID</th><th>Date</th><th>Tenue</th><th>Categorie</th><th>Type Couture</th>
         <th>Amount</th><th>Status</th>
         <th *ngIf="sec.kc.hasRealmRole('COUTURIER')">Customer</th>
         <th *ngIf="sec.kc.hasRealmRole('CUSTOMER')">Couturier</th>
@@ -22,11 +24,12 @@
         <td>{{o.status}}</td>
         <td *ngIf="sec.kc.hasRealmRole('COUTURIER')">{{o.customer.name}}</td>
         <td *ngIf="sec.kc.hasRealmRole('CUSTOMER')">{{o.couturier.name}}</td>
-        <td *ngIf="sec.kc.hasRealmRole('COUTURIER')">
-          <button class="btn btn-success btn-sm float-right"
-                  (click)="updateOrder(o,null)">{{checkstatus(o.status)}}</button>
-          <button *ngIf="o.status=='CREE'" class="btn btn-danger btn-sm float-right"
-                  (click)="updateOrder(o,5)">ANNULER</button>
+        <td *ngIf="sec.kc.hasRealmRole('COUTURIER')" class="d-flex justify-content-center">
+          <button class="btn btn-info btn-sm float-right"
+                  (click)="updateOrder(o,null)">
+            <i class="bi bi-pen" title="{{checkstatus(o.status)}}"></i></button>
+          <button *ngIf="o.status=='CREE'" class="btn btn-info btn-sm float-right m-1"
+                  (click)="updateOrder(o,5)"><i class="bi bi-x" title="ANNULER"></i></button>
         </td>
       </tr>
       </tbody>
@@ -34,9 +37,9 @@
 
 
     <div class="table " >
-      <thead class="table-dark">
+      <thead class="table-info">
       <tr>
-        <th>ID</th><th>Order Date</th><th>Tenue</th><th>Categorie</th><th>Type Couture</th>
+        <th>ID</th><th>Date</th><th>Tenue</th><th>Categorie</th><th>Type Couture</th>
         <th>Amount</th><th>Status</th>
         <th *ngIf="sec.kc.hasRealmRole('COUTURIER')">Customer</th>
         <th *ngIf="sec.kc.hasRealmRole('CUSTOMER')">Couturier</th>

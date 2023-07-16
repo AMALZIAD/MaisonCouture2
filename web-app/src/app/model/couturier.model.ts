@@ -9,4 +9,7 @@ export interface Couturier{
   photo:string;
   profile:string;
   gallery:string[];
+  adresse:string;
+  homePhone:string;
+  rate:string;
 }

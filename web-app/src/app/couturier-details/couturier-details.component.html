@@ -1,51 +1,94 @@
-<div class="container">
+<div class="container mt-5">
+  <div class="row  mt-5 ">
+    <div class="col-3 border  rounded">
+      <div class=" text-center  pt-2">
+        <img class=" rounded-circle" src="{{couturier.photo}}" alt="Generic placeholder image" width="140" height="140">
+        <h2 >{{couturier.name}}</h2>
+        <h2 ><i class="bi bi-star-fill mx-2 mystar" ></i>{{couturier.rate}}</h2>
+      </div>
+    </div>
+    <div class="col-9 ">
+      <div class="  border rounded p-2">
+        <h3 > A propos de moi</h3>
+        <p class="card-text">{{couturier.profile}}</p>
+        <hr class="featurette-divider">
+        <p class="card-text"><i class="bi bi-phone-fill me-1"></i>{{couturier.homePhone}}</p>
+        <p class="card-text"><i class="bi bi-send-fill me-1"></i>{{couturier.email}}</p>
+        <p class="card-text "><i class="bi bi-pin-map-fill me-1"></i>{{couturier.adresse}}</p>
+
+      </div>
+
+    </div>
+  </div><!--  FIN ROW---->
+
 
   <!--  PROFIL------------------------------------------------------------------------------>
-  <div class="card mb-3">
-    <img class="card-img-top" src="{{couturier.photo}}" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <div class="card-body">
-        <h5 class="card-title">{{couturier.name}}</h5>
-        <p class="card-text">{{couturier.email}}</p>
-        <p class="card-text">{{couturier.profile}}</p>
-      </div>
-    </div>
-  </div>
-  <div  class="row d-flex justify-content-center">
+
 
 <!--  begin gallery--------------------------------------------------------------------------------->
-  <div class="ecommerce-gallery" data-mdb-zoom-effect="true" data-mdb-auto-height="true">
-    <div class="row py-3 shadow-5">
-      <div class="col-12 mb-1">
-        <div class="lightbox">
-          <img
-            src="{{couturier.gallery[0]}}"
-            alt="Gallery image 1"
-            class="ecommerce-gallery-main-img active w-100"
-          />
-        </div>
-      </div>
-      <div class="col-3 mt-1" *ngFor=" let img of couturier.gallery">
-        <img src="{{img}}" alt="Gallery image 1"class="active w-100"/>
+  <div class="container mt-4">
+    <h2>Mes fabuleuses creations </h2>
+    <div class="container-gallery m-4">
+      <div class="popup popup-1" *ngFor=" let img of couturier.gallery">
+        <img class="img-responsive" width="250"alt="Pop Up Gallety"
+             src="{{img}}" />
       </div>
     </div>
   </div>
+
 
 <!--  end galleryeeeeeeeeeeeeeeeeeee----------------------------------------------------------------------->
 
 <!--  begin reviews----------------------------------------------------------------------->
 
   <section >
+
+    <div class="row d-flex justify-content-center m-4">
+      <div class="col-md-10 col-lg-8 col-xl-6">
+        <div class="card">
+          <div class="card-body ">
+            <div >
+              <div class="w-100">
+                <h5 class="m-2">Les avis </h5>
+
+                <div class="d-flex flex-start w-100 m-2" *ngFor="let r of reviews|async">
+                  <div>
+                    <img class="rounded-circle shadow-1-strong me-3"
+                         src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="65"
+                         height="65" />
+                    <h5>{{r.name}}</h5>
+                  </div>
+                  <div class="w-100 card p-2">
+                    <ngb-rating [max]="5" [(rate)]="r.rate" ></ngb-rating>
+                    <p >{{r.comment}}</p>
+                  </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- START THE FEATURETTES -->
+    <hr class="featurette-divider">
+    <!-- END THE FEATURETTES -->
+    <!-- START THE FORM COMMENT -->
     <div class="container my-5 py-5 text-dark">
       <div *ngIf="sec.kc.hasRealmRole('CUSTOMER')" class="row d-flex justify-content-center">
         <div class="col-md-10 col-lg-8 col-xl-6">
           <div class="card">
-            <div class="card-body ">
-              <div >
+            <div class="card-body p-4">
+              <div class="d-flex flex-start w-100">
+                <div>
+                  <img class="rounded-circle shadow-1-strong me-3"
+                       src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="65"
+                       height="65" />
+                  <h3 *ngIf="sec.kc.authenticated">{{tokenjson.name}}</h3>
+                </div>
                 <div class="w-100">
                   <form [formGroup]="newReviewFormGroup" (ngSubmit)="addReview()">
-                    <h5>Votre avis !</h5>
+                    <h5>Add a comment</h5>
+                    <ngb-rating [max]="5" [(rate)]="starRating" ></ngb-rating>
                     <div class="form-outline">
                       <textarea class="form-control" formControlName="comment" rows="4"></textarea>
                       <span class="text-danger"
@@ -56,7 +99,7 @@
                       </span>
                     </div>
                     <div >
-                      <button [disabled]="!newReviewFormGroup.valid" class="btn btn-danger mt-3" >envoyer</button>
+                      <button  class="btn btn-info mt-3" >envoyer</button>
                     </div>
                   </form>
                 </div>
@@ -65,28 +108,13 @@
           </div>
         </div>
       </div>
-      <div class="row d-flex justify-content-center">
-        <div class="col-md-10 col-lg-8 col-xl-6">
-          <div class="card">
-            <div class="card-body ">
-              <div >
-                <div class="w-100">
-                  <h5>Les avis </h5>
-                  <div class="form-outline" *ngFor="let r of reviews|async">
-                    <h6   rows="4">{{r.name}}</h6>
-                    <p   rows="4">{{r.comment}}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
+
+
   </section>
 
 <!--  begin reviews----------------------------------------------------------------------->
-
 
 
 </div>

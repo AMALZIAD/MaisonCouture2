@@ -1,12 +1,15 @@
 <div class="container">
-  <div class="card-header">Mes Rendez-Vous /</div>
-  <button class="btn btn-success btn-sm float-right"
-          *ngIf="sec.kc.hasRealmRole('COUTURIER')"
-          (click)="declarerConge()">Déclarer Mes Congés</button>
+  <div class="card-header d-flex my-4">
+    <h2 class="h2 me-4">Mes Rendez-Vous </h2>
+    <button class="btn btn-info btn-sm float-right ms-4"
+            *ngIf="sec.kc.hasRealmRole('COUTURIER')"
+            (click)="declarerConge()">Déclarer Mes Congés</button>
+  </div>
+
 
   <div class="card-body" *ngIf="this.sec.kc.hasRealmRole('CUSTOMER')">
     <div class="table " >
-      <thead class="table-dark">
+      <thead class="table-info">
       <tr>
         <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th >Couturier</th> <th>Action</th>
       </tr>
@@ -27,7 +30,7 @@
       </tbody>
     </div>
     <div class="table " >
-      <thead class="table-dark">
+      <thead class="table-info">
       <tr>
         <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th >Couturier</th>
 
@@ -46,9 +49,9 @@
   </div>
 
 
-  <div class="card-body" *ngIf="sec.kc.hasRealmRole('COUTURIER')">
+  <div class="card-body d-flex" *ngIf="sec.kc.hasRealmRole('COUTURIER')">
     <div class="table " >
-      <thead class="table-dark">
+      <thead class="table-info">
       <tr>
         <th>ID</th><th>Date</th><th>Heure</th><th>Status</th>
         <th>Customer</th>
@@ -63,18 +66,20 @@
           <td>{{m.status}}</td>
           <td>{{m.customerId}}</td>
           <td >
-            <button *ngIf="m.status=='PRIS'" class="btn btn-success btn-sm float-right"
+            <button *ngIf="m.status=='PRIS'" class="btn btn-info btn-sm float-right"
                     (click)="newOrder(m)"
-                    [disabled]="(m.rdvDate | date: 'dd-MM-yyyy')!=(lyom| date: 'dd-MM-yyyy')">New Order</button>
+                    [disabled]="(m.rdvDate | date: 'dd-MM-yyyy')!=(lyom| date: 'dd-MM-yyyy')">
+              <i class="bi bi-cart-fill" title="New Order"></i></button>
             <button *ngIf="m.status=='CONGE'"
-                    class="btn btn-danger btn-sm float-right"  (click)="cancelConge(m)">Cancel</button>
+                    class="btn btn-info btn-sm float-right"(click)="cancelConge(m)">
+              <i class="bi bi-x" title="ANNULER"></i></button>
           </td>
       </tr>
       </tbody>
     </div>
 
     <div class="table" >
-      <thead class="table-dark">
+      <thead class="table-info">
       <tr>
         <th>ID</th><th>Date</th><th>Heure</th><th>Status</th> <th>Customer</th>
       </tr>

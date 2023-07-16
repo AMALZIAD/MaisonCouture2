@@ -116,7 +116,8 @@ public class CouturierRestController {
 
     // FILE TREATMENT
     // define location
-    public static final String DIRECTORY= "E:/MaisonCouture/web-app/src/res/";
+    //public static final String DIRECTORY= "E:/MaisonCouture/web-app/src/res/";
+    public static final String DIRECTORY= "web-app/src/res/";
     //define to upload file
     @PostMapping("/upload")
     //return list of names of files uploaded

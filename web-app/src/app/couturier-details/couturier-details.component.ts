@@ -15,7 +15,8 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./couturier-details.component.css']
 })
 export class CouturierDetailsComponent implements OnInit {
-
+  tokenjson !: any;
+  starRating = 0;
   fileName = '';
   couturier!:Couturier;
   review!:any;
@@ -29,6 +30,7 @@ export class CouturierDetailsComponent implements OnInit {
               private route:ActivatedRoute,public sec: KeycloakSecurityService,private http:HttpClient) {
     this.couturierId=this.route.snapshot.params["id"];
     console.log("id cou..."+this.couturierId);
+    this.tokenjson=sec.kc.tokenParsed;
     //get couturier detail
     this.couturierService.getCouturier(this.couturierId)
       .subscribe({ next : (data)=>{
@@ -63,6 +65,9 @@ export class CouturierDetailsComponent implements OnInit {
     let review =this.newReviewFormGroup.value;
     review.name= this.sec.kc.tokenParsed?.['name'];
     review.couturier={id:<number>this.couturierId}
+    console.log(this.starRating);
+    review.rate=this.starRating;
+    console.log(review);
    this.review= this.couturierService.addReview(review).subscribe({
      next: data => {
        alert("Review has been successfully updated!");

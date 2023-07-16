@@ -18,6 +18,8 @@ import { MesrdvsComponent } from './mesrdvs/mesrdvs.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { EditCouturierComponent } from './edit-couturier/edit-couturier.component';
 import { SimulateurComponent } from './simulateur/simulateur.component';
+import { HomeComponent } from './home/home.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 function kcFactory(kcSecurity:KeycloakSecurityService) {
   return()=>kcSecurity.init();
@@ -35,13 +37,15 @@ function kcFactory(kcSecurity:KeycloakSecurityService) {
     MesrdvsComponent,
     ScheduleComponent,
     EditCouturierComponent,
-    SimulateurComponent
+    SimulateurComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
     {provide:APP_INITIALIZER,deps:[KeycloakSecurityService],useFactory:kcFactory,multi:true},

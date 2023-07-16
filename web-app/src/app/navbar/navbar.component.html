@@ -1,24 +1,24 @@
 <!-- Grey with black text -->
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-expand-sm ">
   <div class="container-fluid">
     <ul class="navbar-nav" >
       <li class="nav-item">
-        <a class="nav-link active" routerLink="#">Home</a>
+        <a class="nav-link " routerLink="">Accueil</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" routerLink="/couturiers">Maison de Couture</a>
+        <a class="nav-link " routerLink="/couturiers">Maison de Couture</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/customers" *ngIf="sec.kc.hasRealmRole('COUTURIER')">Customers</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/mesrdvs"  >Mes Rdvs</a>
+        <a class="nav-link" routerLink="/mesrdvs" *ngIf="sec.kc.authenticated" >Mes Rdvs</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/orders"  >Mes Commandes</a>
+        <a class="nav-link" routerLink="/orders" *ngIf="sec.kc.authenticated" >Mes Commandes</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/simulateur"  >Sumilateur</a>
+        <a class="nav-link" routerLink="/simulateur"  >Simulateur</a>
       </li>
     </ul>
     <ul class="navbar-nav " >
@@ -38,7 +38,7 @@
         </div>
       </li>
       <li class="nav-item" *ngIf="!sec.kc.authenticated">
-        <a  class=" btn text-white" (click)="onLogin()">LogIn</a>
+        <a  class=" btn " (click)="onLogin()">LogIn</a>
       </li>
     </ul>
   </div>
@@ -46,6 +46,11 @@
 <router-outlet>
 
 </router-outlet>
+<footer class="text-center text-white  " style="background-color: #f1f1f1;">
 
-
-
+  <div class="text-center text-dark p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2023 Copyright:
+    <a class="text-dark" href="https://mdbootstrap.com/">MaisonCouture.com</a>
+  </div>
+  <!-- Copyright -->
+</footer>

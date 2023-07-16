@@ -61,7 +61,8 @@ export class KeycloakSecurityService {
         //  create customer object from token
          const couturier: Couturier = {
           id: 0, idkc: <string>this.kc.tokenParsed?.sub, name: this.kc?.tokenParsed?.['name'],
-          email: this.kc?.tokenParsed?.['email'],photo :"",profile:"",gallery:[]
+          email: this.kc?.tokenParsed?.['email'],photo :"",profile:"",gallery:[],
+           adresse:"",homePhone:"",rate:""
         }
         console.log(couturier);
         // save new customer to db

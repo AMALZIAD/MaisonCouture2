@@ -17,6 +17,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private int rate;
     private String comment;
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
