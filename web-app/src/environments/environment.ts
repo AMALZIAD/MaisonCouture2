@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  bankendhost:"http://localhost:8888"
+  // bankendhost : 'http://localhost:8888'
 };
 
 /*
