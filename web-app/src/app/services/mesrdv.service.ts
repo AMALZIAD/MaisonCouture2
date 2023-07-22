@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import {map, Observable} from "rxjs";
-import {Mesrdv} from "../model/mesrdv";
+import {Mesrdv} from "../model/mesrdv.model";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {Customer} from "../model/customer.model";
+import {RdvMail} from "../model/rdvmail.model";
+import {CmdMail} from "../model/cmdmail.model";
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,36 @@ export class MesrdvService {
     console.log("id ",id)
      return this.http.delete(environment.bankendhost+"/RDV-SERVICE/rdvs/"+id);
 
+  }
+
+  //send email prise rdv vers couturier
+  public sendMailPriseRdv(details:RdvMail){
+    this.http.post<RdvMail>(environment.bankendhost+
+      "/RDV-SERVICE/mailCouturier", details).subscribe(
+      res => {
+        details= res;
+        console.log(details);
+        console.log('email couturier done!');
+      });
+  }
+//send email prise rdv vers customer
+  public sendMailConfirmRdv(details:RdvMail ) {
+    this.http.post<RdvMail>(environment.bankendhost+
+      "/RDV-SERVICE/mailCustomer", details).subscribe(
+      res => {
+        details= res;
+        console.log(details);
+        console.log('email customer done!');
+      });
+  }
+
+  sendMailContact(custRdv: RdvMail ) {
+      this.http.post<RdvMail>(environment.bankendhost+
+        "/RDV-SERVICE/mailContact", custRdv).subscribe(
+        res => {
+          custRdv= res;
+          console.log(custRdv);
+          console.log('email admin done!');
+        });
   }
 }

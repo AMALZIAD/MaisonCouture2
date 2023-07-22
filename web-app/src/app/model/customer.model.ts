@@ -6,4 +6,7 @@ export interface Customer{
   email: string;
   idkc :string;
   mesure:Mesure;
+  photo:string;
+  phone:string;
+  adresse:string;
 }

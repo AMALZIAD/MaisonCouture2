@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Template</title>
+</head>
+<body style="background-color: #dee8ed;padding: 50px">
+
+<p th:text="${'Cher(e) ' + name+','}">  </p>
+
+
+<p>Nous espérons que vous allez bien. Nous tenions à vous informer de l'état actuel de votre commande passée auprès de notre entreprise.</p>
+<p th:text="${'Numéro de commande : ' + numero}"></p>
+<p th:text="${'Date de commande : ' + date}"></p>
+<p th:text="${'Montant de commande : ' + prix}"></p>
+
+<p> Nous sommes heureux de vous annoncer que votre commande est
+  <b><span th:text="${ etat}"></span></b>
+  avec succès.
+  Nos équipes des couturiers ont lancé les preparatives.
+  Voici un récapitulatif de votre commande:</p>
+<p th:text="${ tenue}"></p>
+<p>Vous pourrez  suivre l'avancement de votre commande directement sur notre site .
+  Si vous avez des questions supplémentaires concernant votre commande,
+  n'hésitez pas à nous contacter en répondant à cet e-mail ou par contact du couturier</p>
+<p>Coordonnées du couturier :</p>
+<p th:text="${contact}"></p>
+<p> Notre équipe se fera un plaisir de vous aider.
+  Nous tenons à vous remercier de votre confiance et de votre patience. Nous sommes impatients de vous voir recevoir votre commande très prochainement.
+</p>
+<br>
+<p>Cordialement,</p>
+<p>L'équipe de Maison de couture</p>
+
+</body>
+</html>

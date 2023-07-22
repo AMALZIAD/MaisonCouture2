@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Template</title>
+</head>
+<body style="background-color: #dee8ed; padding: 50px;">
+
+<p th:text="${'Cher(e) ' + name+','}">  </p>
+
+<p>Nous tenons à vous informer que nous avons bien enregistré une demande de rendez-vous de la part d'un de nos clients. Les détails du rendez-vous sont les suivants :
+</p>
+<p th:text="${'Client '+ client}">  </p>
+<p th:text="${'Date ' + date}">  </p>
+<p th:text="${'Heure ' + heure}">  </p>
+
+<p>Nous comptons sur votre professionnalisme et votre expertise pour fournir un service de couture de haute qualité lors de ce rendez-vous. Nous apprécions votre collaboration et votre engagement envers nos clients.
+</p>
+<p>Nous vous remercions pour votre participation et nous nous réjouissons de cette collaboration fructueuse.
+</p>
+
+<p>Cordialement,</p>
+<p>L'équipe de gestion des couturiers</p>
+</body>
+</html>

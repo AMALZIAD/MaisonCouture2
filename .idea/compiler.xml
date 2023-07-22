@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="RdvService" />
         <module name="CouturierService" />
         <module name="CustomerService" />
-        <module name="DiscoveryService" />
         <module name="GetawayService" />
+        <module name="RdvService" />
+        <module name="DiscoveryService" />
         <module name="BillingService" />
       </profile>
     </annotationProcessing>
@@ -23,6 +23,7 @@
       <module name="DiscoveryService" target="17" />
       <module name="GetawayService" target="17" />
       <module name="RdvService" target="17" />
+      <module name="SendMail" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -34,6 +35,7 @@
       <module name="DiscoveryService" options="-parameters" />
       <module name="GetawayService" options="-parameters" />
       <module name="RdvService" options="-parameters" />
+      <module name="SendMail" options="-parameters" />
     </option>
   </component>
 </project>

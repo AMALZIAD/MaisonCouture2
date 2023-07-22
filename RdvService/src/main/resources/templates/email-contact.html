@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Template</title>
+</head>
+<body style="background-color: #dee8ed; padding: 50px;">
+
+<p th:text="${'Cher admin,'}">  </p>
+
+<p>Vous avez recu un email de <span th:text="${'Date ' + date}">  </span>d'un client sur la plateforme MAISON COUTURE.
+  Les détails du message sont les suivants :
+</p>
+<p th:text="${'Nom: '+ name}">  </p>
+<p th:text="${'Email ' + email}">  </p>
+
+<p>Le message :</p>
+<p th:text="${'client: '+ client}">  </p>
+<p>Cordialement,</p>
+<p th:text="${'Nom: '+ name}">  </p>
+</body>
+</html>

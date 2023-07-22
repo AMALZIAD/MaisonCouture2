@@ -1,14 +1,24 @@
 package org.sid.billingservice.web;
 
+import org.sid.billingservice.entities.Details;
 import org.sid.billingservice.entities.Order;
 import org.sid.billingservice.model.Couturier;
 import org.sid.billingservice.model.Customer;
 import org.sid.billingservice.services.CouturierRestClient;
 import org.sid.billingservice.services.CustomerRestClient;
 import org.sid.billingservice.services.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
+import javax.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class OrderRestController {
@@ -74,5 +84,43 @@ public class OrderRestController {
         return orderService.updateOrder(order);
     }
 
+    // SEND EMAIL OPTION
+    @Autowired
+    private JavaMailSender sender;
+    @Autowired
+    SpringTemplateEngine templateEngine;
+    @RequestMapping("/mailCmd")
+    public @ResponseBody
+    Details sendMail(@RequestBody Details details) throws Exception {
 
+        MimeMessage message = sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                StandardCharsets.UTF_8.name());
+
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("numero",details.getNumCmd());
+        model.put("etat",details.getEtat());
+        model.put("prix",details.getPrix());
+        model.put("tenue",details.getTenue());
+        model.put("name",details.getName());
+        model.put("date",details.getDatecmd());
+        model.put("contact",details.getContact());
+
+        Context context = new Context();
+        context.setVariables(model);
+        String html = templateEngine.process("email-cmd", context);
+
+        try {
+            helper.setTo(details.getEmail());
+            helper.setText(html,true);
+            helper.setSubject("Suivi de Commande N°"+details.getNumCmd());
+        } catch (javax.mail.MessagingException e) {
+            e.printStackTrace();
+        }
+        sender.send(message);
+
+        return details;
+
+    }
 }

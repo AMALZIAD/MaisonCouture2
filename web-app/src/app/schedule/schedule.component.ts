@@ -1,11 +1,15 @@
 import {Component,OnInit,} from '@angular/core';
 import {MesrdvService} from "../services/mesrdv.service";
-import {Mesrdv} from "../model/mesrdv";
+import {Mesrdv} from "../model/mesrdv.model";
 import {DatePipe} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import {CustomerService} from "../services/customer.service";
 import {KeycloakSecurityService} from "../services/keycloak-security.service";
-
+import {RdvMail} from "../model/rdvmail.model";
+import { Customer } from '../model/customer.model';
+import {CouturierService} from "../services/couturier.service";
+import { Couturier } from '../model/couturier.model';
+declare let Email: any;
 
 @Component({
   selector: 'app-schedule',
@@ -21,16 +25,30 @@ export class ScheduleComponent implements OnInit {
   pipe = new DatePipe('en-US');
   times :Array<string> =["09:00","09:30","10:00","10:30","11:00","11:30","14:00","14:30",
     "15:00","15:30","16:00","16:30","17:00","17:30"];
-
+  rdv :any;
   couturierId!:number;
   customerId!:number;
+  customer!:Customer;
   couturierIdkc!:string;
   conges :Array<any>=[];
+  adressMail="";
+  couturier!:Couturier;
   constructor(private rdvService:MesrdvService,private route:ActivatedRoute ,
-              private customerService :CustomerService,public  sec:KeycloakSecurityService) {
+              private customerService :CustomerService,
+              private couturierService :CouturierService
+              ,public  sec:KeycloakSecurityService) {
    //get couturier id from route(clickedlink )
     this.couturierId=route.snapshot.params['id'];
      console.log(this.couturierId);
+    this.couturierService.getCouturier(this.couturierId).subscribe({
+      next: (data: any) => {
+        console.log("couturier ",data);
+        this.couturier=data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
     }
 
   ngOnInit(): void {
@@ -44,6 +62,8 @@ export class ScheduleComponent implements OnInit {
           next: data => {
             console.log("customer ",data);
             this.customerId=data.id;
+            this.adressMail=data.email;
+            this.customer=data;
           },
           error: err => {
             console.log(err);
@@ -117,6 +137,7 @@ fillData():boolean{
 }
   // validate rdv -CUSTOMER---------------------------------------------------
   valideRdv(event:any) {
+
     // get only buttons clicked
     if(event.target.localName=="button"){
       // get the time end date
@@ -124,15 +145,20 @@ fillData():boolean{
       var date = event.target.name;
       //check if customer
       if(this.sec.kc.hasRealmRole('CUSTOMER')){
+
         //save it to BD
         let rdvDate=new Date(new Date(date).setHours(0, 0, 0, 0));
-        let rdv:Mesrdv={id:0,rdvDate:rdvDate,heure:heure,customerId:this.customerId,couturierId:this.couturierId,status:1};
-        this.rdvService.saveRdv(rdv).subscribe({
+        this.rdv={id:0,rdvDate:rdvDate,heure:heure,
+          customerId:this.customerId,couturierId:this.couturierId,
+          status:1,customer:this.customer,couturier:this.couturier};
+        console.log(this.rdv)
+        this.rdvService.saveRdv(this.rdv).subscribe({
           next: data => {
             alert("Rdv est bien enregistré!");
             // reset tab
             this.mesrdvs=[];
             this.fillTab();
+            this.sendEmail(this.rdv);
           }, error: err => { console.log(err); }
         });
         // msg affichage
@@ -144,7 +170,9 @@ fillData():boolean{
         event.target.className="btn btn-block btn-dark ";
         event.target.disabled=true;
         let rdvDate=new Date(new Date(date).setHours(0, 0, 0, 0));
-        let rdv:Mesrdv={id:0,rdvDate:rdvDate,heure:heure,customerId:0,couturierId:this.couturierId,status:3};
+        let rdv:Mesrdv={id:0,rdvDate:rdvDate,heure:heure,
+          customerId:0,couturierId:this.couturierId,status:3,
+          customer:this.customer,couturier:this.couturier};
         this.conges.push(rdv);
       }
     }
@@ -168,5 +196,27 @@ fillData():boolean{
 
   resetConge() {
     this.conges=[];
+  }
+  sendEmail( rdv:Mesrdv){
+    //mailCouturier
+    let curr :any = this.pipe.transform(rdv.rdvDate, 'MM-dd-yyyy');
+    let coutRdv:RdvMail = {
+      name: rdv.couturier.name,
+      email: rdv.couturier.email,
+      daterdv:curr,
+      heure:rdv.heure,
+      client: rdv.customer.name
+    };
+    let custRdv:RdvMail = {
+      name: rdv.customer.name,
+      email: rdv.customer.email,
+      daterdv:curr,
+      heure:rdv.heure,
+      client:"Nom:"+rdv.couturier.name +", email :"+rdv.couturier.email
+        +", tel :"+rdv.couturier.homePhone
+    };
+    this.rdvService.sendMailPriseRdv(coutRdv);
+    this.rdvService.sendMailConfirmRdv(custRdv);
+    alert("Email de confirmation est envoyé!")
   }
 }

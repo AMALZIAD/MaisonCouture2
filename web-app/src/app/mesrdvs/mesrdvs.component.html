@@ -1,13 +1,13 @@
 <div class="container">
-  <div class="card-header d-flex my-4">
-    <h2 class="h2 me-4">Mes Rendez-Vous </h2>
-    <button class="btn btn-info btn-sm float-right ms-4"
+  <div class=" d-flex my-4">
+    <h2 class=" me-4">Mes Rendez-Vous </h2>
+    <button class="btn btn-info btn-sm  ms-4 d-flex justify-content-end"
             *ngIf="sec.kc.hasRealmRole('COUTURIER')"
             (click)="declarerConge()">Déclarer Mes Congés</button>
   </div>
 
-
-  <div class="card-body" *ngIf="this.sec.kc.hasRealmRole('CUSTOMER')">
+  <!--  CUSTOMER INTERFACE                        -->
+  <div class="container" *ngIf="this.sec.kc.hasRealmRole('CUSTOMER')">
     <div class="table " >
       <thead class="table-info">
       <tr>
@@ -48,51 +48,59 @@
     </div>
   </div>
 
+<!--  COUTURIER INTERFACE                        -->
+  <div class="container" *ngIf="sec.kc.hasRealmRole('COUTURIER')">
+    <div class="container d-flex">
+      <div class="container">
+        <h3> Mes Rendez-Vous encours</h3>
+        <div class="table " >
+          <thead class="table-info">
+          <tr>
+            <th>ID</th><th>Date</th><th>Heure</th><th>Status</th>
+            <th>Customer</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let m of todays |async" >
+            <td>{{m.id}}</td>
+            <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
+            <td>{{m.heure}}</td>
+            <td>{{m.status}}</td>
+            <td>{{m.customerId}}</td>
+            <td >
+              <button *ngIf="m.status=='PRIS'" class="btn btn-info btn-sm float-right"
+                      (click)="newOrder(m)"
+                      [disabled]="(m.rdvDate | date: 'dd-MM-yyyy')!=(lyom| date: 'dd-MM-yyyy')">
+                <i class="bi bi-cart" title="New Order"></i></button>
 
-  <div class="card-body d-flex" *ngIf="sec.kc.hasRealmRole('COUTURIER')">
-    <div class="table " >
-      <thead class="table-info">
-      <tr>
-        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th>
-        <th>Customer</th>
-        <th>Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let m of todays |async" >
-          <td>{{m.id}}</td>
-          <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
-          <td>{{m.heure}}</td>
-          <td>{{m.status}}</td>
-          <td>{{m.customerId}}</td>
-          <td >
-            <button *ngIf="m.status=='PRIS'" class="btn btn-info btn-sm float-right"
-                    (click)="newOrder(m)"
-                    [disabled]="(m.rdvDate | date: 'dd-MM-yyyy')!=(lyom| date: 'dd-MM-yyyy')">
-              <i class="bi bi-cart-fill" title="New Order"></i></button>
-            <button *ngIf="m.status=='CONGE'"
-                    class="btn btn-info btn-sm float-right"(click)="cancelConge(m)">
-              <i class="bi bi-x" title="ANNULER"></i></button>
-          </td>
-      </tr>
-      </tbody>
-    </div>
-
-    <div class="table" >
-      <thead class="table-info">
-      <tr>
-        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th> <th>Customer</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let m of olds |async">
-        <td>{{m.id}}</td>
-        <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
-        <td>{{m.heure}}</td>
-        <td>{{m.status}}</td>
-        <td>{{m.customerId}}</td>
-      </tr>
-      </tbody>
+              <button *ngIf="m.status=='CONGE'"
+                      class="btn btn-info btn-sm float-right"(click)="cancelConge(m)">
+                <i class="bi bi-x" title="ANNULER"></i></button>
+            </td>
+          </tr>
+          </tbody>
+        </div>
+      </div>
+      <div class="container">
+        <h3> Historique</h3>
+        <div class="table" >
+          <thead class="table-info">
+          <tr>
+            <th>ID</th><th>Date</th><th>Heure</th><th>Status</th> <th>Customer</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let m of olds |async">
+            <td>{{m.id}}</td>
+            <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
+            <td>{{m.heure}}</td>
+            <td>{{m.status}}</td>
+            <td>{{m.customerId}}</td>
+          </tr>
+          </tbody>
+        </div>
+      </div>
     </div>
   </div>
 </div>

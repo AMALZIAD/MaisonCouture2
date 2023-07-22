@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Template</title>
+</head>
+<body style="background-color: #dee8ed;padding: 50px;">
+
+<p th:text="${'Cher(e) ' + name+','}">  </p>
+
+<p>Nous vous remercions d'avoir choisi notre service de Maison Couture. Nous sommes ravis de confirmer la prise de rendez-vous que vous avez demandée.</p>
+
+<p>Voici les détails de votre rendez-vous :</p>
+<br>
+<b><p th:text="${'Date : ' + date}"></p></b>
+<b><p th:text="${'Heure : ' + heure}"></p></b>
+
+
+<p>Coordonnée du Couturier :</p>
+<b><p th:text="${client}"></p></b>
+
+<p>Veuillez noter que ce rendez-vous est réservé exclusivement pour vous. Si vous avez besoin d'apporter des modifications ou si vous devez annuler votre rendez-vous, veuillez nous en informer dès que possible afin que nous puissions ajuster notre planning.
+
+  Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter par téléphone ou par email. Nous sommes là pour vous aider.
+
+  Nous sommes impatients de vous rencontrer lors de votre rendez-vous et de vous offrir un service de couture exceptionnel.
+</p>
+<p>Cordialement,</p>
+<p>L'équipe de Maison Couture</p>
+</body>
+</html>

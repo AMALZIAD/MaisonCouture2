@@ -1,20 +1,27 @@
 package org.sid.rdvservice.web;
 
 
+import org.sid.rdvservice.entities.Details;
+import org.sid.rdvservice.entities.RdcClient;
 import org.sid.rdvservice.entities.Rdv;
 import org.sid.rdvservice.model.Couturier;
 import org.sid.rdvservice.model.Customer;
 import org.sid.rdvservice.services.CouturierRestClient;
 import org.sid.rdvservice.services.CustomerRestClient;
 import org.sid.rdvservice.services.RdvService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 
+import javax.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
@@ -43,6 +50,7 @@ public class RdvRestController {
     // rdv encours couturioer from today !!! ( mesrdvs)
     @GetMapping("/TodayRdv/{id}")
     public List<Rdv> getTodayRdvs(@PathVariable String id){
+        System.out.println("id kc rdv "+id);
         Long couturierId=this.couturierRestClient.getByIdkc(id).getId();
         Date dt = new Date();
         Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
@@ -101,4 +109,105 @@ public class RdvRestController {
         System.out.println(rdv.toString());
         return rdvService.updateRdv(rdv);
     }*/
+
+    // SEND EMAIL OPTION
+    @Autowired
+    private JavaMailSender sender;
+    @Autowired
+    SpringTemplateEngine templateEngine;
+    @RequestMapping("/mailCouturier")
+    public @ResponseBody
+    RdcClient sendMailCout(@RequestBody RdcClient client) throws Exception {
+
+        MimeMessage message = sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                StandardCharsets.UTF_8.name());
+
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("date",client.getDaterdv());
+        model.put("client",client.getClient());
+        model.put("heure",client.getHeure());
+        model.put("name",client.getName());
+
+
+        Context context = new Context();
+        context.setVariables(model);
+        String html = templateEngine.process("email-rdv-couturier", context);
+
+        try {
+            helper.setTo(client.getEmail());
+            helper.setText(html,true);
+            helper.setSubject(" Prise de rendez-vous confirmée");
+        } catch (javax.mail.MessagingException e) {
+            e.printStackTrace();
+        }
+        sender.send(message);
+
+        return client;
+
+    }
+
+    @RequestMapping("/mailCustomer")
+    public @ResponseBody
+    RdcClient sendMailCust(@RequestBody RdcClient client) throws Exception {
+
+        MimeMessage message = sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                StandardCharsets.UTF_8.name());
+
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("date",client.getDaterdv());
+        model.put("client",client.getClient());
+        model.put("heure",client.getHeure());
+        model.put("name",client.getName());
+
+            System.out.println("client :"+client.getClient());
+        Context context = new Context();
+        context.setVariables(model);
+        String html = templateEngine.process("email-rdv-customer", context);
+
+        try {
+            helper.setTo(client.getEmail());
+            helper.setText(html,true);
+            helper.setSubject(" Prise de rendez-vous confirmée");
+        } catch (javax.mail.MessagingException e) {
+            e.printStackTrace();
+        }
+        sender.send(message);
+        return client;
+
+    }
+    @RequestMapping("/mailContact")
+    public @ResponseBody
+    RdcClient sendMailContact(@RequestBody RdcClient client) throws Exception {
+
+        MimeMessage message = sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                StandardCharsets.UTF_8.name());
+
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("name",client.getName());
+        model.put("email",client.getEmail());
+        model.put("date",client.getDaterdv());
+        model.put("client",client.getClient());
+
+        Context context = new Context();
+        context.setVariables(model);
+        String html = templateEngine.process("email-contact", context);
+
+        try {
+            helper.setTo("amal.amal.ziad@gmail.com");
+            helper.setText(html,true);
+            helper.setSubject(client.getDaterdv());
+        } catch (javax.mail.MessagingException e) {
+            e.printStackTrace();
+        }
+        sender.send(message);
+
+        return client;
+
+    }
 }

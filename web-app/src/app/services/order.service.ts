@@ -5,6 +5,7 @@ import {Couturier} from "../model/couturier.model";
 import {environment} from "../../environments/environment";
 import {Customer} from "../model/customer.model";
 import {Order} from "../model/order.model";
+import { CmdMail } from '../model/cmdmail.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class OrderService {
   constructor(private http:HttpClient) { }
 
   // save 1 order----------------------------------------------------------------------------------------
-  public saveOrder(order:Order){
-    return this.http.post(environment.bankendhost+"/BILLING-SERVICE/orders",order)
+  public saveOrder(order:Order):Observable<Order>{
+    return this.http.post<Order >(environment.bankendhost+"/BILLING-SERVICE/orders",order)
   }
   // get all orders---------------------------------------------------------------------------------------
   public getOrders():Observable<Order[]>{
@@ -53,5 +54,15 @@ export class OrderService {
     /* .pipe(map((result:any)=>{
        return result._embedded.couturiers; //just return "couturiers"
      }));*/
+  }
+  //send email maj cmd
+  sendMailMajOrder(details:CmdMail){
+    this.http.post<CmdMail>(environment.bankendhost+
+      "/BILLING-SERVICE/mailCmd", details).subscribe(
+      res => {
+        details= res;
+        console.log(details);
+        alert('Email Sent successfully');
+      });
   }
 }

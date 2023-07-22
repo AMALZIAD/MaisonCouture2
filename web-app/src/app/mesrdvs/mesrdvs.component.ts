@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MesrdvService} from "../services/mesrdv.service";
-import {Mesrdv} from "../model/mesrdv";
+import {Mesrdv} from "../model/mesrdv.model";
 import {catchError, Observable, throwError} from "rxjs";
 import {KeycloakSecurityService} from "../services/keycloak-security.service";
 import {Router} from "@angular/router";
@@ -72,7 +72,9 @@ export class MesrdvsComponent implements OnInit {
   // annuler rdv customer
   cancelRdv(m: Mesrdv) {
     m.status='ANNULE';
-    let rdv: Mesrdv ={id:m.id,heure:m.heure,rdvDate:m.rdvDate,status:5,customerId:m.customerId,couturierId:m.couturierId}
+    let rdv: Mesrdv ={id:m.id,heure:m.heure,rdvDate:m.rdvDate,status:5,
+      customerId:m.customerId,couturierId:m.couturierId,
+      customer:m.customer,couturier:m.couturier}
     console.log(rdv);
     this.mesrdvsService.saveRdv(rdv).subscribe({
       next: data => {

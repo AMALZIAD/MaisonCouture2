@@ -19,7 +19,6 @@ export class CustomerService {
   public getCustomerIdkc(idkc: string):Observable<boolean>{
     return this.http.get<boolean>(environment.bankendhost+"/CUSTOMER-SERVICE/findByIdkc/"+idkc);
   }
-
 // create account in web site
   public saveCustomer(customer: Customer):Observable<Customer>{
     return this.http.post<Customer>(environment.bankendhost+"/CUSTOMER-SERVICE/customers",customer);

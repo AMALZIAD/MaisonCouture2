@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {OrderService} from "../services/order.service";
 import {catchError, Observable, throwError} from "rxjs";
 import {Order} from "../model/order.model";
+import {CmdMail} from "../model/cmdmail.model";
 import {KeycloakSecurityService} from "../services/keycloak-security.service";
+import {environment} from "../../environments/environment";
+import {DatePipe} from "@angular/common";
+declare let Email: any;
 
 @Component({
   selector: 'app-orders',
@@ -10,7 +14,7 @@ import {KeycloakSecurityService} from "../services/keycloak-security.service";
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
-
+  pipe = new DatePipe('en-US');
   orders!:Observable<Order[]>;
   Oldorders!:Observable<Order[]>;
   errorMessage!:string;
@@ -73,7 +77,7 @@ export class OrdersComponent implements OnInit {
     let st= t;// status  annule ou 4( livre)
   let stat=""
     if( st == 5){// annule
-
+      o.status='ANNULE';
     }else if(o.status=='TERMINE'){
       st=4;
     }
@@ -94,6 +98,8 @@ export class OrdersComponent implements OnInit {
       next: data => {
         console.log("Order has been successfully Updated!");
         this.LoadData();
+        console.log(o.status)
+        this.sendEmail(order,stat);
       },
       error: err => {
         console.log(err);
@@ -101,4 +107,19 @@ export class OrdersComponent implements OnInit {
     });
   }
 
+  sendEmail(o:Order,t :any){
+
+    let curr :any = this.pipe.transform(o.orderdate, 'MM-dd-yyyy');
+    let details:CmdMail = {
+      name: o.customer.name,
+      email: o.customer.email,
+      datecmd:curr,
+      numCmd:o.id.toString(),
+      tenue:"Tenue :"+o.tenue+ " en "+o.typecouture +" par couture de " + o.categorie,
+      etat:t,
+      prix:o.amount.toString(),
+      contact:"Nom:"+o.couturier.name +", email :"+o.couturier.email+", tel :"+o.couturier.phone
+    };
+    this.orderService.sendMailMajOrder(details);
+  }
 }

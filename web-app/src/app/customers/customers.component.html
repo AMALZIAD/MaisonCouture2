@@ -1,20 +1,27 @@
 <div class="container">
-  <div class="card-header">Customers</div>
-  <div class="card-body">
-    <div class="table" >
-
-      <thead class="table-info" >
-      <tr>
-        <th>ID</th><th>Name</th><th>Email</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let c of customers |async">
-        <td>{{c.id}}</td>
-        <td>{{c.name}}</td>
-        <td>{{c.email}}</td>
-      </tr>
-      </tbody>
-    </div>
+  <div class="">
+    <h2>Mes Clients</h2>
   </div>
+  <div class="marketing ">
+    <div class="row ">
+      <div class="col mx-2" *ngFor="let c of customers |async">
+        <div class="card ">
+          <img src="{{c.photo}}" class=" rounded-circle"  width="128" height="128">
+          <div class="card-body">
+            <h5 class="card-title">{{c.name}}</h5>
+            <p class="card-text"> <i class="bi bi-phone-fill me-1"></i>{{c.phone}}</p>
+            <p class="card-text"><i class="bi bi-send-fill me-1"></i>{{c.email}}</p>
+            <p class="card-text"><i class="bi bi-pin-map-fill me-1"></i>{{c.adresse}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
 </div>
+

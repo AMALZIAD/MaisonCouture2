@@ -12,23 +12,24 @@ import org.sid.couturierservice.entities.Review;
 import org.sid.couturierservice.repositories.CouturierRepository;
 import org.sid.couturierservice.repositories.ReviewRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import static java.nio.file.Files.copy;
 import static java.nio.file.Paths.get;
@@ -147,4 +148,6 @@ public class CouturierRestController {
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(filePath)))
                 .headers(httpHeaders).body(resource);
     }
+
+
 }
