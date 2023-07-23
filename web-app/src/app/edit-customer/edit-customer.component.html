@@ -1,67 +1,86 @@
 <div class="container">
-  <div class="card">
-    <div class="card-header">Update Customer </div>
-    <div class="card-body">
-      <form [formGroup]="newCustomerFormGroup" (ngSubmit)="handleSaveCustomer()">
-        <div class="mb-3">
-          <label class="form-label">Name:</label>
-          <input type="text" formControlName="name" class="form-control">
-          <span class="text-danger"
-                *ngIf="newCustomerFormGroup.controls['name'].touched
-                && newCustomerFormGroup.controls['name'].errors
-                && newCustomerFormGroup.controls['name'].errors!['required']">
-            Name is Required
-          </span>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Email:</label>
-          <input type="text" formControlName="email" class="form-control">
-          <span class="text-danger"
-                *ngIf="newCustomerFormGroup.controls['email'].touched
-                && newCustomerFormGroup.controls['email'].errors
-                && newCustomerFormGroup.controls['email'].errors!['email']">
-            Email is not valid
-          </span>
-        </div>
-        <button  [disabled]="!newCustomerFormGroup.valid"  class="btn btn-info">Save</button>
-      </form>
+  <div class="container" *ngIf="sec.kc.hasRealmRole('CUSTOMER')">
+    <h3 class="card-header">Mettez à jour vos coordonnées </h3>
+    <div class="card" >
+      <div class="card-body">
+        <form [formGroup]="newCustomerFormGroup" (ngSubmit)="handleSaveCustomer()">
+
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-3">
+                <label class="form-label">Phone:</label>
+                <input type="text" formControlName="phone" class="form-control">
+                <span class="text-danger"
+                      *ngIf="newCustomerFormGroup.controls['phone'].touched
+                        && newCustomerFormGroup.controls['phone'].errors
+                        && newCustomerFormGroup.controls['phone'].errors!['required']">
+                    homePhone is Required
+                  </span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Adresse:</label>
+                <input type="text" formControlName="adresse" class="form-control">
+                <span class="text-danger"
+                      *ngIf="newCustomerFormGroup.controls['adresse'].touched
+                        && newCustomerFormGroup.controls['adresse'].errors
+                        && newCustomerFormGroup.controls['adresse'].errors!['required']">
+                    Adresse is not valid
+                  </span>
+              </div>
+            </div>
+            <div class="mb-3 col">
+              <img src="{{this.customer.photo}}" width="128"  height="128" class="img-thumbnail">
+              <input class ="custom-file-input"type="file"name ="profilepic"
+                     class="form-control"  formControlName="photo"
+                     (change)="onUploadPhoto($event)">
+            </div>
+          </div>
+
+          <button  [disabled]="!newCustomerFormGroup.valid"  class="btn btn-info">Save</button>
+        </form>
+      </div>
     </div>
   </div>
 
-  <div class="card-body">
-    <form [formGroup]="editMesureFormGroup" (ngSubmit)="handleEditMesure()">
-      <div class="mb-3">
-        <label class="form-label">Tour d'Epaule:</label>
-        <input type="text" formControlName="tourEpaule" class="form-control">
-        <span class="text-danger"
-              *ngIf="editMesureFormGroup.controls['tourEpaule'].touched
+<!--  EDIT MESURE BY COUTURUER---------------------->
+  <div class="container m-4" *ngIf="sec.kc.hasRealmRole('COUTURIER')">
+    <h3>Modifier les mesures</h3>
+     <div class="card-body">
+      <form [formGroup]="editMesureFormGroup">
+        <div class="mb-3">
+          <label class="form-label">Tour d'Epaule:</label>
+          <input type="text" formControlName="tourEpaule" class="form-control">
+          <span class="text-danger"
+                *ngIf="editMesureFormGroup.controls['tourEpaule'].touched
                 && editMesureFormGroup.controls['tourEpaule'].errors
                 && editMesureFormGroup.controls['tourEpaule'].errors!['number']">
             Tour d'epaule is not valid
           </span>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Tour de Taille:</label>
-        <input type="text" formControlName="tourTaille" class="form-control">
-        <span class="text-danger"
-              *ngIf="editMesureFormGroup.controls['tourTaille'].touched
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Tour de Taille:</label>
+          <input type="text" formControlName="tourTaille" class="form-control">
+          <span class="text-danger"
+                *ngIf="editMesureFormGroup.controls['tourTaille'].touched
                 && editMesureFormGroup.controls['tourTaille'].errors
                 && editMesureFormGroup.controls['tourTaille'].errors!['number']">
             Tour Taille is not valid
           </span>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Hauteur:</label>
-        <input type="text" formControlName="hauteur" class="form-control">
-        <span class="text-danger"
-              *ngIf="editMesureFormGroup.controls['hauteur'].touched
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Hauteur:</label>
+          <input type="text" formControlName="hauteur" class="form-control">
+          <span class="text-danger"
+                *ngIf="editMesureFormGroup.controls['hauteur'].touched
                 && editMesureFormGroup.controls['hauteur'].errors
                 && editMesureFormGroup.controls['hauteur'].errors!['number']">
             Hauteur is not valid
           </span>
-      </div>
-      <button  [disabled]="!editMesureFormGroup.valid"  class="btn btn-info">Save</button>
-    </form>
+        </div>
+        <button  (click)="handleEditMesure()" class="btn btn-info">Save</button>
+      </form>
+    </div>
   </div>
+
 </div>
 

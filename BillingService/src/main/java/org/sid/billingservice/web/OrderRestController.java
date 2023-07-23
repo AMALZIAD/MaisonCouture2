@@ -8,6 +8,9 @@ import org.sid.billingservice.services.CouturierRestClient;
 import org.sid.billingservice.services.CustomerRestClient;
 import org.sid.billingservice.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
@@ -41,25 +44,41 @@ public class OrderRestController {
     public List<Order> getOrders(){
         return orderService.getOrders();
     }
+
+    // COMMANDE ENCOURS CUSTOMER-----------------------------------------------------
     @GetMapping("/FinishedOrderByCustomer/{id}")
-    public List<Order> getFinishedCustomerOrders(@PathVariable String id){
-        return orderService.getFinishedCustomerOrders(id);
+    public Page<Order> getFinishedCustomerOrders(@PathVariable String id,
+                                                 @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size){
+        Pageable paging = PageRequest.of(page, size);
+        return orderService.getFinishedCustomerOrders(id,paging);
     }
+    // COMMANDE ENCOURS CUSTOMER
     @GetMapping("/YetOrderByCustomer/{id}")
-    public List<Order> getYetCustomerOrders(@PathVariable String id){
-        return orderService.getYetCustomerOrders(id);
+    public Page<Order> getYetCustomerOrders(@PathVariable String id,
+                                            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size){
+        Pageable paging = PageRequest.of(page, size);
+        return orderService.getYetCustomerOrders(id,paging);
     }
+
+    // COMMANDE FINESHED COUTURIER------------------------------------------------
     @GetMapping("/FinishedOrderByCouturier/{id}")
-    public List<Order> getFinishedOrderByCouturier(@PathVariable String id){
+    public Page<Order> getFinishedOrderByCouturier(@PathVariable String id,
+                                                   @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size){
         // get id from couturier RestClient
-        return orderService.getCouturierFinishedOrders(id);
+        Pageable paging = PageRequest.of(page, size);
+        return orderService.getCouturierFinishedOrders(id,paging);
     }
+    // COMMANDE ENCOURS COUTURIER
     @GetMapping("/YetOrderByCouturier/{id}")
-    public List<Order> getYetOrderByCouturier(@PathVariable String id){
+    public Page<Order> getYetOrderByCouturier(@PathVariable String id,
+                                              @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size){
         // get id from couturier RestClient
-        return orderService.getCouturierYetOrders(id);
+        Pageable paging = PageRequest.of(page, size);
+        return orderService.getCouturierYetOrders(id,paging);
     }
-    //getCustomersByCouturier
+
+
+    //getCustomersByCouturier----------------------------------------------
     @GetMapping("/CustomersByCouturier/{id}")
     public List<Customer> getCustomersByCouturier(@PathVariable Long id){
         return orderService.getCustomersByCouturier(id);
@@ -68,7 +87,9 @@ public class OrderRestController {
     public List<Couturier> getCouturiesByCustomer(@PathVariable Long id){
         return orderService.getCouturiesByCustomer(id);
     }
-    // save and update
+
+
+    // save and update----------------------------------------------------------------------
     @PostMapping("/orders")
     public Order saveOrder(@RequestBody Order order){
         return orderService.saveOrder(order);

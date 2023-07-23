@@ -5,12 +5,14 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {RdvMail} from "../model/rdvmail.model";
 import {CmdMail} from "../model/cmdmail.model";
+import {Couturier} from "../model/couturier.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MesrdvService {
 
+  //getCurrentRdvs SECDLE
   constructor(private http:HttpClient) { }
 
   //All rdvs-------------------------------------------------------------------------------
@@ -20,23 +22,52 @@ export class MesrdvService {
         return result._embedded.rdvs; //just return "couturiers"
       }));
   }
+
   //CUSTOMER rdvs------------------------------------------------------------------------------------
-  public getCustomerOldRdvs(id:string):Observable<Mesrdv[]>{
+ /* public getCustomerOldRdvs(id:string):Observable<Mesrdv[]>{
     return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/OldRdvsByCustomer/"+id);
+  }*/
+  //pagination
+  public getCustomerOldRdvs(idkc:string,request:any):Observable<any>{
+    const params = request;
+    console.log("request",params)
+    return this.http.get(environment.bankendhost+"/RDV-SERVICE/OldRdvsByCustomer/"+idkc, {params})
   }
-  public getCustomerNewRdvs(id:string):Observable<Mesrdv[]>{
+  /*public getCustomerNewRdvs(id:string):Observable<Mesrdv[]>{
     return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/NewRdvsByCustomer/"+id);
-  }
-  //COUTURIER rdvs------------------OLD---------------------------------------------------------------------
-  public getCouturierRdvs(id:string):Observable<Mesrdv[]>{
-    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/RdvsByCouturier/"+id);
-  }
-//current couturier rdvs-------les rdvs qui sont deja pris dans la periode de TOMROW +14jours-----------------------------------------------------
-  public getTodayRdvs(id:string){
-    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/TodayRdv/"+id);
+  }*/
+  //pagination
+  public getCustomerNewRdvs(idkc:string,request:any):Observable<any>{
+    const params = request;
+    console.log("request",params)
+    return this.http.get(environment.bankendhost+"/RDV-SERVICE/NewRdvsByCustomer/"+idkc, {params})
   }
 
-  //SCHEDULE current couturier rdvs-------les rdvs qui sont deja pris dans la periode de TOMROW +14jours-----------------------------------------------------
+
+  //COUTURIER rdvs------------------OLD---------------------------------------------------------------------
+  /*public getCouturierRdvs(id:string):Observable<Mesrdv[]>{
+    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/RdvsByCouturier/"+id);
+  }*/
+  // pagination
+  //  get one couturuer by IDKC
+  public getOldRdvCouturier(idkc:string,request:any):Observable<any>{
+    const params = request;
+    console.log("request",params)
+    return this.http.get(environment.bankendhost+"/RDV-SERVICE/OldRdvCouturier/"+idkc, {params})
+  }
+//current couturier rdvs-------les rdvs qui sont deja pris dans la periode de TOMROW +14jours-----------------------------------------------------
+  /*public getTodayRdvs(id:string){
+    return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/TodayRdv/"+id);
+  }*/
+  // pagination
+  public getNewRdvCouturier(idkc:string,request:any):Observable<any>{
+    const params = request;
+    console.log("request",params)
+    return this.http.get(environment.bankendhost+"/RDV-SERVICE/NewRdvCouturier/"+idkc, {params})
+  }
+
+
+//SCHEDULE current couturier rdvs-------SCHEDULE-----------------------------------------------------
   public getCurrentRdvs(id:number){
     return this.http.get<Mesrdv[]>("http://localhost:8888/RDV-SERVICE/CurrentRdv/"+id);
   }
@@ -83,4 +114,7 @@ export class MesrdvService {
           console.log('email admin done!');
         });
   }
+
+
+
 }

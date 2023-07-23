@@ -10,6 +10,9 @@ import org.sid.rdvservice.services.CouturierRestClient;
 import org.sid.rdvservice.services.CustomerRestClient;
 import org.sid.rdvservice.services.RdvService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -39,7 +42,7 @@ public class RdvRestController {
 
     // get one and many
     @GetMapping("/rdvs/{id}")
-    public Rdv getOrder(@PathVariable Long id){
+    public Rdv getRdv(@PathVariable Long id){
         return rdvService.getRdv(id);
     }
     @GetMapping("/rdvs")
@@ -47,41 +50,70 @@ public class RdvRestController {
         return rdvService.getRdvs();
     }
 
-    // rdv encours couturioer from today !!! ( mesrdvs)
-    @GetMapping("/TodayRdv/{id}")
-    public List<Rdv> getTodayRdvs(@PathVariable String id){
+    // --------------------------------COUTURIER-------------------------------------
+    // new rdv encours couturioer from today !!! ( mesrdvs)
+   /* @GetMapping("/NewRdvCouturier/{id}")
+    public List<Rdv> getNewRdvCouturier(@PathVariable String id){
         System.out.println("id kc rdv "+id);
         Long couturierId=this.couturierRestClient.getByIdkc(id).getId();
         Date dt = new Date();
         Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
         System.out.println(hier.toString());
         return  rdvService.getCouturierCurrentRdv(hier,couturierId);
+    }*/
+    @GetMapping("/NewRdvCouturier/{id}")
+    public Page<Rdv> getNewRdvCouturier(@PathVariable String id,
+          @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+        System.out.println("id kc rdv "+id);
+        Long couturierId=this.couturierRestClient.getByIdkc(id).getId();
+        Pageable paging = PageRequest.of(page, size);
+        return  rdvService.getNewCouturierRdvs(couturierId,paging);
     }
+
     // rdv old couturioer from yesterday!!! (mesrdvs)
-    @GetMapping("/RdvsByCouturier/{id}")
+   /* @GetMapping("/RdvsByCouturier/{id}")
     public List<Rdv> getCouturierRdvs(@PathVariable String id){
         System.out.println("im inside rdv rest --- rdvby couturier");
         Long code =this.couturierRestClient.getByIdkc(id).getId();
         System.out.println(code);
         return rdvService.getCouturierRdvs(code);
+    }*/
+    // pagination-------------------------------
+    @GetMapping("/OldRdvCouturier/{id}")
+    public Page<Rdv> getOldRdvCouturier(@PathVariable String id,
+                                      @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+        System.out.println("im inside rdv rest --- rdvby couturier");
+        Long code =this.couturierRestClient.getByIdkc(id).getId();
+        System.out.println(code);
+        Pageable paging = PageRequest.of(page, size);
+        return rdvService.getOldCouturierRdvs(code,paging);
     }
-    // rdv encours couturioer from tomorow !!! (schedule)
+
+    //------------------------- SCHEDULE -------------------------------
     @GetMapping("/CurrentRdv/{id}")
     public List<Rdv> getCouturierCurrentRdv(@PathVariable Long id)  {
         return rdvService.getCouturierCurrentRdv(new Date(),id);
     }
 
     ////////////////////////////////////CUSTOMER///////////////////////////////////////
-    @GetMapping("/NewRdvsByCustomer/{id}")
+   /* @GetMapping("/NewRdvsByCustomer/{id}")
     public List<Rdv> getCustomerNewRdvs(@PathVariable String id){
         System.out.println("im inside rdv rest --- rdvby customer");
         Long code =this.customerRestClient.getByIdkc(id).getId();
         System.out.println(code);
         List<Rdv> lst= rdvService.getCustomerNewRdvs(code);
-        //rdvService.updateRdv(lst);
         return lst;
+    }*/
+    @GetMapping("/NewRdvsByCustomer/{id}")
+    public Page<Rdv> getCustomerNewRdvs(@PathVariable String id
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size){
+        System.out.println("im inside rdv rest --- rdvby customer");
+        Long code =this.customerRestClient.getByIdkc(id).getId();
+        System.out.println(code);
+        Pageable paging = PageRequest.of(page, size);
+        return rdvService.getCustomerNewRdvs(code,paging);
     }
-    @GetMapping("/OldRdvsByCustomer/{id}")
+    /*@GetMapping("/OldRdvsByCustomer/{id}")
     public List<Rdv> getCustomerOldRdvs(@PathVariable String id){
         System.out.println("im inside rdv rest --- rdvby customer");
         Long code =this.customerRestClient.getByIdkc(id).getId();
@@ -89,8 +121,16 @@ public class RdvRestController {
         List<Rdv> lst= rdvService.getCustomerOldRdvs(code);
        // rdvService.updateRdv(lst);
         return lst;
+    }*/
+    @GetMapping("/OldRdvsByCustomer/{id}")
+    public Page<Rdv> getCustomerOldRdvs(@PathVariable String id
+            ,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size){
+        System.out.println("im inside rdv rest --- rdvby customer");
+        Long code =this.customerRestClient.getByIdkc(id).getId();
+        System.out.println(code);
+        Pageable paging = PageRequest.of(page, size);
+        return rdvService.getCustomerOldRdvs(code,paging);
     }
-
     // save and update rdv
     @PostMapping("/rdvs")
     public Rdv saveRdv(@RequestBody Rdv rdv){
@@ -210,4 +250,7 @@ public class RdvRestController {
         return client;
 
     }
+
+
+
 }

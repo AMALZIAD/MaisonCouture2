@@ -21,11 +21,13 @@ export class CouturierDetailsComponent implements OnInit {
   couturier!:Couturier;
   review!:any;
   couturierId!:number;
-  reviews!:Observable<Review[]>;
+  reviews:Review[]=[];
   errorMessage!:string;
   newReviewFormGroup !:FormGroup;
   editProfilFormGroup!:FormGroup;
   addPictureFormGroup!:FormGroup;
+
+
   constructor(private fb:FormBuilder,private couturierService: CouturierService,
               private route:ActivatedRoute,public sec: KeycloakSecurityService,private http:HttpClient) {
     this.couturierId=this.route.snapshot.params["id"];
@@ -51,12 +53,14 @@ export class CouturierDetailsComponent implements OnInit {
     //get couturier reviews
     console.log("get reviewsz ....")
     console.log("id cou..."+this.couturierId);
-    this.reviews=this.couturierService.getReviews(this.couturierId).pipe(
-      catchError(err =>{
-        this.errorMessage=err.message;
-        return throwError(err);
-      })
-    );
+    this.couturierService.getReviews(this.couturierId).subscribe({
+      next: data => {
+        this.reviews=data;
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
     console.log("reviews  ....",this.reviews)
   }// end oninit----------------------------------------------------------
 

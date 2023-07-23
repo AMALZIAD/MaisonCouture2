@@ -12,6 +12,8 @@
             <p class="card-text"> <i class="bi bi-phone-fill me-1"></i>{{c.phone}}</p>
             <p class="card-text"><i class="bi bi-send-fill me-1"></i>{{c.email}}</p>
             <p class="card-text"><i class="bi bi-pin-map-fill me-1"></i>{{c.adresse}}</p>
+            <button class="btn btn-info btn-sm float-right" (click)="updateMesure(c)">
+              <i class="bi bi-gear" title="Update Mesure"></i></button>
           </div>
         </div>
       </div>

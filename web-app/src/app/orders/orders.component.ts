@@ -14,9 +14,12 @@ declare let Email: any;
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
+
   pipe = new DatePipe('en-US');
-  orders!:Observable<Order[]>;
-  Oldorders!:Observable<Order[]>;
+  orders:Order []= [];
+  Oldorders:Order []= [];
+  totalEleNew: number = 0;
+  totalEleOld: number = 0;
   errorMessage!:string;
   stOrder = [{i:'CREE',r:'VALIDER'},{i:'VALIDE',r:'TRAITER'},{i:'ENCOURS',r:'TERMINER'},{i:'TERMINE',r:'LIVRER'}];
   /*
@@ -27,6 +30,7 @@ export class OrdersComponent implements OnInit {
       * Termine 3 : btn LIVRE;
       * LIVRE 4/ : history
       * */
+
   constructor( private orderService: OrderService,public sec :KeycloakSecurityService) { }
 
   ngOnInit(): void {
@@ -36,34 +40,89 @@ export class OrdersComponent implements OnInit {
   LoadData(){
     let idkc = <string>this.sec.kc.tokenParsed?.sub;
     if(this.sec.kc.hasRealmRole("CUSTOMER")){
-      this.orders=this.orderService.getCustomerYetOrders(idkc).pipe(
-        catchError(err =>{
-          this.errorMessage=err.message;
-          return throwError(err);
-        })
-      );
-      this.Oldorders=this.orderService.getCustomerFinishedOrders(idkc).pipe(
-        catchError(err =>{
-          this.errorMessage=err.message;
-          return throwError(err);
-        })
-      );
+      this.getAllCust(idkc,{ page: "0", size: "2" },0);
+      this.getAllCust(idkc,{ page: "0", size: "2" },1);
     }else{//couturier
-      this.orders=this.orderService.getCouturierYetOrders(idkc).pipe(
-        catchError(err =>{
-          this.errorMessage=err.message;
-          return throwError(err);
-        })
+      this.getAllCout(idkc,{ page: "0", size: "2" },0);
+      this.getAllCout(idkc,{ page: "0", size: "2" },1);
+    }
+  }
+  //get all data --------------------------------------
+
+  //pagination customer---------------------------------
+    getAllCust(idkc:string,request:any,status:number){
+      console.log("helo from Cust")
+      //--------------------------------------------------------------
+      if(status==0){
+        this.orderService.getCustomerFinishedOrders(idkc,request).subscribe(data => {
+            this.Oldorders = data['content'];
+            this.totalEleOld = data['totalElements'];
+            console.log("total eles:"+this.totalEleOld);
+            console.log(this.Oldorders)
+          }
+          , error => {
+            console.log(error.error.message);
+          }
+        );
+      }else {
+        this.orderService.getCustomerYetOrders(idkc,request).subscribe(data => {
+            this.orders = data['content'];
+            this.totalEleNew = data['totalElements'];
+            console.log("total eles:"+this.totalEleNew);
+            console.log(this.orders)
+          }
+          , error => {
+            console.log(error.error.message);
+          }
+        );
+      }
+    }
+
+    // pagination couturier
+    getAllCout(idkc:string,request:any,status:number){
+    console.log("helo from Cout")
+    //--------------------------------------------------------------
+    if(status==0){
+      this.orderService.getCouturierFinishedOrders(idkc,request).subscribe(data => {
+          this.Oldorders = data['content'];
+          this.totalEleOld = data['totalElements'];
+          console.log("total eles:"+this.totalEleOld);
+          console.log(this.Oldorders)
+        }
+        , error => {
+          console.log(error.error.message);
+        }
       );
-      this.Oldorders=this.orderService.getCouturierFinishedOrders(idkc).pipe(
-        catchError(err =>{
-          this.errorMessage=err.message;
-          return throwError(err);
-        })
+    }else {
+      this.orderService.getCouturierYetOrders(idkc,request).subscribe(data => {
+          this.orders = data['content'];
+          this.totalEleNew = data['totalElements'];
+          console.log("total eles:"+this.totalEleNew);
+          console.log(this.orders)
+        }
+        , error => {
+          console.log(error.error.message);
+        }
       );
     }
   }
 
+
+  // next page----------------------------------------------
+  nextPage(event: any,st:number) {
+    let idkc:string = <string>this.sec.kc.tokenParsed?.sub;
+    const request = {page:'',size:''};
+    request['page'] = event.pageIndex.toString();
+    request['size'] = event.pageSize.toString();
+    if(this.sec.kc.hasRealmRole("CUSTOMER")){
+      this.getAllCust(idkc,request,st);
+    }else{
+      this.getAllCout(idkc,request,st);
+    }
+
+  }
+
+// check status -----------------------------------
   checkstatus(st:string){
     let res : string="";
     this.stOrder.forEach(s =>{
@@ -73,6 +132,8 @@ export class OrdersComponent implements OnInit {
     });
     return res;
   }
+
+// update order -----------------------------------
   updateOrder(o:Order,t:any ) {
     let st= t;// status  annule ou 4( livre)
   let stat=""
@@ -107,6 +168,7 @@ export class OrdersComponent implements OnInit {
     });
   }
 
+// send email confirmation---------------------------------
   sendEmail(o:Order,t :any){
 
     let curr :any = this.pipe.transform(o.orderdate, 'MM-dd-yyyy');

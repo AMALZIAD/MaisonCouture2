@@ -13,10 +13,19 @@ import org.sid.customerservice.repositories.MesureRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
+import static java.nio.file.Files.copy;
+import static java.nio.file.Paths.get;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.Arrays.asList;
 
 @RestController@AllArgsConstructor
@@ -37,7 +46,6 @@ public class CustomerRestController {
         return rep.findCustomerByIdkc(id);
     }
 
-
     @PostMapping("/customers")
     public Customer saveCustomer(@RequestBody Customer customer){
         System.out.println(customer);
@@ -54,7 +62,6 @@ public class CustomerRestController {
         System.out.println(customer);
         return  rep.save(customer);
     }
-
 
    // assign role customer to connected user
     public void assignRole( String id){
@@ -91,4 +98,21 @@ public class CustomerRestController {
 
     }
 
+    @PostMapping("/upload")
+    //return list of names of files uploaded
+    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files")List<MultipartFile> multipartFiles) throws IOException {
+        String DIRECTORY= "web-app/src/assets/profile/";
+
+        List<String> filenames=new ArrayList<>();
+        for(MultipartFile file : multipartFiles){
+            System.out.println(file.getName());
+            String filename = StringUtils.cleanPath(file.getOriginalFilename());
+            System.out.println(filename);
+            Path fileStorage =get(DIRECTORY,filename).toAbsolutePath().normalize();
+            System.out.println(fileStorage.toString());
+            copy(file.getInputStream(),fileStorage,REPLACE_EXISTING);
+            filenames.add(filename);
+        }
+        return ResponseEntity.ok().body(filenames);
+    }
 }

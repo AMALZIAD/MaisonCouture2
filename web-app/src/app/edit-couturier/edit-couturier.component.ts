@@ -5,8 +5,8 @@ import {FormBuilder, FormGroup,  Validators} from "@angular/forms"
 import {Couturier} from "../model/couturier.model";
 import {catchError, Observable, throwError} from "rxjs";
 import {Review} from "../model/review.model";
+import { v4 as uuidv4 } from 'uuid';
 
-import {HttpClient, HttpHeaders} from "@angular/common/http";
 @Component({
   selector: 'app-edit-couturier',
   templateUrl: './edit-couturier.component.html',
@@ -17,7 +17,7 @@ export class EditCouturierComponent implements OnInit {
   editProfilFormGroup!:FormGroup;
   addPictureFormGroup!:FormGroup;
   couturier!:Couturier;
-  reviews!:Observable<Review[]>;
+  reviews:Review[]=[];
   errorMessage!:string;
   filenames:string[]=[];
   formDataPic=new FormData();
@@ -50,9 +50,9 @@ export class EditCouturierComponent implements OnInit {
     console.log(couturier);
     // initialise inputs in the form with control
     this.editProfilFormGroup = this.fb.group({
-      name: this.fb.control(couturier.name, [Validators.required, Validators.minLength(2)]),
-      email: this.fb.control(couturier.email, [Validators.required, Validators.email]),
-      photo: this.fb.control(null)
+      profile: this.fb.control(couturier.profile, [Validators.required, Validators.minLength(2)]),
+      adresse: this.fb.control(couturier.adresse, [Validators.required, Validators.email]),
+      homePhone: this.fb.control(couturier.homePhone)
     });
     // initialise inputs in the form with control
     this.addPictureFormGroup = this.fb.group({
@@ -62,12 +62,14 @@ export class EditCouturierComponent implements OnInit {
   getReviews(){
     //get couturier reviews
     console.log("get reviews ....")
-    this.reviews=this.couturierService.getReviews(this.couturier.id).pipe(
-      catchError(err =>{
-        this.errorMessage=err.message;
-        return throwError(err);
-      })
-    );
+    this.couturierService.getReviews(this.couturier.id).subscribe({
+      next: data => {
+        this.reviews=data;
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
   }
 
 //edit profil function------------------------------------------------------------
@@ -77,7 +79,10 @@ export class EditCouturierComponent implements OnInit {
     cout.id=this.couturier.id;
     //cust.mesure=this.customer.mesure
     cout.idkc=this.couturier.idkc
-    cout.photo="web-app/src/res/profilPic"+this.couturier.id+".png";
+    cout.email=this.couturier.email
+    cout.name=this.couturier.name
+    cout.gallery=this.couturier.gallery
+    cout.photo="assets/profile/profilCout"+this.couturier.id+".png";
     console.log(cout);
     this.couturierService.editCouturier(cout).subscribe({
       next: data => {
@@ -87,7 +92,7 @@ export class EditCouturierComponent implements OnInit {
         console.log(err);
       }
     });
-    this.couturierService.upload(this.formDataPic).subscribe(
+    this.couturierService.upload(this.formDataPic,1).subscribe(
       event =>{
         console.log("Photo Profil sauvegardé !");
       },
@@ -104,36 +109,42 @@ export class EditCouturierComponent implements OnInit {
     let files :FileList | null;
     if(target.files){
       files=target.files;
+     console.log(files)
       // @ts-ignore
-      for(const file of files){formData.append("files", file,file.name);}
-      this.couturierService.upload(formData).subscribe(
+      for(let file of files){
+        let fname=uuidv4()+".png";
+        formData.append("files", file,fname);
+        this.couturier.gallery.push("assets/imgs/"+fname);
+      }
+      // upoload to the server
+      this.couturierService.upload(formData,0).subscribe(
         event =>{
-          alert("Les images sont bien Enregistrées!");
+
         },
         (error)=>{
           console.log(error)
         }
       );
       // add pic link to the bd
-      // @ts-ignore
-      for(const file of files){ this.couturier.gallery.push(file.name);}
-     this.couturierService.saveCouturier(this.couturier).subscribe(
+         this.couturierService.saveCouturier(this.couturier).subscribe(
        data =>{ console.log(data);},
        (error)=>{console.log(error)}
      );
+      alert("Les images sont bien Enregistrées!");
     }
 
   }
 
-
-  onUploadPhoto($event: Event) {
+// u^pdate photo profil
+  onUploadPhoto(event: Event) {
     const target = event!.target as HTMLInputElement;
     let files :FileList | null;
     if(target.files){
       files=target.files;
+
       // @ts-ignore
       for(const file of files){
-        this.formDataPic.append("files", file,"profilPic"+this.couturier.id+".png");
+        this.formDataPic.append("files", file,"profilCout"+this.couturier.id+".png");
       }
 
     }

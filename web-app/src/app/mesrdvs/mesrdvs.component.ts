@@ -4,10 +4,9 @@ import {Mesrdv} from "../model/mesrdv.model";
 import {catchError, Observable, throwError} from "rxjs";
 import {KeycloakSecurityService} from "../services/keycloak-security.service";
 import {Router} from "@angular/router";
-import { Couturier } from '../model/couturier.model';
 import {CouturierService} from "../services/couturier.service";
 import {DatePipe} from "@angular/common";
-import {Order} from "../model/order.model";
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-mesrdvs',
@@ -16,53 +15,68 @@ import {Order} from "../model/order.model";
 })
 export class MesrdvsComponent implements OnInit {
 
+  userrole="";
   mesrdvs!:Observable<Mesrdv[]>;
-  todays!:Observable<Mesrdv[]>;
-  olds!:Observable<Mesrdv[]>;
+  todays:Mesrdv[]= [];
+  olds:Mesrdv[]= [];
   errorMessage!:string;
   toCancel!:any;
   lyom =new Date();
   pipe = new DatePipe('en-US');
+  totalEleNew: number = 0;
+  totalEleOld: number = 0;
+
   constructor(private mesrdvsService:MesrdvService,public sec:KeycloakSecurityService,
               private router :Router,private couturierService :CouturierService) { }
 
+  //on init fill the tables with rdvs old and new
   ngOnInit(): void {
+
+    // fill the tables
     this.fillTable();
     let curr :string | null ="";
     this.toCancel = this.pipe.transform(new Date(), 'dd-MM-yyyy');
   }
+  //fill the table function
  fillTable(){
    let idkc:string = <string>this.sec.kc.tokenParsed?.sub;
    console.log(idkc);
+   // if its customer
    if(this.sec.kc.hasRealmRole("CUSTOMER")){
      console.log("im customer")
-     this.todays=this.mesrdvsService.getCustomerNewRdvs(idkc).pipe(
-       catchError(err =>{
-         this.errorMessage=err.message;
-         return throwError(err);
-       })
-     );
-     this.olds=this.mesrdvsService.getCustomerOldRdvs(idkc).pipe(
-       catchError(err =>{
-         this.errorMessage=err.message;
-         return throwError(err);
-       })
-     );
+     /*  this.todays=this.mesrdvsService.getCustomerNewRdvs(idkc).pipe(
+        catchError(err =>{
+          this.errorMessage=err.message;
+          return throwError(err);
+        })
+      )    /* this.olds=this.mesrdvsService.getCustomerOldRdvs(idkc).pipe(
+        catchError(err =>{
+          this.errorMessage=err.message;
+          return throwError(err);
+        })
+      );*/
+     this.getAllCust(idkc,{ page: "0", size: "2" },0);
+     this.getAllCust(idkc,{ page: "0", size: "2" },1);
 
    }else{
      console.log("im couturier")
-     this.olds=this.mesrdvsService.getCouturierRdvs(idkc).pipe(
-       catchError(err =>{
-         this.errorMessage=err.message;
-         return throwError(err);
-       })
-     );
-     this.todays=this.mesrdvsService.getTodayRdvs(idkc).pipe(
-       catchError(err =>{
-         this.errorMessage=err.message;
-         return throwError(err);
-       })
-     );
+     /* this.todays=this.mesrdvsService.getTodayRdvs(idkc).pipe(
+        catchError(err =>{
+          this.errorMessage=err.message;
+          return throwError(err);
+        })
+      );
+    /*this.olds=this.mesrdvsService.getCouturierRdvs(idkc).pipe(
+        catchError(err =>{
+          this.errorMessage=err.message;
+          return throwError(err);
+        })
+      );*/
+     console.log(idkc);
+      this.getAllCout(idkc,{ page: "0", size: "2" },0);
+     this.getAllCout(idkc,{ page: "0", size: "2" },1);
+     //-------------------------------------------------------------------
+
    }
  }
  // new order
@@ -118,5 +132,72 @@ export class MesrdvsComponent implements OnInit {
       });
     }
   }
+// pagination couturier
+  getAllCout(idkc:string,request:any,status:number){
+    console.log("helo from Cout")
+    //--------------------------------------------------------------
+     if(status==0){
+       this.mesrdvsService.getOldRdvCouturier(idkc,request).subscribe(data => {
+           this.olds = data['content'];
+           this.totalEleOld = data['totalElements'];
+           console.log("total eles:"+this.totalEleOld);
+           console.log(this.olds)
+         }
+         , error => {
+           console.log(error.error.message);
+         }
+       );
+     }else {
+       this.mesrdvsService.getNewRdvCouturier(idkc,request).subscribe(data => {
+           this.todays = data['content'];
+           this.totalEleNew = data['totalElements'];
+           console.log("total eles:"+this.totalEleNew);
+           console.log(this.todays)
+         }
+         , error => {
+           console.log(error.error.message);
+         }
+       );
+     }
+  }
+  //pagination customer------------------------------------------------
+  getAllCust(idkc:string,request:any,status:number){
+    console.log("helo from Cust")
+    //--------------------------------------------------------------
+    if(status==0){
+      this.mesrdvsService.getCustomerOldRdvs(idkc,request).subscribe(data => {
+          this.olds = data['content'];
+          this.totalEleOld = data['totalElements'];
+          console.log("total eles:"+this.totalEleOld);
+          console.log(this.olds)
+        }
+        , error => {
+          console.log(error.error.message);
+        }
+      );
+    }else {
+      this.mesrdvsService.getCustomerNewRdvs(idkc,request).subscribe(data => {
+          this.todays = data['content'];
+          this.totalEleNew = data['totalElements'];
+          console.log("total eles:"+this.totalEleNew);
+          console.log(this.olds)
+        }
+        , error => {
+          console.log(error.error.message);
+        }
+      );
+    }
+  }
+  nextPage(event: any,st:number) {
+    let idkc:string = <string>this.sec.kc.tokenParsed?.sub;
+    const request = {page:'',size:''};
+    request['page'] = event.pageIndex.toString();
+    request['size'] = event.pageSize.toString();
+    if(this.sec.kc.hasRealmRole("CUSTOMER")){
+      this.getAllCust(idkc,request,st);
+    }else{
+      this.getAllCout(idkc,request,st);
+    }
 
+  }
 }

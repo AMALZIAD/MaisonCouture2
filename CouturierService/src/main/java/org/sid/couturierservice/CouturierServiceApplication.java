@@ -41,8 +41,8 @@ public class CouturierServiceApplication {
             Couturier sCouturier =couturierRepository.save(couturier);
 
             // create reviews add couturier to review
-            List<Review> reviews =Arrays.asList(new Review(null,"amal",0,"goood!",sCouturier),
-            new Review(null,"sara",0,"awesome!",sCouturier));
+            List<Review> reviews =Arrays.asList(new Review(null,"amal",0,"9","goood!",sCouturier),
+            new Review(null,"sara",0,"9","awesome!",sCouturier));
             List<Review> reviewList= reviewRepository.saveAll(reviews);
 
             // 2eme couturue
@@ -54,8 +54,8 @@ public class CouturierServiceApplication {
             c.setHomePhone("0505050505");
             c.setGallery(gallery);
             Couturier s =couturierRepository.save(c);
-            List<Review> rs =Arrays.asList(new Review(null,"amal",0,"gonnnnnood!",s),
-                    new Review(null,"sara",0,"wow!",s));
+            List<Review> rs =Arrays.asList(new Review(null,"amal",0,"9","gonnnnnood!",s),
+                    new Review(null,"sara",0,"9","wow!",s));
             List<Review> lst= reviewRepository.saveAll(rs);
 
         };

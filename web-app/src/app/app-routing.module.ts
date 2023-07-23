@@ -16,7 +16,7 @@ const routes: Routes = [
   { path :"",component :HomeComponent},
   { path :"customers",component :CustomersComponent},
   { path :"couturiers",component :CouturiersComponent},
-  { path :"editcustomer",component :EditCustomerComponent},
+  { path :"editcustomer/:id",component :EditCustomerComponent},
   { path :"editcouturier",component :EditCouturierComponent},
   { path :"orders",component :OrdersComponent},
   { path :"neworder/:rdv",component :NewOrderComponent},

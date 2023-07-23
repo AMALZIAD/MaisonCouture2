@@ -10,6 +10,9 @@ import org.sid.rdvservice.exceptions.RdvNotFoundException;
 import org.sid.rdvservice.model.Couturier;
 import org.sid.rdvservice.model.Customer;
 import org.sid.rdvservice.repositories.RdvRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +27,13 @@ public class RdvServiceImpl implements RdvService {
     RdvRepository rdvRepository;
     private CustomerRestClient customerRestClient;
     private CouturierRestClient couturierRestClient;
+
+    // save RDV ----------------------------------------------------------------------------------
     @Override
     public Rdv saveRdv(Rdv rdv) {
         return rdvRepository.save(rdv);
     }
-
+   //GET  RDVS by id---------------------------------------------------------------------------------
     @Override
     public Rdv getRdv(Long id) {
         Rdv rdv=rdvRepository.findById(id).orElse(null);
@@ -39,7 +44,7 @@ public class RdvServiceImpl implements RdvService {
         rdv.setCouturier(couturier);
         return rdv;
     }
-
+   //update ALL RDVS ---------------------------------------------------------------------------------
     @Override
     public void updateRdv(List<Rdv> lst) {
         Date mtn=new Date();
@@ -56,12 +61,12 @@ public class RdvServiceImpl implements RdvService {
             }
         });
     }
-
+    //delete ALL RDVS ---------------------------------------------------------------------------------
     @Override
     public void deleteRdv(Long id) {
         rdvRepository.deleteById(id);
     }
-
+    //get ALL RDVS ---------------------------------------------------------------------------------
     @Override
     public List<Rdv> getRdvs() {
         List<Rdv> rdvs =rdvRepository.findAll();
@@ -76,7 +81,7 @@ public class RdvServiceImpl implements RdvService {
     }
 
     // old customer rdvs
-    @Override
+   /* @Override
     public List<Rdv> getCustomerOldRdvs(Long customerId) {
         Customer customer=customerRestClient.customerById(customerId);
         if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
@@ -92,9 +97,27 @@ public class RdvServiceImpl implements RdvService {
             }
         });
         return rdvs;
+    }*/
+    // pagination
+    @Override
+    public Page<Rdv> getCustomerOldRdvs(Long customerId,Pageable paging) {
+        Customer customer=customerRestClient.customerById(customerId);
+        if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
+        Date dt = new Date();
+        Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
+        Page<Rdv> rdvs=rdvRepository.findRdvsByRdvDateLessThanAndCustomerId(hier,customerId,paging);
+        rdvs.forEach( rdv -> {
+            Couturier couturier=couturierRestClient.couturierById(rdv.getCouturierId());
+            rdv.setCouturier(couturier);
+            if(rdv.getStatus()==RdvStatus.PRIS){
+                rdv.setStatus(RdvStatus.DEPASSE);
+                rdvRepository.save(rdv);
+            }
+        });
+        return rdvs;
     }
     // new customer rdvs
-    @Override
+   /* @Override
     public List<Rdv> getCustomerNewRdvs(Long customerId) {
         Customer customer=customerRestClient.customerById(customerId);
         if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
@@ -106,10 +129,23 @@ public class RdvServiceImpl implements RdvService {
             rdv.setCouturier(couturier);
         });
         return rdvs;
-    }
-
-    // get couturier old rdvs
+    }*/
+    //pagination
     @Override
+    public Page<Rdv> getCustomerNewRdvs(Long customerId,Pageable paging) {
+        Customer customer=customerRestClient.customerById(customerId);
+        if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
+        Date dt = new Date();
+        Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
+        Page<Rdv> rdvs=rdvRepository.findRdvsByRdvDateGreaterThanAndCustomerId(hier,customerId,paging);
+        rdvs.forEach( rdv -> {
+            Couturier couturier=couturierRestClient.couturierById(rdv.getCouturierId());
+            rdv.setCouturier(couturier);
+        });
+        return rdvs;
+    }
+    // get couturier old rdvs
+   /* @Override
     public List<Rdv> getCouturierRdvs(Long couturierId) {
         Couturier couturier=couturierRestClient.couturierById(couturierId);
         if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
@@ -127,11 +163,55 @@ public class RdvServiceImpl implements RdvService {
             }
         });
         return rdvs;
+    }*/
+    //pagination
+    @Override
+    public Page<Rdv> getOldCouturierRdvs(Long couturierId,Pageable paging) {
+        Couturier couturier=couturierRestClient.couturierById(couturierId);
+        if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
+        Date dt = new Date();
+        Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
+        Page<Rdv> rdvs=rdvRepository.findRdvsByRdvDateLessThanAndCouturierId(hier,couturierId,paging);
+        rdvs.forEach( rdv -> {
+            if(rdv.getCustomerId()!=0){
+                Customer customer=customerRestClient.customerById(rdv.getCustomerId());
+                rdv.setCustomer(customer);
+            }
+            if(rdv.getStatus()==RdvStatus.PRIS){
+                rdv.setStatus(RdvStatus.DEPASSE);
+                rdvRepository.save(rdv);
+            }
+        });
+        return rdvs;
     }
+
+    @Override
+    public Page<Rdv> getNewCouturierRdvs( Long id, Pageable paging) {
+        Couturier couturier=couturierRestClient.couturierById(id);
+        if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
+        Date dt = new Date();
+        Date hier = new Date(dt.getTime() - (1000 * 60 * 60 * 24));
+        Page<Rdv> rdvs=rdvRepository.findRdvsByRdvDateLessThanAndCouturierId(hier,id,paging);
+        rdvs.forEach( rdv -> {
+            if(rdv.getCustomerId()!=0){
+                Customer customer=customerRestClient.customerById(rdv.getCustomerId());
+                rdv.setCustomer(customer);
+            }
+            if(rdv.getStatus()==RdvStatus.PRIS){
+                rdv.setStatus(RdvStatus.DEPASSE);
+                rdvRepository.save(rdv);
+            }
+        });
+        return rdvs;
+    }
+
+
     // recuperer la liste des rdv encours pour la prise des rdvs from tomoroow
     @Override
     public List<Rdv> getCouturierCurrentRdv(Date rdvDate, Long id) {
         List<Rdv> rdvs=rdvRepository.findRdvsByRdvDateGreaterThanAndCouturierId(rdvDate,id);
         return rdvs;
     }
+
+
 }

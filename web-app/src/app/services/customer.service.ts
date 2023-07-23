@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpEvent} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {Customer} from "../model/customer.model";
 import {Mesure} from "../model/mesure.model";
@@ -37,6 +37,11 @@ export class CustomerService {
   }
 
   // maj les mesures
+  public getMesure(id: number):Observable<Mesure>{
+    let uri=environment.bankendhost+"/CUSTOMER-SERVICE/customers/"+id+"/mesure/?projection=fMesure";
+    console.log(uri);
+    return this.http.get<Mesure>(uri);
+  }
   public updateMesure(mesure: Mesure){
     /*let walo :any;
     if(this.sec.kc.authenticated){
@@ -64,6 +69,13 @@ export class CustomerService {
         return result._embedded.customers; //just return "customers"
       }))*/
       ;
+  }
+  // define fucntion to uplaod file
+  upload(formData:FormData):Observable<HttpEvent<string[]>>{
+    return this.http.post<string[]>(environment.bankendhost+'/CUSTOMER-SERVICE/upload',formData,{
+      reportProgress:true,
+      observe:'events'
+    });
   }
 
 }

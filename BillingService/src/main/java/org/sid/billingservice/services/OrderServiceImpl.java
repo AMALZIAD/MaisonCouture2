@@ -10,6 +10,8 @@ import org.sid.billingservice.exceptions.OrderNotFoundException;
 import org.sid.billingservice.model.Couturier;
 import org.sid.billingservice.model.Customer;
 import org.sid.billingservice.repositories.OrderRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
 
 // CUSTOMERS ORDERS------------------------------------------------------------------
     // FINISHED CUTOMER ORDERS --------------------------------
-    @Override
+    /*@Override
     public List<Order> getFinishedCustomerOrders(String idkc) {
         Customer customer=customerRestClient.findCustomerByIdkc(idkc);
         if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
@@ -80,9 +82,26 @@ public class OrderServiceImpl implements OrderService {
             order.setCouturier(couturier);
         });
         return orders;
-    }
-    // YET CUSTOMER ORDERS ---------------------------------------------------
+    }*/
     @Override
+    public Page<Order> getFinishedCustomerOrders(String idkc, Pageable pageable) {
+        Customer customer=customerRestClient.findCustomerByIdkc(idkc);
+        if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
+        List<OrderStatus> stat =new ArrayList<>();
+        stat.add(OrderStatus.ANNULE);
+        stat.add(OrderStatus.LIVRE);
+        Page<Order> orders=orderRepository.findByCustomerIdAndStatusIn(customer.getId(),stat,pageable);
+        orders.forEach( order -> {
+            Couturier couturier=couturierRestClient.couturierById(order.getCouturierId());
+            order.setCustomer(customer);
+            order.setCouturier(couturier);
+        });
+        return orders;
+    }
+
+
+    // YET CUSTOMER ORDERS ---------------------------------------------------
+    /*@Override
     public List<Order> getYetCustomerOrders(String idkc) {
         Customer customer=customerRestClient.findCustomerByIdkc(idkc);
         if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
@@ -98,10 +117,28 @@ public class OrderServiceImpl implements OrderService {
             order.setCouturier(couturier);
         });
         return orders;
-    }
-    // finished orders
-    //    List<Order> findByCouturierIdAndStatusGreaterThan(Long couturierId,Long stat);
+    }*/
     @Override
+    public Page<Order> getYetCustomerOrders(String idkc, Pageable pageable) {
+        Customer customer=customerRestClient.findCustomerByIdkc(idkc);
+        if(customer==null) throw new CustomerNotFoundException("Customer Not Found");
+        List<OrderStatus> stat =new ArrayList<>();
+        stat.add(OrderStatus.CREE);
+        stat.add(OrderStatus.ENCOURS);
+        stat.add(OrderStatus.VALIDE);
+        stat.add(OrderStatus.TERMINE);
+        Page<Order> orders=orderRepository.findByCustomerIdAndStatusIn(customer.getId(),stat,pageable);
+        orders.forEach( order -> {
+            Couturier couturier=couturierRestClient.couturierById(order.getCouturierId());
+            order.setCustomer(customer);
+            order.setCouturier(couturier);
+        });
+        return orders;
+    }
+
+    // finished orders couturier---------------------------------------------------------------
+    //    List<Order> findByCouturierIdAndStatusGreaterThan(Long couturierId,Long stat);
+    /*@Override
     public List<Order> getCouturierFinishedOrders(String idkc) {
         Couturier couturier=couturierRestClient.getByIdkc(idkc);
         if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
@@ -115,9 +152,25 @@ public class OrderServiceImpl implements OrderService {
             order.setCouturier(couturier);
         });
         return orders;
-    }
-    // not finished yet  orders
+    }*/
     @Override
+    public Page<Order> getCouturierFinishedOrders(String idkc, Pageable pageable) {
+        Couturier couturier=couturierRestClient.getByIdkc(idkc);
+        if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
+        List<OrderStatus> stat =new ArrayList<>();
+        stat.add(OrderStatus.ANNULE);
+        stat.add(OrderStatus.LIVRE);
+        Page<Order> orders=orderRepository.findByCouturierIdAndStatusIn(couturier.getId(),stat,pageable);
+        orders.forEach( order -> {
+            Customer customer=customerRestClient.customerById(order.getCustomerId());
+            order.setCustomer(customer);
+            order.setCouturier(couturier);
+        });
+        return orders;
+    }
+
+    // not finished yet  orders
+   /* @Override
     public List<Order> getCouturierYetOrders(String idkc) {
         Couturier couturier=couturierRestClient.getByIdkc(idkc);
         if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
@@ -133,7 +186,26 @@ public class OrderServiceImpl implements OrderService {
             order.setCouturier(couturier);
         });
         return orders;
+    }*/
+    @Override
+    public Page<Order> getCouturierYetOrders(String idkc, Pageable pageable) {
+        Couturier couturier=couturierRestClient.getByIdkc(idkc);
+        if(couturier==null) throw new CouturierNotFoundException("Couturier Not Found");
+        List<OrderStatus> stat =new ArrayList<>();
+        stat.add(OrderStatus.CREE);
+        stat.add(OrderStatus.ENCOURS);
+        stat.add(OrderStatus.VALIDE);
+        stat.add(OrderStatus.TERMINE);
+        Page<Order> orders=orderRepository.findByCouturierIdAndStatusIn(couturier.getId(),stat,pageable);
+        orders.forEach( order -> {
+            Customer customer=customerRestClient.customerById(order.getCustomerId());
+            order.setCustomer(customer);
+            order.setCouturier(couturier);
+        });
+        return orders;
     }
+
+    // CUSTOMER BY COPUTURER
     @Override
     public List<Customer> getCustomersByCouturier(Long couturierId) {
         List<Order> orders=orderRepository.findByCouturierId(couturierId);

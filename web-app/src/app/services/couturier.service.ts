@@ -26,6 +26,7 @@ export class CouturierService {
   public getCouturierIdkc(idkc:string):Observable<Couturier>{
     return this.http.get<Couturier>(environment.bankendhost+"/COUTURIER-SERVICE/CouturierByIdkc/"+idkc)
   }
+
   // save couturier
 //create account in web site
   public saveCouturier(couturier: Couturier):Observable<Couturier>{
@@ -56,8 +57,8 @@ export class CouturierService {
   }
 
   // define fucntion to uplaod file
-  upload(formData:FormData):Observable<HttpEvent<string[]>>{
-    return this.http.post<string[]>(environment.bankendhost+'/COUTURIER-SERVICE/upload',formData,{
+  upload(formData:FormData,id:number):Observable<HttpEvent<string[]>>{
+    return this.http.post<string[]>(environment.bankendhost+'/COUTURIER-SERVICE/upload/'+id,formData,{
       reportProgress:true,
       observe:'events'
     });

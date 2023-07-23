@@ -118,14 +118,20 @@ public class CouturierRestController {
     // FILE TREATMENT
     // define location
     //public static final String DIRECTORY= "E:/MaisonCouture/web-app/src/res/";
-    public static final String DIRECTORY= "web-app/src/res/";
+
     //define to upload file
-    @PostMapping("/upload")
+    @PostMapping("/upload/{id}")
     //return list of names of files uploaded
-    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files")List<MultipartFile> multipartFiles) throws IOException {
+    public ResponseEntity<List<String>> uploadFiles(@PathVariable Long id,@RequestParam("files")List<MultipartFile> multipartFiles) throws IOException {
+        String DIRECTORY= "web-app/src/assets/profile/";
+        if(id==0){
+            DIRECTORY= "web-app/src/assets/imgs/";
+       }
         List<String> filenames=new ArrayList<>();
         for(MultipartFile file : multipartFiles){
+            System.out.println(file.getName());
             String filename = StringUtils.cleanPath(file.getOriginalFilename());
+            System.out.println(filename);
             Path fileStorage =get(DIRECTORY,filename).toAbsolutePath().normalize();
             System.out.println(fileStorage.toString());
             copy(file.getInputStream(),fileStorage,REPLACE_EXISTING);
@@ -133,6 +139,7 @@ public class CouturierRestController {
         }
         return ResponseEntity.ok().body(filenames);
     }
+/*
 
     //defile methos to download
     @GetMapping("downlaod/{filename}")
@@ -149,5 +156,6 @@ public class CouturierRestController {
                 .headers(httpHeaders).body(resource);
     }
 
+*/
 
 }

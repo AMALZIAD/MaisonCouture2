@@ -5,36 +5,56 @@
         <div >
           <h3>Modifier mes données personnelle </h3>
           <div class="w-100 mt-4">
-
             <form [formGroup]="editProfilFormGroup" (ngSubmit)="editProfil()">
-              <div class="mb-3">
-                <label class="form-label">Name:</label>
-                <input type="text" formControlName="name" class="form-control">
-                <span class="text-danger"
-                      *ngIf="editProfilFormGroup.controls['name'].touched
-                        && editProfilFormGroup.controls['name'].errors
-                        && editProfilFormGroup.controls['name'].errors!['required']">
-                    Name is Required
+
+                <div class="row">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="mb-3">
+                        <label class="form-label">Phone:</label>
+                        <input type="text" formControlName="homePhone" class="form-control">
+                        <span class="text-danger"
+                              *ngIf="editProfilFormGroup.controls['homePhone'].touched
+                        && editProfilFormGroup.controls['homePhone'].errors
+                        && editProfilFormGroup.controls['homePhone'].errors!['required']">
+                    homePhone is Required
                   </span>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Email:</label>
-                <input type="text" formControlName="email" class="form-control">
-                <span class="text-danger"
-                      *ngIf="editProfilFormGroup.controls['email'].touched
-                        && editProfilFormGroup.controls['email'].errors
-                        && editProfilFormGroup.controls['email'].errors!['email']">
-                    Email is not valid
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Adresse:</label>
+                        <input type="text" formControlName="adresse" class="form-control">
+                        <span class="text-danger"
+                              *ngIf="editProfilFormGroup.controls['adresse'].touched
+                        && editProfilFormGroup.controls['adresse'].errors
+                        && editProfilFormGroup.controls['adresse'].errors!['required']">
+                    Adresse is not valid
                   </span>
-              </div>
-              <div class="mb-3">
-                  <label class="form-label">Photo:</label>
-                  <input type="file" name ="files" multiple formControlName="photo"
-                     class="form-control" (change)="onUploadPhoto($event)">
-              </div>
-              <div >
-                <button [disabled]="!editProfilFormGroup.valid" class="btn btn-info mt-3" >Valider</button>
-              </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 col">
+                      <img src="{{this.couturier.photo}}" width="128"  height="128" class="img-thumbnail">
+                        <input class ="custom-file-input"type="file"name ="profilepic"
+                               class="form-control"  formControlName="photo"
+                              (change)="onUploadPhoto($event)">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3">
+                      <label class="form-label">A Propos de Mois:</label>
+                      <textarea class="form-control" formControlName="profile" rows="4"></textarea>
+                      <span class="text-danger"
+                            *ngIf="editProfilFormGroup.controls['profile'].touched
+                        && editProfilFormGroup.controls['profile'].errors
+                        && editProfilFormGroup.controls['profile'].errors!['profile']">
+                    profile is required
+                  </span>
+                    </div>
+                    <div >
+                      <button  class="btn btn-info mt-3" >Valider</button>
+                    </div>
+                </div>
+
             </form>
           </div>
         </div>
@@ -85,12 +105,13 @@
           <div class="card-body ">
             <div >
               <div class="w-100">
-                <h5 class="m-2">Les avis </h5>
+                <h3 class="m-2">Les avis </h3>
 
-                <div class="d-flex flex-start w-100 m-2" *ngFor="let r of reviews|async">
+                <div class="d-flex flex-start w-100 m-2" *ngFor="let r of reviews">
                   <div>
                     <img class="rounded-circle shadow-1-strong me-3"
-                         src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="65"
+                         [src]="'assets/profile/profilCust'+r.customerId+'.png'"
+                         (error)= "r.customerId='0'" alt="avatar" width="65"
                          height="65" />
                     <h5>{{r.name}}</h5>
                   </div>

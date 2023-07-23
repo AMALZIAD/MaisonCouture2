@@ -18,7 +18,9 @@ public class Review {
     private Long id;
     private String name;
     private int rate;
+    private String customerId;
     private String comment;
+
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Couturier couturier;

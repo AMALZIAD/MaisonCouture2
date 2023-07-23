@@ -8,46 +8,61 @@
 
   <!--  CUSTOMER INTERFACE                        -->
   <div class="container" *ngIf="this.sec.kc.hasRealmRole('CUSTOMER')">
-    <div class="table " >
-      <thead class="table-info">
-      <tr>
-        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th >Couturier</th> <th>Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let m of todays |async">
-        <td>{{m.id}}</td>
-        <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
-        <td>{{m.heure}}</td>
-        <td>{{m.status}}</td>
-        <td>{{m.couturierId}}</td>
-        <td>
-          <button [disabled]="toCancel == (m.rdvDate| date: 'dd-MM-yyyy') || m.status=='ANNULE'"
-                  class="btn btn-warning btn-sm float-right" (click)="cancelRdv(m)">Cancel</button>
-        </td>
+    <div class="container d-flex">
+      <div class="container">
+          <h3> Mes Rendez-Vous encours</h3>
+          <div class="table float-center " >
+            <thead class="table-info">
+            <tr>
+              <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th >Couturier</th> <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let m of todays ">
+              <td>{{m.id}}</td>
+              <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
+              <td>{{m.heure}}</td>
+              <td>{{m.status}}</td>
+              <td>{{m.couturierId}}</td>
+              <td>
+                <button [disabled]="toCancel == (m.rdvDate| date: 'dd-MM-yyyy') || m.status=='ANNULE'"
+                        class="btn btn-warning btn-sm float-right" (click)="cancelRdv(m)">Cancel</button>
+              </td>
 
-      </tr>
-      </tbody>
-    </div>
-    <div class="table " >
-      <thead class="table-info">
-      <tr>
-        <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th >Couturier</th>
-
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let m of olds |async">
-        <td>{{m.id}}</td>
-        <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
-        <td>{{m.heure}}</td>
-        <td>{{m.status}}</td>
-        <td>{{m.couturierId}}</td>
-      </tr>
-      </tbody>
-    </div>
+            </tr>
+            </tbody>
+          </div>
+         <div class="container">
+           <mat-paginator class="float-start" [pageSizeOptions]="[2, 4, 8, 16]"
+                          [pageSize]="2" [length]="totalEleNew"
+                          (page)="nextPage($event,1)"> </mat-paginator>
+         </div>
+      </div>
+      <div>
+        <h3> Historique</h3>
+          <div class="table " >
+            <thead class="table-info">
+            <tr>
+              <th>ID</th><th>Date</th><th>Heure</th><th>Status</th><th >Couturier</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let m of olds ">
+              <td>{{m.id}}</td>
+              <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
+              <td>{{m.heure}}</td>
+              <td>{{m.status}}</td>
+              <td>{{m.couturierId}}</td>
+            </tr>
+            </tbody>
+          </div>
+        <div class="">
+          <mat-paginator class="float-start" [pageSizeOptions]="[2, 4, 8, 16]"
+                       [pageSize]="2" [length]="totalEleOld"
+                       (page)="nextPage($event,0)"> </mat-paginator></div>
+      </div>
   </div>
-
+  </div>
 <!--  COUTURIER INTERFACE                        -->
   <div class="container" *ngIf="sec.kc.hasRealmRole('COUTURIER')">
     <div class="container d-flex">
@@ -62,7 +77,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let m of todays |async" >
+          <tr *ngFor="let m of todays " >
             <td>{{m.id}}</td>
             <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
             <td>{{m.heure}}</td>
@@ -81,7 +96,11 @@
           </tr>
           </tbody>
         </div>
-      </div>
+       <div class="container">
+         <mat-paginator class="float-start"  [pageSizeOptions]="[2, 4, 8, 16]"
+                       [pageSize]="2" [length]="totalEleNew"
+                       (page)="nextPage($event,1)"> </mat-paginator></div>
+    </div>
       <div class="container">
         <h3> Historique</h3>
         <div class="table" >
@@ -91,7 +110,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let m of olds |async">
+          <tr *ngFor="let m of olds ">
             <td>{{m.id}}</td>
             <td>{{m.rdvDate| date: 'dd-MM-yyyy'}}</td>
             <td>{{m.heure}}</td>
@@ -100,8 +119,13 @@
           </tr>
           </tbody>
         </div>
+        <div class="container">
+          <mat-paginator class="float-start" [pageSizeOptions]="[2, 4, 8, 16]"
+                       [pageSize]="2" [length]="totalEleOld"
+                       (page)="nextPage($event,0)"> </mat-paginator></div>
       </div>
     </div>
   </div>
 </div>
+
 

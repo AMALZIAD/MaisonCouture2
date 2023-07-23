@@ -20,6 +20,8 @@ import { EditCouturierComponent } from './edit-couturier/edit-couturier.componen
 import { SimulateurComponent } from './simulateur/simulateur.component';
 import { HomeComponent } from './home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 function kcFactory(kcSecurity:KeycloakSecurityService) {
   return()=>kcSecurity.init();
@@ -40,13 +42,15 @@ function kcFactory(kcSecurity:KeycloakSecurityService) {
     SimulateurComponent,
     HomeComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    NgbModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        NgbModule,
+        BrowserAnimationsModule,
+        MatPaginatorModule
+    ],
   providers: [
     {provide:APP_INITIALIZER,deps:[KeycloakSecurityService],useFactory:kcFactory,multi:true},
     {provide:HTTP_INTERCEPTORS,useClass:RequestInterceptorService,multi:true}],

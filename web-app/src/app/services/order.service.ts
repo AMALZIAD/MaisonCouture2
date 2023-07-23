@@ -31,30 +31,53 @@ export class OrderService {
         return result._embedded.customers; //just return "customers"
       }));
   }
+
   // GET ORDERS BY CUSTOMER ID ----------------------------------------------------------------------------
-  getCustomerFinishedOrders(idkc: string):Observable<Order[]> {
+  /*getCustomerFinishedOrders(idkc: string):Observable<Order[]> {
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/FinishedOrderByCustomer/"+idkc);
   }
   getCustomerYetOrders(idkc: string):Observable<Order[]> {
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/YetOrderByCustomer/"+idkc);
+  }*/
+  getCustomerFinishedOrders(idkc: string,request:any):Observable<any> {
+    const params = request;
+    console.log("request",params)
+    return this.http.get(environment.bankendhost+"/BILLING-SERVICE/FinishedOrderByCustomer/"+idkc,{params});
   }
-
+  getCustomerYetOrders(idkc: string,request:any):Observable<any> {
+    const params = request;
+    console.log("request",params)
+    return this.http.get(environment.bankendhost+"/BILLING-SERVICE/YetOrderByCustomer/"+idkc,{params});
+  }
 
 // GET ORDERS BY COUTURIER IDKC------------------------------------------------------------------------------
   // finished
-  getCouturierFinishedOrders(idkc: string) :Observable<Order[]> {
+  /*getCouturierFinishedOrders(idkc: string) :Observable<Order[]> {
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/FinishedOrderByCouturier/"+idkc);
-    /* .pipe(map((result:any)=>{
+    /!* .pipe(map((result:any)=>{
        return result._embedded.couturiers; //just return "couturiers"
-     }));*/
+     }));*!/
   }
  // encours
   getCouturierYetOrders(idkc: string) :Observable<Order[]> {
     return this.http.get<Order[]>(environment.bankendhost+"/BILLING-SERVICE/YetOrderByCouturier/"+idkc);
-    /* .pipe(map((result:any)=>{
+    /!* .pipe(map((result:any)=>{
        return result._embedded.couturiers; //just return "couturiers"
-     }));*/
+     }));*!/
+  }*/
+  getCouturierFinishedOrders(idkc: string,request:any) :Observable<any> {
+    const params = request;
+    console.log("request",params)
+    return this.http.get(environment.bankendhost+"/BILLING-SERVICE/FinishedOrderByCouturier/"+idkc,{params});
   }
+  // encours
+  getCouturierYetOrders(idkc: string,request:any) :Observable<any> {
+    const params = request;
+    console.log("request",params)
+    return this.http.get(environment.bankendhost+"/BILLING-SERVICE/YetOrderByCouturier/"+idkc,{params});
+  }
+
+
   //send email maj cmd
   sendMailMajOrder(details:CmdMail){
     this.http.post<CmdMail>(environment.bankendhost+

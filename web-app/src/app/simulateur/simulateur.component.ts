@@ -48,42 +48,5 @@ export class SimulateurComponent implements OnInit {
         }
       });
   }
-  sendEmail(){
-    let details:cmdMail = {
-      name: 'sara',
-      email: 'amal.amal.ziad@gmail.com',
-      datecmd:'12/02/2023',
-      numCmd:'12:30',
-      tenue:'tekshita b randa',
-      etat:'CREE',
-      etatproche:'VALIDE',
-      contact:'<p> Amal Ziad</p>'+'<p>0102030504</p>'+'<p>amal.ziad@gmail.com</p>'
-    };
-    this.https.post<cmdMail>(environment.bankendhost+
-      "/BILLING-SERVICE/mailCmd", details).subscribe(
-      res => {
-        details= res;
-        console.log(this.dataset);
-        alert('Email Sent successfully');
-      });
-    interface Details
-    {
-      name:string;
-      email:string;
-      daterdv:string;
-      heure:string;
-      contact:string;
-    }
-    interface cmdMail
-    {
-      name:string;
-      email:string;
-      datecmd:string;
-      numCmd:string;
-      contact:string;
-      etat:string;
-      etatproche: string;
-      tenue:string;
-    }
-  }
+
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CustomerService} from "../services/customer.service";
 import {catchError, Observable, throwError} from "rxjs";
 import {Customer} from "../model/customer.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-customers',
@@ -13,7 +14,8 @@ export class CustomersComponent implements OnInit {
   customers!:Observable<Array<Customer>>;
   errorMessage!:string;
 
-  constructor(private customerService: CustomerService) { }
+  constructor(private customerService: CustomerService,
+                       private route:Router ) { }
 
   ngOnInit(): void {
     this.customers=this.customerService.getCustomers().pipe(
@@ -27,4 +29,7 @@ export class CustomersComponent implements OnInit {
     });
   }
 
+  updateMesure(c: Customer) {
+    this.route.navigateByUrl("/editcustomer/"+c.id);
+  }
 }
